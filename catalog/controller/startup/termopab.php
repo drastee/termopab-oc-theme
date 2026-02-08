@@ -29,7 +29,13 @@ class Termopab extends \Opencart\System\Engine\Controller {
 	}
 
 	public function event(string &$route, array &$args, mixed &$output): void {
-		$override = ['common/header', 'common/footer', 'common/home'];
+		$override = [
+			'common/header', 
+			'common/footer', 
+			'common/home', 
+			'common/currency',
+			'common/language',
+		];
 		if (in_array($route, $override)) {
 			$route = 'extension/termopab/' . $route;
 		}

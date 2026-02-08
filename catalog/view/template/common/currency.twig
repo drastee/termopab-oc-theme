@@ -1,0 +1,16 @@
+{% if currencies|length > 1 %}
+<form id="form-currency" action="{{ action }}" method="post" data-oc-toggle="ajax" class="header__currency">
+    {% set selected_label = title %}
+    {% set currency_options = [] %}
+    {% for currency in currencies %}
+        {% set label = currency.title %}
+        {% set currency_options = currency_options|merge([{ label: label, href: currency.code }]) %}
+    {% endfor %}
+    {% include '@termopab/components/dropdown/_dropdown.twig' with {
+        "selected": selected_label,
+        "options": currency_options
+    } %}
+    <input type="hidden" name="code" value=""/>
+    <input type="hidden" name="redirect" value="{{ redirect }}"/>
+</form>
+{% endif %}

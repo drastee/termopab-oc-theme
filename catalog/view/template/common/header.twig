@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html dir="{{ direction }}" lang="{{ lang }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,6 +30,9 @@
     {% if icon %}
         <link rel="icon" href="{{ icon }}" type="image/png">
     {% endif %}
+    
+    <script src="{{base}}extension/termopab/catalog/view/javascript/common.js" type="text/javascript"></script>
+
 </head>
 
 <body class="{{ pageClass }}">
@@ -59,18 +62,8 @@
 
                     </ul>
                     <div class="header__dropdowns">
-                        <div class="header__languages">
-                            {% include '@termopab/components/dropdown/_dropdown.twig' with {
-                                "selected": "UAH",
-                                "options": ["USD","EUR","GBP"]
-                            } %}
-                        </div>
-                        <div class="header__currency">
-                            {% include '@termopab/components/dropdown/_dropdown.twig' with {
-                            "selected": "UA",
-                            "options": ["UA","EN","GE","FR"]
-                            } %}
-                        </div>
+                        {{ currency }}
+                        {{ language }}
                     </div>
                     <div class="header__nav">
                         <button

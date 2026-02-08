@@ -10,9 +10,15 @@
         <ul class="dropdown__list">
             {% for option in options %}
             <li class="dropdown__item">
-                <button type="button" class="dropdown__option" data-value="{{ option }}">
-                    <span>{{ option }}</span>
+                {% if option.href is defined %}
+                <a href="{{ option.href }}" class="dropdown-item dropdown__option">
+                    <span>{{ option.label }}</span>
+                </a>
+                {% else %}
+                <button type="button" class="dropdown__option" data-value="{{ option is iterable ? (option.value ?? option.label) : option }}">
+                    <span>{{ option is iterable ? option.label : option }}</span>
                 </button>
+                {% endif %}
             </li>
             {% endfor %}
         </ul>
