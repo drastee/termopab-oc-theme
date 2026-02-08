@@ -9,6 +9,10 @@ export default {
           src: 'src/assets/icons/*',
           dest: 'image/icons',
         },
+        {
+          src: 'src/assets/images/payments/*',
+          dest: 'image/images/payments',
+        },
       ],
     }),
   ],

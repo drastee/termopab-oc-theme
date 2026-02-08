@@ -18,12 +18,110 @@
       <div class="card-header"><i class="fa-solid fa-pencil"></i> {{ text_edit }}</div>
       <div class="card-body">
         <form id="form-theme" action="{{ save }}" method="post" data-oc-toggle="ajax">
-          <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">{{ entry_status }}</label>
-            <div class="col-sm-10">
-              <div class="form-check form-switch form-switch-lg">
-                <input type="hidden" name="theme_termopab_status" value="0"/>
-                <input type="checkbox" name="theme_termopab_status" value="1" id="input-status" class="form-check-input"{% if theme_termopab_status %} checked{% endif %}/>
+          <ul class="nav nav-tabs">
+            <li class="nav-item"><a href="#tab-main" data-bs-toggle="tab" class="nav-link active">{{ tab_main }}</a></li>
+            <li class="nav-item"><a href="#tab-header" data-bs-toggle="tab" class="nav-link">{{ tab_header }}</a></li>
+            <li class="nav-item"><a href="#tab-footer" data-bs-toggle="tab" class="nav-link">{{ tab_footer }}</a></li>
+            <li class="nav-item"><a href="#tab-status" data-bs-toggle="tab" class="nav-link">{{ tab_status }}</a></li>
+          </ul>
+          <div class="tab-content">
+            <div id="tab-main" class="tab-pane active">
+              <fieldset>
+                <legend>{{ tab_main }}</legend>
+                <div class="row mb-3">
+                  <label class="col-sm-2 col-form-label">{{ entry_telephone }}</label>
+                  <div class="col-sm-10">
+                    <div id="telephone-list">
+                      {% for phone in theme_termopab_telephones|default([]) %}
+                      <div class="input-group mb-2 telephone-row">
+                        <input type="text" name="theme_termopab_telephone[]" value="{{ phone }}" placeholder="{{ entry_telephone }}" class="form-control"/>
+                        <button type="button" class="btn btn-outline-danger remove-telephone" title="{{ button_remove }}"><i class="fa-solid fa-minus"></i></button>
+                      </div>
+                      {% else %}
+                      <div class="input-group mb-2 telephone-row">
+                        <input type="text" name="theme_termopab_telephone[]" value="" placeholder="{{ entry_telephone }}" class="form-control"/>
+                        <button type="button" class="btn btn-outline-danger remove-telephone" title="{{ button_remove }}"><i class="fa-solid fa-minus"></i></button>
+                      </div>
+                      {% endfor %}
+                    </div>
+                    <button type="button" id="add-telephone" class="btn btn-outline-primary btn-sm mt-1"><i class="fa-solid fa-plus"></i> {{ button_add }}</button>
+                    <div class="form-text">{{ help_telephone }}</div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="input-email" class="col-sm-2 col-form-label">{{ entry_email }}</label>
+                  <div class="col-sm-10">
+                    <input type="text" name="theme_termopab_email" value="{{ theme_termopab_email }}" placeholder="{{ entry_email }}" id="input-email" class="form-control"/>
+                  </div>
+                </div>
+                <ul class="nav nav-tabs">
+                  {% for language in languages %}
+                    <li class="nav-item"><a href="#language-main-{{ language.language_id }}" data-bs-toggle="tab" class="nav-link{% if loop.first %} active{% endif %}"><img src="{{ language.image }}" title="{{ language.name }}"/> {{ language.name }}</a></li>
+                  {% endfor %}
+                </ul>
+                <div class="tab-content mt-3">
+                  {% for language in languages %}
+                    <div id="language-main-{{ language.language_id }}" class="tab-pane{% if loop.first %} active{% endif %}">
+                      <div class="row mb-3">
+                        <label for="input-brand-{{ language.language_id }}" class="col-sm-2 col-form-label">{{ entry_brand }}</label>
+                        <div class="col-sm-10">
+                          <input type="text" name="theme_termopab_brand[{{ language.language_id }}]" value="{{ theme_termopab_brand[language.language_id] ?? '' }}" placeholder="{{ entry_brand }}" id="input-brand-{{ language.language_id }}" class="form-control"/>
+                        </div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+              </fieldset>
+            </div>
+            <div id="tab-header" class="tab-pane">
+              <fieldset>
+                <legend>{{ tab_header }}</legend>
+                <p class="text-muted">{{ text_header_empty }}</p>
+              </fieldset>
+            </div>
+            <div id="tab-footer" class="tab-pane">
+              <fieldset>
+                <legend>{{ tab_footer }}</legend>
+                <ul class="nav nav-tabs">
+                  {% for language in languages %}
+                    <li class="nav-item"><a href="#language-footer-{{ language.language_id }}" data-bs-toggle="tab" class="nav-link{% if loop.first %} active{% endif %}"><img src="{{ language.image }}" title="{{ language.name }}"/> {{ language.name }}</a></li>
+                  {% endfor %}
+                </ul>
+                <div class="tab-content mt-3">
+                  {% for language in languages %}
+                    <div id="language-footer-{{ language.language_id }}" class="tab-pane{% if loop.first %} active{% endif %}">
+                      <div class="row mb-3">
+                        <label for="input-address-{{ language.language_id }}" class="col-sm-2 col-form-label">{{ entry_address }}</label>
+                        <div class="col-sm-10">
+                          <textarea name="theme_termopab_address[{{ language.language_id }}]" rows="3" placeholder="{{ entry_address }}" id="input-address-{{ language.language_id }}" class="form-control">{{ theme_termopab_address[language.language_id] ?? '' }}</textarea>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label for="input-worknote-{{ language.language_id }}" class="col-sm-2 col-form-label">{{ entry_worknote }}</label>
+                        <div class="col-sm-10">
+                          <input type="text" name="theme_termopab_worknote[{{ language.language_id }}]" value="{{ theme_termopab_worknote[language.language_id] ?? '' }}" placeholder="{{ entry_worknote }}" id="input-worknote-{{ language.language_id }}" class="form-control"/>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label for="input-schedule-{{ language.language_id }}" class="col-sm-2 col-form-label">{{ entry_schedule }}</label>
+                        <div class="col-sm-10">
+                          <textarea name="theme_termopab_schedule[{{ language.language_id }}]" rows="4" placeholder="{{ entry_schedule }}" id="input-schedule-{{ language.language_id }}" class="form-control">{{ theme_termopab_schedule[language.language_id] ?? '' }}</textarea>
+                        </div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+              </fieldset>
+            </div>
+            <div id="tab-status" class="tab-pane">
+              <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">{{ entry_status }}</label>
+                <div class="col-sm-10">
+                  <div class="form-check form-switch form-switch-lg">
+                    <input type="hidden" name="theme_termopab_status" value="0"/>
+                    <input type="checkbox" name="theme_termopab_status" value="1" id="input-status" class="form-check-input"{% if theme_termopab_status %} checked{% endif %}/>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -32,4 +130,20 @@
     </div>
   </div>
 </div>
+<script type="text/javascript"><!--
+$('#add-telephone').on('click', function() {
+  var html = '<div class="input-group mb-2 telephone-row">';
+  html += '<input type="text" name="theme_termopab_telephone[]" value="" placeholder="{{ entry_telephone }}" class="form-control"/>';
+  html += '<button type="button" class="btn btn-outline-danger remove-telephone" title="{{ button_remove }}"><i class="fa-solid fa-minus"></i></button>';
+  html += '</div>';
+  $('#telephone-list').append(html);
+});
+
+$('#telephone-list').on('click', '.remove-telephone', function() {
+  var rows = $('#telephone-list .telephone-row');
+  if (rows.length > 1) {
+    $(this).closest('.telephone-row').remove();
+  }
+});
+//--></script>
 {{ footer }}

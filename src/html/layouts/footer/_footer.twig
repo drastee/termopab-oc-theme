@@ -5,8 +5,12 @@
         <div class="footer__left">
             <h2 class="footer__brand">Воп</h2>
 
-            {% include "@termopab/components/phones-styled/_phones-styled.twig" %}
-            {% include "@termopab/components/shedule-styled/_shedule-styled.twig"%}
+            {% include "@termopab/components/phones-styled/_phones-styled.twig" with {
+                telephones: ['+30 (067) 409-91-61', '+30 (067) 409-91-61']
+            } %}
+            {% include "@termopab/components/shedule-styled/_shedule-styled.twig" with {
+                schedule: 'Пн — Пт з 10:00 до 18:00<br>Сб з 9:00 до 16:00'
+            } %}
 
 
             <a href="#" class="footer__button btn btn-transparent">Зателефонувати мені</a>

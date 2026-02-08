@@ -1,4 +1,9 @@
 <div class="phones-styled">
-    <a href="tel:+380674099161">+30 (067) 409-91-61</a>
-    <a href="tel:+380674099161">+30 (067) 409-91-61</a>
+    {% for phone in telephones|default([]) %}
+    <a href="tel:{{ phone|replace({' ': '', '-': '', '(': '', ')': ''}) }}">{{ phone }}</a>
+    {% else %}
+    {% if telephone|default('') %}
+    <a href="tel:{{ telephone|replace({' ': '', '-': '', '(': '', ')': ''}) }}">{{ telephone }}</a>
+    {% endif %}
+    {% endfor %}
 </div>

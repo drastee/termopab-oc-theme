@@ -3,31 +3,34 @@
 
             <!-- LEFT -->
             <div class="footer__left">
-                <h2 class="footer__brand">ТЕРМОПАБ</h2>
+                <h2 class="footer__brand">{{ brand|default(name)|upper }}</h2>
 
                 {% include "@termopab/components/phones-styled/_phones-styled.twig" %}
-                {% include "@termopab/components/shedule-styled/_shedule-styled.twig"%}
+                {% include "@termopab/components/shedule-styled/_shedule-styled.twig" %}
 
-
-
-                <a href="#" class="footer__button btn btn-transparent">Зателефонувати мені</a>
+                {% set first_phone = (telephones|default([]))|first|default(telephone) %}
+                {% if first_phone %}
+                <a href="tel:{{ first_phone|replace({' ': '', '-': '', '(': '', ')': ''}) }}" class="footer__button btn btn-transparent">{{ text_call_me }}</a>
+                {% endif %}
                 <hr>
-                <a href="mailto:info@termopab.com" class="footer__email">
-                    INFO@TERMOPAB.COM
-                </a>
+                {% if email %}
+                <a href="mailto:{{ email }}" class="footer__email">{{ email|upper }}</a>
+                {% endif %}
             </div>
 
             <!-- RIGHT SIDE -->
             <div class="footer__right">
                 <div class="footer__right-top">
                     <div class="footer__location">
+                        {% if address %}
                         <p class="footer__address">
                             <svg class="footer__icon-location"><use href="#icon-location"></use></svg>
-                            УКРАЇНА, КИЇВ
+                            {{ address|nl2br }}
                         </p>
-                        <p class="footer__worknote">
-                            Працюємо по всій Україні та Європі
-                        </p>
+                        {% endif %}
+                        {% if worknote %}
+                        <p class="footer__worknote">{{ worknote }}</p>
+                        {% endif %}
                     </div>
                     <div class="footer_socials_wrapper">
                         {% include "@termopab/components/social-buttons/_social-buttons.twig" %}  
@@ -61,10 +64,10 @@
                 <a href="#" class="footer__privacy">Політика конфіденційності</a>
 
                 <div class="footer__payments">
-                    <img src="@assets/images/payments/privat.webp" alt="Privat">
-                    <img src="@assets/images/payments/visa.webp" alt="Visa">
-                    <img src="@assets/images/payments/liqpay.webp" alt="Liqpay">
-                    <img src="@assets/images/payments/mastercard.webp" alt="Mastercard">
+                    <img src="{{ base }}extension/termopab/catalog/view/image/images/payments/privat.webp" alt="Privat">
+                    <img src="{{ base }}extension/termopab/catalog/view/image/images/payments/visa.webp" alt="Visa">
+                    <img src="{{ base }}extension/termopab/catalog/view/image/images/payments/liqpay.webp" alt="Liqpay">
+                    <img src="{{ base }}extension/termopab/catalog/view/image/images/payments/mastercard.webp" alt="Mastercard">
                 </div>
             </div>
         </div>
@@ -75,7 +78,7 @@
 
     {% include "@termopab/components/modal-cart/_modal-cart.twig" %}
     
-    <script type="module" src="{{base}}extension/termopab/catalog/view/javascripts/theme.js"></script>
+    <script type="module" src="{{base}}extension/termopab/catalog/view/javascript/theme.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.5.6/dialog-polyfill.min.js"></script>
     
     

@@ -43,6 +43,9 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		$data['back'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=theme');
 
 		$this->load->model('setting/setting');
+		$this->load->model('localisation/language');
+
+		$data['languages'] = $this->model_localisation_language->getLanguages();
 
 		$setting_info = $this->model_setting_setting->getSetting('theme_termopab', $store_id);
 
@@ -51,6 +54,15 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		} else {
 			$data['theme_termopab_status'] = '';
 		}
+
+		$data['theme_termopab_brand'] = isset($setting_info['theme_termopab_brand']) ? $setting_info['theme_termopab_brand'] : [];
+		$data['theme_termopab_address'] = isset($setting_info['theme_termopab_address']) ? $setting_info['theme_termopab_address'] : [];
+		$telephone_raw = isset($setting_info['theme_termopab_telephone']) ? $setting_info['theme_termopab_telephone'] : '';
+		$data['theme_termopab_telephones'] = is_string($telephone_raw) ? array_filter(array_map('trim', explode("\n", $telephone_raw))) : [];
+		$email_raw = isset($setting_info['theme_termopab_email']) ? $setting_info['theme_termopab_email'] : '';
+		$data['theme_termopab_email'] = is_array($email_raw) ? (string)reset($email_raw) : (string)$email_raw;
+		$data['theme_termopab_schedule'] = isset($setting_info['theme_termopab_schedule']) ? $setting_info['theme_termopab_schedule'] : [];
+		$data['theme_termopab_worknote'] = isset($setting_info['theme_termopab_worknote']) ? $setting_info['theme_termopab_worknote'] : [];
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
@@ -82,7 +94,24 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		if (!$json) {
 			$this->load->model('setting/setting');
 
-			$this->model_setting_setting->editSetting('theme_termopab', $this->request->post, $store_id);
+			$post = array_merge([
+				'theme_termopab_status'   => 0,
+				'theme_termopab_brand'   => [],
+				'theme_termopab_address' => [],
+				'theme_termopab_telephone' => '',
+				'theme_termopab_email'   => '',
+				'theme_termopab_schedule'=> [],
+				'theme_termopab_worknote'=> [],
+			], $this->request->post);
+
+			if (isset($post['theme_termopab_telephone']) && is_array($post['theme_termopab_telephone'])) {
+				$post['theme_termopab_telephone'] = implode("\n", array_filter(array_map('trim', $post['theme_termopab_telephone'])));
+			}
+			if (isset($post['theme_termopab_email']) && is_array($post['theme_termopab_email'])) {
+				$post['theme_termopab_email'] = (string)reset($post['theme_termopab_email']);
+			}
+
+			$this->model_setting_setting->editSetting('theme_termopab', $post, $store_id);
 
 			$json['success'] = $this->language->get('text_success');
 		}

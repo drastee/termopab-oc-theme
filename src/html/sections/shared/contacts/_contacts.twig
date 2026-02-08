@@ -9,8 +9,12 @@
                 </div>
                 <div class="contacts__columns">
                     <div class="contacts__phones-wrapper">            
-                        {% include "@components/phones-styled/_phones-styled.twig"%}
-                        {% include "@components/shedule-styled/_shedule-styled.twig"%}
+                        {% include "@components/phones-styled/_phones-styled.twig" with {
+                            telephones: ['+30 (067) 409-91-61', '+30 (067) 409-91-61']
+                        } %}
+                        {% include "@components/shedule-styled/_shedule-styled.twig" with {
+                            schedule: 'Пн — Пт з 10:00 до 18:00<br>Сб з 9:00 до 16:00'
+                        } %}
                     </div>
                     <div class="contacts__social-wrapper">
                         <a href="mailto:info@termopab.com" class="contacts__email">

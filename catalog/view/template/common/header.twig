@@ -47,19 +47,22 @@
                             <span><a href="{{ home }}">{{ name }}</a></span>
                         {% endif %}
                     </div>
+                    {% set header_phones = (telephones|default([]))|length > 0 ? (telephones) : ((telephone|default('')) ? [telephone] : []) %}
+                    {% if header_phones|length > 0 %}
                     <div class="header__phones">
                         <ul>
-                            <li><a href="tel:3806740991XX">+38 (067) 409-91-<span>XX</span></a></li>
-                            <li><a href="tel:3806740991XX">+38 (067) 409-91-<span>XX</span></a></li>
+                            {% for phone in header_phones %}
+                            <li><a href="tel:{{ phone|replace({' ': '', '-': '', '(': '', ')': ''}) }}">{{ phone }}</a></li>
+                            {% endfor %}
                         </ul>
                     </div>
+                    {% endif %}
                 </div>
                 <div class="header__right">
                     <ul class="header__socials">
-                        <li><a href="#" target="_blank" class="social-icon"><svg class="icon"><use href="/src/assets/icons/icons.svg#icon-instagram"></use></svg></a></li>
-                        <li><a href="#" target="_blank" class="social-icon"><svg class="icon"><use href="/src/assets/icons/icons.svg#icon-facebook"></use></svg></a></li>
-                        <li><a href="#" target="_blank" class="social-icon"><svg class="icon"><use href="/src/assets/icons/icons.svg#icon-youtube"></use></svg></a></li>
-
+                        <li><a href="#" target="_blank" class="social-icon"><svg class="icon"><use href="{{ base }}extension/termopab/catalog/view/image/icons/icons.svg#icon-instagram"></use></svg></a></li>
+                        <li><a href="#" target="_blank" class="social-icon"><svg class="icon"><use href="{{ base }}extension/termopab/catalog/view/image/icons/icons.svg#icon-facebook"></use></svg></a></li>
+                        <li><a href="#" target="_blank" class="social-icon"><svg class="icon"><use href="{{ base }}extension/termopab/catalog/view/image/icons/icons.svg#icon-youtube"></use></svg></a></li>
                     </ul>
                     <div class="header__dropdowns">
                         {{ currency }}
