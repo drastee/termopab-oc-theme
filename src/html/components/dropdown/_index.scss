@@ -1,0 +1,142 @@
+@use "src/styles/mixins" as *;
+
+.dropdown {
+    position: relative;
+    width: max-content;
+    
+    // Плавность смены цвета фона самой кнопки (чтобы не моргала при ховере)
+    transition: background-color 0.2s ease, border-radius 0.2s ease;
+    border-radius: 5px; // Исходное скругление
+
+    // === 1. АКТИВНОЕ СОСТОЯНИЕ (Открыто или Ховер) ===
+    &.open, &:hover {
+        background: #EBEBEB;
+        color: var(--color-black); // Меняем цвет текста родителя (стрелка наследует)
+        
+        // Скругляем только верхние углы
+        border-radius: 5px 5px 0 0;
+
+        .dropdown__selected {
+            color: var(--color-black);
+            z-index: 20; // Шапка всегда выше списка
+        }
+        .dropdown__icon {
+            color: var(--color-black);
+            .dropdown-arrow {
+                transform: rotate(180deg);
+            }
+        }
+        
+        // Показываем меню
+        .dropdown__menu {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: all;
+        }
+    }
+
+    &__item {
+        &:hover {
+            color: var(--color-black);
+        }
+    }
+
+    &__option {
+        width: 100%;
+        // Твои стили для опшнов (если нужно, добавь сюда свои паддинги)
+    }
+
+    &__list {
+        background-color: #EBEBEB;
+        border-radius: 0 0 5px 5px;
+        color: var(--color-black);
+        padding: 8px 0;
+        font-weight: 400;
+        font-family: var(--font-alt);
+        
+        // ВАЖНО для ширины: список растягивается на всю ширину обертки
+        width: 100%; 
+        box-sizing: border-box;
+    }
+
+    &__selected {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+        position: relative;
+        z-index: 20; // Чтобы текст кнопки был над выпадающим списком
+    }
+
+    &__icon {
+        aspect-ratio: 1 / 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 25px;
+        height: 25px;
+        color: currentColor;
+        
+        .dropdown-arrow {
+            transform: rotate(0deg); 
+            transition: transform 0.25s ease;
+            fill: currentColor;
+            width: 90%; // Чуть уменьшил, чтобы не прилипало к краям, как у тебя
+            height: 90%;
+        }
+    }
+
+    // Состояние OPEN (для мобилок через JS)
+    &.open {
+        .dropdown__menu {
+            // Свойства заданы в блоке &.open выше (через opacity)
+        }
+    }
+
+    &__menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        
+        // === ИСПРАВЛЕНИЕ ШИРИНЫ ===
+        min-width: 100%; // Не уже родителя
+        width: max-content; // Если контент шире — растягивается
+        box-sizing: border-box; // Учитывает паддинги в ширине
+        
+        z-index: 10;
+        
+        // === АНИМАЦИЯ БЕЗ СДВИГА ===
+        display: block !important; // Обязательно для анимации opacity
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        
+        // Только прозрачность, никакого движения (translate убрал)
+        transition: opacity 0.2s ease, visibility 0.2s ease;
+
+        // Мостик для ховера
+        &::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 0;
+            width: 100%;
+            height: 10px;
+        }
+    }
+
+    &__option {
+        padding: 10px 10px; 
+        width: 100%;
+        text-align: left;
+        background: none;
+        border: none;
+        cursor: pointer;
+        transition: color 0.2s;
+        
+        &:hover {
+            color: var(--color-accent);
+        }
+    }
+    
+}

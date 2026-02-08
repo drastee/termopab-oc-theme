@@ -1,0 +1,111 @@
+@use "src/styles/mixins" as *;
+.about{
+    padding-block: 28px 55px;
+    @include md-up {
+        padding-block: 53px 65px;
+    }
+    &__title{
+        text-transform: uppercase;
+    
+        @include md-down{
+            padding-inline: 12px;
+        }
+        
+        @include sm-up{
+            
+            br{
+                display: none;
+            }
+        }
+    
+    }
+    &__content{
+        margin-top: 28px;
+        @include md-down{
+            padding-inline: 12px;
+        }
+        @include sm-up {
+            margin-top:40px;
+        }
+        @include md-up {
+            margin-left: 80px;
+            display: grid;
+            grid-template-columns: 35% auto;
+            gap: 7%;
+            margin-top:60px;
+        }
+        @include lg-up {
+            margin-left: 125px;
+            gap: 11%;
+        }
+    }
+    &__text{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 52px;
+
+        @include md-down{
+            margin-bottom: 60px;
+        }
+        @include md-up {
+            gap: 15px;
+        }
+    }
+
+    &__facts{
+        display: grid;
+        gap: 20px;
+        @include md-up {
+            gap: 32px;
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    &__fact{
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        position: relative;
+        @include md-up {
+            gap: 20px;
+        }
+        &:hover{
+            .about__fact-title, .about__arrow {
+                color: var(--color-accent);
+            }
+        }
+    }
+
+    &__fact-title{
+        font-family: var(--font-alt);
+        text-transform: uppercase;
+        font-weight: 600;
+        font-size: 24px;
+        letter-spacing: 1.82px;
+        line-height: 1;
+        padding-right: 30px;
+
+        @include md-up {
+            font-size: 23px;
+        }
+
+        @include lg-up {
+            font-size: 26px;
+        }
+
+        @include xxl-up {
+            font-size: 30px;
+        }
+    }
+
+    &__arrow{
+        position: absolute;
+        top: 0;
+        right: 0;
+        fill: currentColor;
+        height: 30px;
+        width: 30px;
+        transform: rotate(135deg);
+    }
+}

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+<symbol id="icon-short-arrow" viewBox="0 0 19 20">
+    <g clip-path="url(#clip-arrow)">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M16.564 11H0.563995V9H16.564V11Z"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M9.79199 19.1849L8.33499 17.8149L15.69 9.99994L8.33499 2.18494L9.79199 0.814941L18.437 9.99994L9.79199 19.1849Z"/>
+    </g>
+    <defs>
+        <clipPath id="clip-arrow">
+            <rect width="19" height="20"/>
+        </clipPath>
+    </defs>
+</symbol>

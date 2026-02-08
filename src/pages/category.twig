@@ -1,0 +1,49 @@
+{% extends "html/layouts/_html.twig" %}
+{% set pageTitle = "Категорія" %}
+{% set pageClass = "category-page" %}
+{% block main %}
+<main>
+
+    {% include "html/sections/shared/hero-secondary/_hero-secondary.twig" with {
+        "title": "Пивоварні",
+        "background_image_desktop": "/src/assets/images/category/hero-bg.webp",
+        "background_image_mobile": "/src/assets/images/category/hero-bg-mobile.webp"
+    }%}
+
+    {% include "html/components/breadcrumbs/_breadcrumbs.twig" with {
+        "background": "black",
+        "breadcrumbs": [
+            {"name": "Пивоварні"}
+        ]
+    } %}
+
+    {% include "html/sections/pages/category/cat-promo/_cat-promo.twig" with {
+        "type": "",
+        "title": "Міні-пивоварні на 200, 300, 500 літрів",
+        "image": "/src/assets/images/category/product.webp",
+        "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been   Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been   Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been   Lorem Ipsum is simply "
+    }%}
+
+    {% include "html/sections/pages/category/running-line/_running-line.twig" %}
+
+    {% include "html/sections/pages/category/cat-promo/_cat-promo.twig" with {
+        "type": "cat-promo--reverse",
+        "title": "Пивзаводи на 1000 - 5000 літрів",
+        "image": "/src/assets/images/category/product2.webp",
+        "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been   Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been   Lorem Ipsum is simply dummy text "
+    }%}
+
+    {% include "html/sections/shared/cta-spikelet/_cta-spikelet.twig" %}
+    
+    {% include "html/sections/pages/category/cat-promo-thin/_cat-promo-thin.twig" %}
+    
+    {% include "html/sections/pages/category/cta-thin-cap/_cta-thin-cap.twig" %}
+
+    {% include "html/sections/shared/brewery-reviews/_brewery-reviews.twig" %}
+
+    {% include "html/sections/shared/text-content/_text-content.twig" %}
+
+
+
+</main>
+{% endblock %}

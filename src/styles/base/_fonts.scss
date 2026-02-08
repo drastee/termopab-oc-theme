@@ -1,0 +1,33 @@
+@use "../mixins/" as *;
+
+// Inter
+@include font-variable(
+  "Inter",
+  "/src/assets/fonts/inter-variable",
+  100 900,
+  normal
+);
+
+// Oswald
+@include font-variable(
+  "Oswald",
+  "/src/assets/fonts/oswald-variable",
+  200 700,
+  normal
+);
+
+// Rubik
+@include font-variable(
+  "Rubik",
+  "/src/assets/fonts/rubik-variable",
+  100 900,
+  normal
+);
+
+// The Artist
+@include font-static(
+  "TheArtist",
+  "/src/assets/fonts/theartist-static",
+  400,
+  normal
+);

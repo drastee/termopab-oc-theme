@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Termopab | {{ pageTitle }}</title>
+
+    <link rel="stylesheet" href="/src/styles/main.scss">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.5.6/dialog-polyfill.min.css">
+</head>
+
+<body class="{{ pageClass }}">
+
+    <div class="wrapper">
+
+        {% include "header/_header.twig" %}
+
+        {% block main %}
+            {# Место под контент страницы #}
+        {% endblock %}
+
+        {% include "footer/_footer.twig" %}
+
+    </div>
+
+    {% include "@components/modal-cart/_modal-cart.twig" %}
+    
+    <script type="module" src="/src/scripts/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.5.6/dialog-polyfill.min.js"></script>
+    
+    
+    {# Sprites #}
+    {% include "../../assets/icons/arrow.svg" %}
+    {% include "../../assets/icons/short-arrow.svg" %}
+    {% include "../../assets/icons/dropdown-arrow.svg" %}
+    {% include "../../assets/icons/location.svg" %}
+    {% include "../../assets/icons/360.svg" %}
+    {% include "../../assets/icons/play.svg" %}
+    {# {% include "../../assets/icons/play2.svg" %} #}
+</body>
+</html>

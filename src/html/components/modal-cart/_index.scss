@@ -1,0 +1,132 @@
+@use "src/styles/mixins" as *;
+.modal-cart {
+    background: var(--color-white);
+    border: none;
+    border-radius: 15px;
+    padding: 25px;
+    max-width: 985px;
+    width: calc(100% - 40px); // Оставляем зазоры по бокам вместо margin
+    margin: auto; // Магия центрирования диалога
+    @include md-up{
+        padding: 26px 55px 32px;
+        margin: auto;
+        height: none;
+    }
+
+    &::backdrop {
+        background: rgba(0, 0, 0, 0.2); // Полупрозрачный черный (50%)
+        backdrop-filter: blur(5px);      // Размытие фона на 5px
+        -webkit-backdrop-filter: blur(5px); // Для Safari (обязательно)
+    }
+
+    & + .backdrop {
+        background: rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        // Полифил не умеет делать фиксированный фон сам по себе, помогаем ему
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+    }
+    &__inner{
+        display: grid;
+        @include md-up{
+            gap: 56px;
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+    &__title{
+        font-size: 32px;
+        font-weight: 600;
+        letter-spacing: 0;
+        text-align: center;
+        margin-bottom: 32px;
+    }
+
+    hr{
+        height: 1px;
+        background: #EBEBEB;
+        width: 100%;
+        margin-left: 0;
+        margin-block: 32px;
+        opacity: .1;
+    }
+
+    .label{
+        color: var(--color-gray-dark);
+        margin-bottom: 9px;
+        font-size: 12px;
+    }
+
+    .fields-wrapper{
+        margin-bottom: 20px;
+    }
+
+    input{
+        background-color: #CDCDCD;
+        color: currentColor;
+        &::placeholder{
+            font-weight: 400;
+        }
+    }
+    button{
+        color: var(--color-white);
+    }
+    .agreement {
+        font-family: var(--font-secondary);
+        background: var(--color-white);
+        display: flex;
+        gap:12px;
+        align-items: start;
+        margin-top: 8px;
+        label{
+            font-size: 11px;
+            line-height: 1.45;
+            text-transform: unset;
+            letter-spacing: .25px;
+            font-weight: inherit;
+        }
+        a{
+            text-decoration: underline;
+            &:hover{
+                color: var(--color-accent)
+            }
+        }
+    }
+    .radio-label{
+        .radio-text{
+            color: #3F3F40;
+            font-size: 14px;
+            opacity: .8;
+            font-weight: 500;
+        }
+    }
+}
+
+.cart-product{
+    display: grid;
+    grid-template-columns: 137px 1fr;
+    gap: 18px;
+    margin-bottom: 12px;
+    &__image{
+        img{
+            object-fit: contain;
+        }
+    }
+    &__info{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    &__title{
+        font-weight: 500;
+        font-family: var(--font-alt);
+        color: var(--color-accent);
+        font-size: 18px;
+        line-height: 1.4;
+        margin-bottom: 10px;
+    }
+    &__price{
+        font-size: 16px;
+        font-weight: 400;
+    }
+}

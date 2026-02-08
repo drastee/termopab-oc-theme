@@ -1,0 +1,51 @@
+@use "src/styles/mixins" as *;
+.marquee {
+    display: flex;
+    width: max-content;
+    animation: marquee 15s linear infinite;
+    white-space: nowrap;
+    align-items: center;
+    padding-bottom: 5%;
+    span {
+        font-size: 33px;
+        line-height: 1.12;
+        letter-spacing: 1px;
+        font-family: var(--font-alt);
+        font-weight: 600;
+        color: var(--color-accent);
+        display: flex;
+        vertical-align: middle;
+        
+        align-items: center;
+        @include md-up {
+            font-size: 60px;
+            letter-spacing: 2px;
+        }
+        @include lg-up {
+            font-size: 75px;
+            letter-spacing: 2.3px;
+        }
+        @include xxl-up {
+            font-size: 90px;
+            letter-spacing: 2.7px;
+        }
+        
+        &:after{
+            display: inline-block;
+            content: "";
+            width: .3em;
+            height: .3em;
+            margin-left: .5em;
+            margin-right: .5em;
+            background: var(--color-accent);
+            transform: translateY(10%);
+        }
+    }
+}
+
+
+/* 🔥 Обязательная часть — ДЕЛАЙЕШЬ СНАРУЖИ */
+@keyframes marquee {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-33.33%); }
+}

@@ -1,0 +1,40 @@
+@use "src/styles/mixins" as *;
+.post-header{
+    font-family: var(--font-alt);
+    --primary-color: var(--color-black);
+    --secondary-color: var(--color-gray-dark);
+    margin-bottom: 40px;
+    @include md-up{
+        --primary-color: var(--color-white);
+        --secondary-color: var(--color-white);
+        margin-bottom: 60px;
+    }
+    &__link{
+        margin-bottom: 40px;
+        color: var(--secondary-color);
+        font-size: 18px;
+        @include md-up{
+            margin-bottom: 30px;
+        }
+    }
+    &__title{
+        color: var(--primary-color);
+        font-size: 32px;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-bottom: 16px;
+        @include md-up{
+            font-size: 46px;
+        }
+    }
+    &__subtitle{
+        color: var(--secondary-color);
+        font-weight: 600;
+        font-size: 16px;
+        @include md-up{
+            font-size: 26px;
+            font-weight: 400;
+        }
+    }
+    
+}

@@ -1,0 +1,22 @@
+// Variable font mixin
+@mixin font-variable($family, $path, $weight-range: 100 900, $style: normal) {
+  @font-face {
+    font-family: $family;
+    src: url("#{$path}.woff2") format("woff2-variations"),
+         url("#{$path}.ttf") format("truetype-variations");
+    font-weight: $weight-range;
+    font-style: $style;
+    font-display: swap;
+  }
+}
+
+// Static font mixin
+@mixin font-static($family, $path, $weight: 400, $style: normal) {
+  @font-face {
+    font-family: $family;
+    src: url("#{$path}.woff2") format("woff2");
+    font-weight: $weight;
+    font-style: $style;
+    font-display: swap;
+  }
+}

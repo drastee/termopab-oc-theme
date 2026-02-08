@@ -1,0 +1,20 @@
+<div class="dropdown" data-type="select">
+    <button class="dropdown__selected" aria-expanded="false">
+        <span>{{ selected }}</span>
+        <span class="dropdown__icon">
+            <svg class="dropdown-arrow"><use href="#icon-dropdown-arrow"></use></svg>
+        </span>
+    </button>
+
+    <div class="dropdown__menu" hidden>
+        <ul class="dropdown__list">
+            {% for option in options %}
+            <li class="dropdown__item">
+                <button type="button" class="dropdown__option" data-value="{{ option }}">
+                    <span>{{ option }}</span>
+                </button>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,91 @@
+@use "src/styles/mixins" as *;
+.product-feature{
+    padding-block: 80px 133px;
+    &__wrapper{
+        display: grid;
+        font-size: 14px;
+        line-height: 1.85;;
+        @include lg-up{
+            grid-template-columns: 24% 1fr 24%;
+            gap: 105px;
+        }
+    }
+    &__right-side{
+        align-self: end;
+        .link{
+            font-size: 16px;;
+            margin-top: 32px;
+            font-weight: 500;
+        }
+    }
+    &__middle-side{
+        background-image: url(/src/assets/images/logo-silhouette2.webp);
+        background-position: center center;
+        background-size: 70%;
+        background-repeat: no-repeat;
+        display: flex;
+        justify-content: center;
+        position: relative;
+        
+        width: 100%;
+        height: 100%;
+        aspect-ratio: 1 / 1;
+
+        @include sm-up{
+            width: 60%;
+            margin-inline: auto;
+        }
+
+        @include lg-up{
+            width: 100%;
+            margin-inline: unset;
+        }
+        img {
+            position: absolute;
+            inset: 0;
+      
+            max-width: 100%;
+            max-height: 100%;
+            width: 100%;
+            height: 100%;
+      
+            object-fit: contain;
+            transition: opacity 0.2s ease-out;
+          }
+        .img-base {
+            opacity: 1;
+        }
+      
+        .img-hover {
+            opacity: 0;
+        }
+        &:hover {
+            .img-hover {
+                opacity: 1;
+            }
+    
+            .img-base {
+                opacity: 0;
+            }
+        }
+    }
+    &__product-title{
+        font-family: var(--font-alt);
+        font-size: 28px;
+        font-weight: 600;
+        margin-bottom: 26px;
+        @include md-up{
+            margin-bottom: 60px;
+        }
+    }
+    .swiper-controls{
+        position: relative;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        @include md-up{
+            margin-top: unset;
+        }
+    }
+}

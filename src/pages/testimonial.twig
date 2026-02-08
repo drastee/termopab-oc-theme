@@ -1,0 +1,20 @@
+{% extends "html/layouts/_html.twig" %}
+{% set pageTitle = "Відгук - Кулаков Тарас" %}
+{% set pageClass = "testimonial-page" %}
+{% block main %}
+<main>
+
+
+    {% include "@components/breadcrumbs/_breadcrumbs.twig" with {
+        "background": "combo-color",
+        "breadcrumbs": [
+            {"name": "Відгуки"},
+            {"name": "Кулаков Тарас"}
+        ]
+    }%}
+
+    {% include "@sections/pages/testimonial/testimonial-single/_testimonial-single.twig" with {filter: true} %}
+
+
+</main>
+{% endblock %}

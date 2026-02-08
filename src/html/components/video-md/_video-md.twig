@@ -1,0 +1,14 @@
+<div class="video-md">
+    <div class="video-md__inner">
+        <video class="video-md__video" playsinline>
+            <source src="/src/assets/videos/hero.mp4" type="video/mp4">
+            <source src="/src/assets/videos/hero.webm" type="video/webm">
+        </video>
+
+        <img src="/src/assets/images/project/1.webp" alt="" class="video-md__poster">
+        
+        <span class="video-md__overlay"></span>
+
+        {% include '@components/video-play-button/_video-play-button.twig' with { class: "video-md__button" } %}
+    </div>
+</div>

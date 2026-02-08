@@ -1,0 +1,21 @@
+{% extends "html/layouts/_html.twig" %}
+{% set pageTitle = "Броварня Brewmasque" %}
+{% set pageClass = "project-page" %}
+{% block main %}
+<main>
+
+
+    {% include "@components/breadcrumbs/_breadcrumbs.twig" with {
+        "background": "combo-color",
+        "breadcrumbs": [
+            {"name": "Наші проєкти"},
+            {"name": "Броварня Brewmasque"}
+        ]
+    }%}
+
+    {% include "@sections/pages/project/project-single/_project-single.twig" with {filter: true} %}
+
+    {% include "html/sections/shared/cta-thin-barrel/_cta-thin-barrel.twig" %}
+
+</main>
+{% endblock %}

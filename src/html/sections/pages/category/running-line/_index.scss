@@ -1,0 +1,58 @@
+@use "src/styles/mixins" as *;
+.running-line{
+    background-color: var(--color-black);
+    color: var(--color-white);
+    height: 220px;
+    display: flex;
+    position: relative;
+    overflow: hidden;
+    justify-content: center;
+    align-items: center;
+    font-size: 33px;
+    letter-spacing: 1px;
+    @include md-up{
+        height: 300px;
+        font-size: 50px;
+        letter-spacing: 1.7px;
+    }
+    @include lg-up{
+        height: 370px;
+        font-size: 65px;
+        letter-spacing: 2.2px;
+    }
+    @include xxl-up{
+        height: 470px;
+        font-size: 90px;
+        letter-spacing: 2.7px;
+    }
+    &__wrapper{
+        transform: rotate(8deg);
+        @include md-up{
+            transform: rotate(4deg);
+        }
+    }
+    &__marquee{
+        display: flex;
+        animation: marquee 25s linear infinite;
+        width: max-content;
+        white-space: nowrap;
+        align-items: center;
+        gap:6px;
+        @include md-up{
+            gap:15px;
+        }
+        span{
+            color: var(--color-white);
+            text-transform: uppercase;
+            font-weight: 700;
+            line-height: 1;
+            font-family: var(--font-alt);
+        }
+    }
+    img{
+        height: inherit;
+        max-height: 100%;
+        max-width: 100%;
+        position: absolute;
+    }
+}

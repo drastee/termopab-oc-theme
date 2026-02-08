@@ -1,0 +1,101 @@
+@use "src/styles/mixins" as *;
+
+.cat-promo{
+    background-color: var(--color-black);
+    color: var(--color-white);
+    padding-block: 18px 60px;
+    @include md-up{
+        padding-block: 64px 112px;
+    }
+    &__grid{
+        display: grid;
+        grid-template-columns: 1fr;
+        row-gap: 32px;
+        grid-template-areas: 
+        "link"
+        "image"
+        "content";
+        @include md-up{
+            row-gap: 56px;
+            grid-template-rows: repeat(1fr, auto);
+            row-gap: 56px;
+            grid-template-columns: 1fr 50%;
+            column-gap: 10%;
+            grid-template-areas: 
+            "link image"
+            "content image";
+        }
+    }
+    &__content{
+        display: flex;
+        flex-direction: column;
+        gap: 56px;
+        grid-area: content;
+        padding-inline: 20px;
+        @include md-up{
+            padding-inline: 28px 16px;
+            align-self: top;
+        }
+        p{
+            margin-bottom: 32px;
+        }
+        ul.marked{
+            margin-top: -12px;
+        }
+    }
+    &__buttons{
+        height: max-content;
+        @include md-up{
+            grid-area: link;
+            align-self: end;
+            padding-inline: 28px 20px;
+        }
+        .link{
+            font-size: 16px;
+            @include md-up{
+                font-size: 18px;
+            }
+        }
+    }
+    &__image{
+        grid-area: image;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-image: url('/src/assets/images/category/product-bg.webp');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 73%;
+        img{
+            max-width: 100%;
+            max-height: 100%;
+        }
+    }
+}
+
+.cat-promo--reverse{
+    padding-block: 60px 90px;
+    @include md-up{
+        padding-block: 85px 110px;
+    }
+    .title-secondary{
+        @include md-up{
+            margin-bottom: 114px;
+        }
+    }
+    .cat-promo__grid{
+        @include md-up{
+            grid-template-columns: 50% 1fr;
+            grid-template-areas: 
+            "image link"
+            "image content";
+        }
+    }
+}
+
+.title-secondary{
+    margin-bottom: 20px;
+    @include md-up{
+        margin-bottom: 58px;
+    }
+}

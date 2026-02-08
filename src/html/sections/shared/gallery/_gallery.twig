@@ -1,0 +1,15 @@
+<section class="gallery">
+<div class="gallery__images">
+            
+            {# Запускаем цикл по массиву #}
+            {% for image in images %}
+                <a href="{{ image }}" data-fancybox="gallery">
+                    <img src="{{ image }}" alt="" loading="lazy">
+                </a>
+            {% endfor %}
+            
+        </div>
+    <div class="marquee-wrapper">
+        {% include "@components/marquee/_marquee.twig" %}
+    </div>
+</section>

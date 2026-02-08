@@ -1,0 +1,25 @@
+{% extends "html/layouts/_html.twig" %}
+{% set pageTitle = "Наші проєкти" %}
+{% set pageClass = "testimonials-page" %}
+{% block main %}
+<main>
+
+    {% include "@sections/shared/hero-secondary/_hero-secondary.twig" with {
+        "class": "large",
+        "title": "Наші проєкти",
+        "subtitle": "Наш успіх - успіх наших клієнтів",
+        "background_image_desktop": "/src/assets/images/hero-large.webp",
+        "background_image_mobile": "/src/assets/images/hero-large.webp"
+    }%}
+
+    {% include "@components/breadcrumbs/_breadcrumbs.twig" with {
+        "background": "white",
+        "breadcrumbs": [
+            {"name": "Проєкти"}
+        ]
+    }%}
+
+    {% include "@sections/shared/posts/_posts.twig" with {filter: false} %}
+
+</main>
+{% endblock %}

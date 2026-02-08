@@ -1,0 +1,23 @@
+{% extends "html/layouts/_html.twig" %}
+{% set pageTitle = "Новини" %}
+{% set pageClass = "testimonials-page" %}
+{% block main %}
+<main>
+
+    {% include "@sections/shared/hero-secondary/_hero-secondary.twig" with {
+        "title": "Новини",
+        "background_image_desktop": "/src/assets/images/news-bg.webp",
+        "background_image_mobile": "/src/assets/images/news-bg-mobile.webp"
+    }%}
+
+    {% include "@components/breadcrumbs/_breadcrumbs.twig" with {
+        "background": "white",
+        "breadcrumbs": [
+            {"name": "Новини"}
+        ]
+    }%}
+
+    {% include "@sections/shared/posts/_posts.twig" with {filter: false} %}
+
+</main>
+{% endblock %}

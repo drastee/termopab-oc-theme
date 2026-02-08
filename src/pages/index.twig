@@ -1,0 +1,60 @@
+{% extends "html/layouts/_html.twig" %}
+{% set pageTitle = "Головна сторінка" %}
+{% set pageClass = "home-page" %}
+{% block main %}
+<main>
+    {% include "html/sections/shared/hero/_hero.twig" %}
+    {% include "html/sections/pages/main/products-preview/_products-preview.twig" with {
+        "products": [
+            {
+                "image": "/src/assets/images/products/product-1.webp",
+                "image_hover": "/src/assets/images/products/product-2.webp",
+                "title": "ВП200",
+                "params": [
+                    {"label": "Продуктивність", "value": "300000"},
+                    {"label": "Потужність", "value": "28797"}
+                    ],
+                "text": "",
+                "link": "#"
+            },
+            {
+                "image": "/src/assets/images/products/product-2.webp",
+                "image_hover": "/src/assets/images/products/product-1.webp",
+                "title": "ВП200",
+                "params": [{"label": "Продуктивність","value": "300000"}],
+                "power": "",
+                "text": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                "link": "#"
+            },
+            {
+                "image": "/src/assets/images/products/product-1.webp",
+                "image_hover": "/src/assets/images/products/product-2.webp",
+                "title": "ВП200",
+                "params": [
+                    {"label": "Продуктивність","value": "300000"},
+                    {"label": "Потужність","value": "28797"}
+                    ],
+                "text": "",
+                "link": "#"
+            }
+        ]
+    }%}
+    {% include "html/sections/shared/intro/_intro.twig" %}
+    {% include "html/sections/shared/about/_about.twig" with {
+        title: "Компанія <br>Термопаб<span>існує на ринку</span><span>вже понад 8 років</span>",
+        content: true
+    }%}
+    {% include "html/sections/shared/cta-hop/_cta-hop.twig" %}
+    {% include "html/sections/pages/main/assortment/_assortment.twig" %}
+    {% include "html/sections/pages/main/highlight/_highlight.twig" %}
+    {% include "html/sections/pages/main/product-feature/_product-feature.twig" %}
+    {% include "html/sections/pages/main/contact-bar/_contact-bar.twig" %}
+    {% include "html/sections/shared/cases/_cases.twig" with {
+        title: "Наші кейси",
+        linkText: "Усі кейси",
+        sliderNav: true
+    }%}
+    {% include "html/sections/pages/main/questions/_questions.twig" %}
+    {% include "html/sections/shared/brewery-reviews/_brewery-reviews.twig" %}
+</main>
+{% endblock %}

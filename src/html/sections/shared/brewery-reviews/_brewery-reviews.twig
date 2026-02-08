@@ -1,0 +1,64 @@
+<section class="brewery-reviews">
+    <div class="container brewery-reviews__head">
+        <h2 class="brewery-reviews__title">Огляди пивоварень</h2>
+        <a class="brewery-reviews__all link" href="#">Усі огляди <svg class="link-arrow"><use href="#icon-short-arrow"></use></svg></a>
+    </div>
+    <div class="container-wide">
+        <div class="brewery-reviews__slider swiper">
+            <div class="swiper-wrapper">
+
+                <div class="swiper-slide">
+                 {% include '@components/post-card/_post-card.twig' with {
+                    image: '/src/assets/images/brewery-reviews/1.webp',
+                    title: 'Броварня в Литві',
+                    description: 'Огляд литовської броварні 2024 року запуску'
+                 } %}
+                </div>
+
+                <div class="swiper-slide">
+                 {% include '@components/post-card/_post-card.twig' with {
+                    image: '/src/assets/images/brewery-reviews/2.webp',
+                    title: 'Броварня новий буг',
+                    description: 'Огляд броварні в місті Новий Буг 2023 року запуску'
+                 } %}
+                </div>
+
+                <div class="swiper-slide">
+                 {% include '@components/post-card/_post-card.twig' with {
+                    image: '/src/assets/images/brewery-reviews/3.webp',
+                    title: 'Броварня Ніжин',
+                    description: 'Огляд броварні в місті Ніжин 2022 року запуску'
+                 } %}
+                </div>
+
+                <div class="swiper-slide">
+                 {% include '@components/post-card/_post-card.twig' with {
+                    image: '/src/assets/images/brewery-reviews/1.webp',
+                    title: 'Броварня в Литві',
+                    description: 'Огляд литовської броварні 2024 року запуску'
+                 } %}
+                </div>
+
+                <div class="swiper-slide">
+                 {% include '@components/post-card/_post-card.twig' with {
+                    image: '/src/assets/images/brewery-reviews/2.webp',
+                    title: 'Броварня новий буг',
+                    description: 'Огляд броварні в місті Новий Буг 2023 року запуску'
+                 } %}
+                </div>
+
+                <div class="swiper-slide">
+                 {% include '@components/post-card/_post-card.twig' with {
+                    image: '/src/assets/images/brewery-reviews/3.webp',
+                    title: 'Броварня Ніжин',
+                    description: 'Огляд броварні в місті Ніжин 2022 року запуску'
+                 } %}
+                </div>
+            </div>
+
+            {% include '@components/swiper-controls-oval/_swiper-controls-oval.twig' %}
+
+        </div>
+
+    </div>
+</section>

@@ -1,0 +1,87 @@
+@use "src/styles/mixins" as *;
+.history{
+    background-color: var(--color-black);
+
+    @include md-up{
+        padding-block: 150px 175px;
+    }
+    &__title{
+        text-transform: uppercase;
+    }
+
+    &__years{
+        color: var(--color-white);
+        font-size: 30px;
+        font-weight: 500;
+        font-family: var(--font-alt);
+        overflow-x: visible;
+        .swiper-wrapper{
+            padding-right: 0;
+            height: 240px;
+            overflow-x: visible;
+        }
+        .swiper-slide {
+            display: flex;
+            width: auto;
+            cursor: pointer;
+            flex-shrink: 0;
+            align-items: center; // Или baseline, чтобы цифры стояли ровно по одной линии
+            justify-content: center;
+            line-height: 1;
+            
+            // ВАЖНО:
+            // 1. Время (0.6s) должно совпадать с speed: 600 в JS
+            // 2. Добавляем width в транзишн (хотя он auto, это помогает браузеру плавнее считать перерисовку)
+            transition: font-size 0.6s ease, width 0.6s ease, color 0.3s;
+            
+            // Оптимизация для браузера, чтобы не дергалось
+            will-change: font-size, width; 
+    
+            &:hover {
+                color: var(--color-accent);
+            }
+    
+            &.swiper-slide-active {
+                letter-spacing: 7px; // Это тоже лучше добавить в transition если меняется
+                font-size: 239px;
+                cursor: unset;
+                
+                // Можно добавить небольшую задержку для роста, если "скачок" останется
+                // transition: font-size 0.6s ease;
+                
+                &:hover {
+                    color: inherit;
+                }
+            }
+        }
+        .oval-nav{
+            position: relative;
+        }
+    }
+
+    &__info{
+        width: 100%;
+        overflow: hidden;
+    }
+    &__content{
+        color: #D0D0D0;
+        .two-columns{
+            /* 1. Ограничиваем высоту */
+            //height: 420px; /* Или max-height, но height стабильнее для колонок */
+            
+            /* 2. Настройки колонок */
+            column-width: 300px; /* Минимальная ширина одной колонки */
+            column-gap: 32px;    /* Расстояние между колонками */
+           // column-fill: auto;   /* ВАЖНО: Заполнять на всю высоту перед переносом */
+            column-count: 2;
+
+            /* 3. Настройки скролла */
+            overflow-y: hidden; /* Скрываем вертикальный скролл */
+            overflow-x: auto;   /* Включаем горизонтальный скролл, если колонок много */
+            
+            /* 4. Красота (опционально) */
+            width: 100%;
+            padding-bottom: 10px; /* Отступ под скроллбар */
+        }
+    }
+}

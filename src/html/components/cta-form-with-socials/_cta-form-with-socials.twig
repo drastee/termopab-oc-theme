@@ -1,0 +1,12 @@
+<div class="cta-form">
+
+    <h2 class="cta-form__title section-title">{{ formTitle ?? 'Втілимо ваш <span>проєкт у життя</span>'}}</h2>
+
+    <div class="cta-form__wrapper">
+        <p>Можете скористатися мессенджерами для вашої зручності, або залишити свої контакти</p>
+
+        {% include "@components/social-buttons/_social-buttons.twig" %}  
+        
+        {% include "@components/callback-form/_callback-form.twig" with { type: formType ?? "" } %}  
+    </div>
+</div>

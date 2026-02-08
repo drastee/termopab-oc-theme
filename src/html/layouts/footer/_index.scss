@@ -1,0 +1,198 @@
+@use "src/styles/mixins" as *;
+
+.footer{
+    background: var(--color-black);
+    color: #F9F5EC;
+    padding-block: 57px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+    .container{
+        position: relative
+    }
+    &__top{
+        display: grid;
+        gap: 60px;
+        @include md-up{
+            gap: 16.3%;
+        }
+        @include md-up{
+            grid-template-columns: min-content 1fr;
+        }
+    }
+
+    &__left{
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__brand{
+        font-size: 67px;
+        font-weight: bold;
+        line-height: 1;
+        color: var(--color-accent);
+        font-family: var(--font-alt);
+        margin-bottom: 60px;
+        left: 0;
+        @include md-up{
+            font-size: 114px;
+        }
+    }
+
+    &__button{
+        margin-bottom: 30px;
+        max-width: 288px;
+    }
+
+    hr{
+        height: 1px;
+        background: var(--color-gray-mid);
+        max-width: 288px;
+        width: 100%;
+        margin-left: 0;
+        
+    }
+
+    &__email{
+        margin-top: 30px;
+        text-transform: uppercase;
+        font-weight: 500;
+        font-family: var(--font-alt);
+        font-size: 26px;
+        width: max-content;
+        line-height: 1;
+        &:hover{
+            color: var(--color-accent);
+        }
+    }
+    
+
+    &__right{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 80px;
+        @include md-up{
+            padding-top: 40px;
+        }
+    }
+
+    &__right-top{
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+        
+        @include md-down{
+            gap: 30px;
+        }
+        @include md-up{
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+    }
+
+    &__address{
+        font-size: 18px;
+        letter-spacing: .56;
+        line-height: 1.2;
+        display: flex;
+        align-items: center;
+    }
+
+    &__icon-location{
+        fill: currentColor;
+        width: 20px;
+        height: 20px; 
+        margin-right: 7px;
+        margin-bottom: 5px;
+    }
+
+    &__socials_wrapper{
+        display: flex;
+        justify-content: end;
+    }
+
+    &__worknote{
+        color: currentColor;
+        font-size: 14px;
+        letter-spacing: .28px;
+        line-height: 1.6;
+        opacity: .6;
+    }
+
+    &__menu{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        row-gap: 30px;
+        @include md-up{
+            grid-template-columns: repeat(3, 1fr);
+        }
+        a{
+            text-transform: uppercase;
+            line-height: 1.6;
+            font-size: 15px;
+            letter-spacing: .6px;
+            padding-block: 5px;
+            padding-right: 5px;
+            font-weight: 500;
+            &:hover{
+                color: var(--color-accent);
+            }
+        }
+    }
+
+    &__bottom{
+        display: flex;
+        position: relative;
+        @include md-up{
+            justify-content: end;
+        }
+    }
+
+    &__bottom-inner{
+        font-size: 13px;
+        opacity: .3;
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        
+        gap: 22px;
+        @include md-up{
+            
+            width: 75%;
+            gap: 16%;
+        }
+    }
+
+    &__payments{
+        display: flex;
+        gap: 4px;
+        @include md-down{
+            width: 100%;
+        }
+        img{
+            width: 53px;
+            height: 33px;
+            object-fit: contain;
+            border-radius: 3px;
+            background: var(--color-white);
+        }
+    }
+    &__privacy{  
+        margin-right: auto;
+        text-decoration: underline;
+        text-decoration-line: underline;
+        text-decoration-style: dashed;
+        @include md-down{
+            margin-left: auto;
+        }
+        &:hover{
+            color: var(--color-accent);
+        }
+    }
+
+    .shedule-styled{
+        margin-bottom: 32px;
+    }
+}   

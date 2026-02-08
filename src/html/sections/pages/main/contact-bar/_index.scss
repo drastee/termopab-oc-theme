@@ -1,0 +1,50 @@
+
+@use "src/styles/mixins" as *;
+
+.contact-bar{
+    padding-block: 36px 127px;
+    background: linear-gradient(300deg, #552900 0%, #000000 46%);
+    background: linear-gradient(270deg, #000000 46%, #552900 100%);
+    position: relative;
+    @include md-up{
+        padding-block: 36px 51px;
+
+    }
+    &__inner{
+        padding-left: 80px;
+    }
+    .section-title{
+        text-transform: uppercase;
+        margin-bottom: 20px;
+    }
+    &__phone{
+        color: #DEDEDE;
+        font-family: var(--font-alt);
+        font-size: 28px;
+        display: block;
+        font-weight: 600;
+        line-height: 1.28;
+        &:hover{
+            color: var(--color-accent);
+        }
+    }
+    &__spikelet{
+            position: absolute;
+            top: unset;
+            right: 0;
+            bottom: -18%;
+            transform: rotate(17deg) translateX(5%) translateY(-12%);
+            width:  400px;
+            @include sm-up{
+                width:  500px;
+            }
+            @include md-up{
+                width: 56vw;
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: unset;
+            }
+    }
+}
+

@@ -1,0 +1,31 @@
+<section class="contacts">
+    <div class="container">
+        <div class="contacts__inner">
+            <div class="contacts__start">
+                <h1 class="contacts__title section-title">Контакти</h1>
+                <div class="address">
+                    <p class="address__title">Україна, м. Київ, вул. Миколи Василенка,&nbsp;1.</p>
+                    <p class="address__note">(територія заводу КАРЗ)</p>
+                </div>
+                <div class="contacts__columns">
+                    <div class="contacts__phones-wrapper">            
+                        {% include "@components/phones-styled/_phones-styled.twig"%}
+                        {% include "@components/shedule-styled/_shedule-styled.twig"%}
+                    </div>
+                    <div class="contacts__social-wrapper">
+                        <a href="mailto:info@termopab.com" class="contacts__email">
+                            INFO@TERMOPAB.COM
+                        </a>
+                        {% include "@components/social-buttons/_social-buttons.twig" %}
+                    </div>
+                </div>
+            </div>
+            <div class="contacts__end">
+                <div class="contacts__badge">
+                    <img src="/src/assets/images/logo-large.webp" class="logo-large js-rotate-item" alt="Termopab badge">
+                    <img src="/src/assets/images/logo-large-shadow.webp" class="logo-shadow" alt="Termopab badge">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

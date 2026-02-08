@@ -1,0 +1,15 @@
+<section class="hero-secondary {{class}}" style="--bg-desktop: url('{{ background_image_desktop }}'); --bg-mobile: url('{{ background_image_mobile }}');">
+    <picture class="hero-secondary__bg">
+        <source srcset="{{ background_image_desktop }}" media="(min-width: 1024px)">
+        <img src="{{ background_image_mobile }}" alt="{{ title }}">
+    </picture>
+    <div class="hero-secondary__overlay"></div>
+    <div class="hero-secondary__inner">
+        {% if title %}
+            <h1 class="hero-secondary__title">{{ title }}</h1>
+        {% endif %}
+        {% if subtitle %}
+            <h2 class="hero-secondary__subtitle">{{ subtitle }}</h2>
+        {% endif %}
+    </div>
+</section>

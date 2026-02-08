@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+    <symbol id="icon-arrow" viewBox="0 0 24 17">
+        <g clip-path="url(#clip-arrow)">
+            <path d="M24 9.76787L5.20259 9.76787L11.0342 15.2075L9.11255 17L0 8.5L9.11255 0L11.0342 1.7925L5.20259 7.23213L24 7.23213V9.76787Z"
+                fill="currentColor"/>
+        </g>
+        <clipPath id="clip-arrow">
+            <rect width="24" height="17" transform="matrix(-1 0 0 1 24 0)" />
+        </clipPath>
+    </symbol>
+</svg>

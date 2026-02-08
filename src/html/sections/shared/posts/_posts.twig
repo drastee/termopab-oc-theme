@@ -1,0 +1,93 @@
+<section class="posts">
+    <div class="container">
+    
+        {% if(filter) %}
+            <ul class="posts__filter">
+                <li><a class="posts__filter-item active" href="#">УСЕ</a></li>
+                <li><a class="posts__filter-item" href="#">ЦКТ СТАНДАРТ</a></li>
+                <li><a class="posts__filter-item" href="#">ЦКТ ПРЕМІУМ</a></li>
+                <li><a class="posts__filter-item" href="#">БРОВАРНІ</a></li>
+                <li><a class="posts__filter-item" href="#">Форфаси</a></li>
+                <li><a class="posts__filter-item" href="#">Барний охмелювач</a></li>
+            </ul>
+        {% endif %}
+
+        <div class="posts__inner">
+
+                <div>
+                    {% include '@components/post-card/_post-card.twig' with {
+                        image: '/src/assets/images/brewery-reviews/1.webp',
+                        title: 'Броварня в Литві',
+                        description: 'Огляд литовської броварні 2024 року запуску'
+                    } %}
+                </div>
+
+                <div>
+                    {% include '@components/post-card/_post-card.twig' with {
+                        image: '/src/assets/images/brewery-reviews/1.webp',
+                        title: 'Броварня в Литві',
+                        description: 'Огляд литовської броварні 2024 року запуску'
+                    } %}
+                </div>
+
+                <div>
+                    {% include '@components/post-card/_post-card.twig' with {
+                        image: '/src/assets/images/brewery-reviews/1.webp',
+                        title: 'Броварня в Литві',
+                        description: 'Огляд литовської броварні 2024 року запуску'
+                    } %}
+                </div>
+
+                <div>
+                    {% include '@components/post-card/_post-card.twig' with {
+                        image: '/src/assets/images/brewery-reviews/1.webp',
+                        title: 'Броварня в Литві',
+                        description: 'Огляд литовської броварні 2024 року запуску'
+                    } %}
+                </div>
+
+                <div>
+                    {% include '@components/post-card/_post-card.twig' with {
+                        image: '/src/assets/images/brewery-reviews/1.webp',
+                        title: 'Броварня в Литві',
+                        description: 'Огляд литовської броварні 2024 року запуску'
+                    } %}
+                </div>
+
+                <div>
+                    {% include '@components/post-card/_post-card.twig' with {
+                        image: '/src/assets/images/brewery-reviews/1.webp',
+                        title: 'Броварня в Литві',
+                        description: 'Огляд литовської броварні 2024 року запуску'
+                    } %}
+                </div>
+
+                <div>
+                    {% include '@components/post-card/_post-card.twig' with {
+                        image: '/src/assets/images/brewery-reviews/1.webp',
+                        title: 'Броварня в Литві',
+                        description: 'Огляд литовської броварні 2024 року запуску'
+                    } %}
+                </div>
+
+                <div>
+                    {% include '@components/post-card/_post-card.twig' with {
+                        image: '/src/assets/images/brewery-reviews/1.webp',
+                        title: 'Броварня в Литві',
+                        description: 'Огляд литовської броварні 2024 року запуску'
+                    } %}
+                </div>
+
+                <div>
+                    {% include '@components/post-card/_post-card.twig' with {
+                        image: '/src/assets/images/brewery-reviews/1.webp',
+                        title: 'Броварня в Литві',
+                        description: 'Огляд литовської броварні 2024 року запуску'
+                    } %}
+                </div>
+
+        </div>
+
+    {% include "@components/pagination/_pagination.twig"%}
+    </div>
+</section>

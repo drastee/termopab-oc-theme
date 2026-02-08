@@ -1,0 +1,23 @@
+{% extends "html/layouts/_html.twig" %}
+{% set pageTitle = "Відгуки" %}
+{% set pageClass = "testimonials-page" %}
+{% block main %}
+<main>
+
+    {% include "@sections/shared/hero-secondary/_hero-secondary.twig" with {
+        "title": "Відгуки",
+        "background_image_desktop": "/src/assets/images/category/hero-bg.webp",
+        "background_image_mobile": "/src/assets/images/category/hero-bg-mobile.webp"
+    }%}
+
+    {% include "@components/breadcrumbs/_breadcrumbs.twig" with {
+        "background": "white",
+        "breadcrumbs": [
+            {"name": "Відгуки"}
+        ]
+    }%}
+
+    {% include "@sections/shared/posts/_posts.twig" with {filter: false} %}
+
+</main>
+{% endblock %}

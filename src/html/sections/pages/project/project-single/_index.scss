@@ -1,0 +1,8 @@
+@use "src/styles/mixins" as *;
+.project-single{
+    padding-block: 20px 80px;
+    @include md-up{
+        padding-block: 30px 120px;
+        background: var(--color-black);
+    }
+}

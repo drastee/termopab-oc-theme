@@ -1,0 +1,27 @@
+<section class="project-single">
+    <div class="container">
+    
+        {% include "@components/post-header/_post-header.twig" with {
+            "title": "Броварня Brewmasque",
+            "linkText": "Усі проєкти"
+        }%}
+
+        {% include "@components/video-md/_video-md.twig" %}
+
+        {% include "@components/gallery-grid/_gallery-grid.twig" with {
+            images: [
+                '/src/assets/images/project/1.webp',
+                '/src/assets/images/project/2.webp',
+                '/src/assets/images/project/3.webp',
+                '/src/assets/images/project/4.webp',
+                '/src/assets/images/project/5.webp',
+                '/src/assets/images/project/6.webp',
+                '/src/assets/images/project/7.webp',
+                '/src/assets/images/project/8.webp',
+                '/src/assets/images/project/9.webp'
+            ]
+        }%}
+
+    </div>
+
+</section>

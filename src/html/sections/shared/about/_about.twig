@@ -1,0 +1,57 @@
+<section class="about">
+    <div class="container about__inner">
+
+        <!-- Заголовок -->
+        <h2 class="section-title about__title">{{title}}</h2>
+        {% if content %}
+            <div class="about__content">
+
+                <!-- Левая колонка (текст) -->
+                <div class="about__text">
+                    <p>
+                        Виробник пивоварного обладнання «Термо-Паб», 
+                        розпочав свою діяльність у 2017 році та постійно 
+                        розширюючи географію проектів, вже у 2019-му заявив 
+                        про себе на ринку Європейського Союзу!
+                    </p>
+
+                    {% include "@components/button-play/_button-play.twig" with {
+                        text: "Дізнайтеся більше про нас у відео"
+                    }%}
+                </div>
+
+                <!-- Правая колонка (факты) -->
+                <div class="about__facts">
+
+                    <a class="about__fact" href="#">
+                        <span class="about__fact-title">40+ кейсів</span>
+                        <p class="about__fact-text">Більше 40 задоволених клієнтів</p>
+                        <svg class="about__arrow"><use href="#icon-arrow"></use></svg>
+                    </a>
+
+                    
+                    <a class="about__fact" href="#">
+                        <span class="about__fact-title">Сертифікати</span>
+                        <p class="about__fact-text">Вся наша продукція відповідає стандартам якості</p>
+                        <svg class="about__arrow"><use href="#icon-arrow"></use></svg>
+                    </a>
+
+                    
+                    <a class="about__fact" href="#">
+                        <span class="about__fact-title">20+ працівників</span>
+                        <p class="about__fact-text">Наша продукція відповідає усім параметрам якості!</p>
+                        <svg class="about__arrow"><use href="#icon-arrow"></use></svg>
+                    </a>
+
+                    
+                    <a class="about__fact" href="#">
+                        <span class="about__fact-title">Ми в медіа</span>
+                        <p class="about__fact-text">Наші проекти публікуються у провідних виданнях</p>
+                        <svg class="about__arrow"><use href="#icon-arrow"></use></svg>
+                    </a>
+
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</section>

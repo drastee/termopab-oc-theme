@@ -1,0 +1,42 @@
+@use "src/styles/mixins" as *;
+
+.brewery-reviews {
+    padding-block: 112px 72px;
+    overflow: hidden;
+    &__head{
+        margin-bottom: 56px;   
+    }
+    &__title {
+        font-weight: 600;
+        line-height: 1;
+        letter-spacing: 1.9;
+        text-transform: uppercase;
+        font-family: var(--font-alt);
+        color: var(--color-black);
+        margin-bottom: 32px;
+        font-size: 32px;
+        @include md-up{
+            font-size: 46px;
+        }
+    }
+
+    &__all {
+        font-size: 18px;
+    }
+
+    .swiper {
+        overflow: visible;
+    }
+    .swiper-wrapper{
+        display: flex;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .oval-nav{
+        transform: none;
+        @include lg-down{
+            display: none;
+        }
+    }
+
+}

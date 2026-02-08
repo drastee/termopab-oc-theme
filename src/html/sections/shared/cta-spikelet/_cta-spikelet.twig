@@ -1,0 +1,28 @@
+<section class="cta-spikelet">
+    <div class="container">
+    
+        {% include "@components/cta-form-with-socials/_cta-form-with-socials.twig" %}
+        <div class="cta-spikelet__image-wrapper">
+            <picture>
+                <!-- Мобильное изображение -->
+                <source srcset="/src/assets/images/cta/welder-spikelet-mob.webp" media="(max-width: 1024px)">
+
+                <!-- Десктопное изображение -->
+                <img src="/src/assets/images/cta/welder-spikelet.webp" alt="">
+                
+            </picture>
+            <video
+                class="explosion"
+                autoplay
+                muted
+                loop
+                playsinline
+                >
+                <source src="/src/assets/videos/explosion.webm" type="video/webm">
+            </video>
+
+
+        </div>
+        
+    </div>
+</section>

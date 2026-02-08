@@ -1,0 +1,39 @@
+import { resolve } from 'path';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
+
+export default {
+  plugins: [
+    viteStaticCopy({
+      targets: [
+        {
+          src: 'src/assets/icons/*',
+          dest: 'image/icons',
+        },
+      ],
+    }),
+  ],
+
+  build: {
+    outDir: './catalog/view',
+    emptyOutDir: false,
+    rollupOptions: {
+      input: {
+        theme: resolve(__dirname, 'src/theme-entry.js'),
+      },
+      output: {
+        entryFileNames: 'javascript/[name].js',
+        assetFileNames: (assetInfo) => {
+          const ext = assetInfo.name?.split('.').pop() || '';
+          if (ext === 'css') return 'stylesheet/theme.css';
+          if (['png', 'jpg', 'jpeg', 'webp', 'svg', 'gif'].includes(ext)) {
+            return 'image/[name][extname]';
+          }
+          if (['woff2', 'woff', 'ttf'].includes(ext)) {
+            return 'stylesheet/fonts/[name][extname]';
+          }
+          return 'other/[name][extname]';
+        },
+      },
+    },
+  },
+};

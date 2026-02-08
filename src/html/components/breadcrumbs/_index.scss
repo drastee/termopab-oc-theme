@@ -1,0 +1,61 @@
+@use "src/styles/mixins" as *;
+
+@mixin breadcrumbs-black {
+    background-color: var(--color-black);
+    .breadcrumbs__item:last-child{
+        color: var(--color-white);
+    }
+}
+@mixin breadcrumbs-white {
+    background-color: var(--color-white);
+}
+.breadcrumbs{
+    color: #999999;
+    font-size: 12.2px;
+    list-style: 1.3;
+    padding-block: 12px;
+    @include md-up{
+        padding-block: 20px;
+    }
+    &.black{
+        @include breadcrumbs-black;
+    }
+    &.white{
+        @include breadcrumbs-white;
+    }
+
+    &.combo-color{
+        @include md-up{
+            @include breadcrumbs-black;
+        }
+    }
+
+    &__list{
+        display: flex;
+        flex-wrap: wrap;
+    }
+    &__item{
+        display: flex;
+        align-items: center;
+    }
+    &__item:last-child{
+        display: flex;
+        font-size: 15.3px;
+        color: var(--color-black);
+        padding-left: 4px;
+    }
+    &__item:not(:last-child)::after{
+        content: '/';
+        width: 18px;
+        display: inline-block;
+        text-align: center;
+        opacity: .4;
+    }
+}
+
+main > .breadcrumbs:first-child{
+    padding-block: 20px 20px;
+    @include md-up{
+        padding-block: 60px 30px;
+    }
+}

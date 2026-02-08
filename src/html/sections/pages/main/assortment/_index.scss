@@ -1,0 +1,114 @@
+@use "src/styles/mixins" as *;
+
+.assortment{
+    padding-block: 52px 82px;
+
+    @include md-up {
+        padding-block: 115px 154px;
+    }
+    .container{
+        position: relative;
+    }
+    .section-title{
+        margin-bottom: 33px;
+        @include md-up{
+            margin-bottom: 50px;
+        }
+    }
+
+    &__inner{
+        @include md-up{
+        }
+    }
+
+    &__product{
+        gap: 10%;
+        @include md-up{
+            display: grid;
+            grid-template-columns: auto 49%;
+        }
+    }
+    
+
+    &__product-right-side{
+        position: relative;
+        width: 100%;
+        height: 100%;
+        aspect-ratio: 1 / 1;
+
+
+        background-image: url(/src/assets/images/logo-silhouette.webp);
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 70%;
+        
+        img {
+            position: absolute;
+            inset: 0;
+      
+            max-width: 100%;
+            max-height: 100%;
+            width: 100%;
+            height: 100%;
+      
+            object-fit: contain;
+            transition: opacity 0.2s ease-out;
+          }
+      
+          .img-base {
+            opacity: 1;
+          }
+      
+          .img-hover {
+            opacity: 0;
+          }
+          &:hover {
+
+            .img-hover {
+              opacity: 1;
+            }
+        
+            .img-base {
+              opacity: 0;
+            }
+          }
+    }
+    &__product-title{
+        font-size: 28px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        font-family: var(--font-alt);
+        @include md-up{
+            margin-bottom: 40px;
+        }
+    }
+
+    &__product-description{
+        margin-top: 26px;
+        @include md-down{
+            padding-inline: 20px;
+        }
+        @include md-up{
+            margin-top: 56px;
+        }
+        p{
+            margin-bottom: 32px;
+        }
+    }
+
+    .swiper{
+        @include md-down{
+            overflow: visible;
+        }
+
+    }
+
+    .swiper-controls{
+        padding-inline: 20px;
+        width: 100%;
+        @include md-up{
+            width: 49%;
+        }
+    }
+    
+}

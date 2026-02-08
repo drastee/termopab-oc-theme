@@ -1,0 +1,69 @@
+@use "src/styles/mixins" as *;
+
+.cta-thin-cap{
+    overflow: hidden;
+    .container{
+        display: flex;
+        flex-direction: column;
+        align-items: end;
+    }
+    &__inner{
+        display: grid;
+        gap: 32px;
+        width: 100%;
+        @include sm-up{
+            max-width: 1350px;
+            gap: 6%;
+            grid-template-columns: max-content 1fr;
+        }
+    }
+
+    &__text-block{
+        text-align: center;
+        @include sm-down{
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+        @include sm-up{
+            text-align: left;
+            padding-block: 70px;
+        }
+        p{
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            font-weight: 500;
+            @include sm-up{
+                margin-bottom: 28px;
+                color: var(--color-black);
+            }
+        }
+    }
+
+    &__image-block{
+        order: -1;
+        position: relative;
+        max-width: 350px;
+        justify-self: center;
+        img{
+            width: 100%;
+        }
+        @include sm-up{
+            max-width: unset;
+            order: unset;
+            justify-self: unset;
+        }
+    }
+    &__image-wrap{
+        margin-top: -50%;
+        overflow: hidden;
+        @include sm-up{
+            width: 100%;
+            position: absolute;
+        }
+    }
+    .section-title{
+        text-transform: uppercase;
+        margin-bottom: 20px;
+    }
+}

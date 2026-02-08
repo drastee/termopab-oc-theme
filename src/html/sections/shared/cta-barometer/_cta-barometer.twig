@@ -1,0 +1,23 @@
+<section class="cta-barometer">
+    <div class="container">
+    
+        {% include "@components/cta-form-with-socials/_cta-form-with-socials.twig" with {
+            formType: 'light',
+            formTitle: 'Ваш задум <span>вже реальний</span>'
+            }%}
+
+        <div class="cta-barometer__image-wrapper">
+            <picture>
+                <!-- Мобильное изображение -->
+                {# <source srcset="/src/assets/images/cta/barometer-mob.webp" media="(max-width: 1024px)"> #}
+
+                <!-- Десктопное изображение -->
+                <img src="/src/assets/images/cta/barometer.webp" alt="">
+                
+            </picture>
+
+
+        </div>
+        
+    </div>
+</section>

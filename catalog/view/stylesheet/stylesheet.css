@@ -1,0 +1,31 @@
+/**
+ * Termopab Theme - Custom Styles
+ * Додайте свої стилі нижче
+ */
+
+/* Приклад: зміна кольору посилань */
+a {
+  color: #0d6efd;
+}
+
+a:hover {
+  color: #0a58ca;
+}
+
+/* Приклад: стилізація меню */
+#menu {
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  min-height: 40px;
+}
+
+/* Приклад: кнопки */
+.btn-primary {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.btn-primary:hover {
+  background-color: #0b5ed7;
+  border-color: #0a58ca;
+}

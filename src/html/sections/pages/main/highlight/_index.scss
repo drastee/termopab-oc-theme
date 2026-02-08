@@ -1,0 +1,33 @@
+@use "src/styles/mixins" as *;
+
+.highlight {
+    overflow: hidden;
+    width: 100%;
+    height: 150px;
+    margin-top: 50px;
+    @include xs-up {
+        height: 300px;
+    }
+    @include md-up {
+        height: 335px;
+        background-size: 115vw;
+    }
+    @include lg-up {
+        height: 465px;
+        margin-top: 0;
+    }
+
+    @include xxl-up {
+        height: 625px;
+    }
+
+    .container{
+        background-image: url('/src/assets/images/bottle.webp');
+        background-size: 120%;
+        background-repeat: no-repeat;
+        background-position: center;
+        display: flex;
+        align-items: center;
+        height: 100%;
+    }
+}

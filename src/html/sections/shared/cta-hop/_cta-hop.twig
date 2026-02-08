@@ -1,0 +1,28 @@
+<section class="cta-hop">
+    <div class="container">
+    
+        <div class="cta-hop__image-wrapper">
+            <picture>
+                <!-- Мобильное изображение -->
+                <source srcset="/src/assets/images/welder-mob.webp" media="(max-width: 1024px)">
+
+                <!-- Десктопное изображение -->
+                <img src="/src/assets/images/welder.webp" alt="">
+                
+            </picture>
+            <video
+                class="explosion"
+                autoplay
+                muted
+                loop
+                playsinline
+                >
+                <source src="/src/assets/videos/explosion.webm" type="video/webm">
+            </video>
+
+
+        </div>
+        
+        {% include "@components/cta-form-with-socials/_cta-form-with-socials.twig" %}
+    </div>
+</section>

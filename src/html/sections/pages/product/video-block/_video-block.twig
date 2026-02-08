@@ -1,0 +1,14 @@
+<section class="video-block">
+    <video class="video-block__video" playsinline>
+        <source src="/src/assets/videos/hero.mp4" type="video/mp4">
+        <source src="/src/assets/videos/hero.webm" type="video/webm">
+    </video>
+
+    <img src="/src/assets/images/video-poster.webp" alt="" class="video-block__poster">
+
+    {% include '@components/video-play-button/_video-play-button.twig' with { class: "video-block__button" } %}
+    
+    <div class="video-block__progress">
+        <div class="video-block__progress-line"></div>
+    </div>
+</section>

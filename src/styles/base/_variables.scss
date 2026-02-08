@@ -1,0 +1,89 @@
+:root {
+    /* === COLORS === */
+    --color-black: #000000;
+    --color-black-opacity-60: rgba(0, 0, 0, 0.6);
+    --color-white: #ffffff;
+
+    --color-orange: #FF7A00;
+    --color-gold: #C29A5C;
+    
+    --color-gray: #F1F1F1;
+    --color-gray-dark: #3F3F40;
+    --color-gray-mid: #7E7E7E;
+    --color-gray-light: #BFBFBF;
+
+    --color-text-primary: var(--color-gray-dark);
+    --color-accent: var(--color-orange);
+    --color-accent-secondary: var(--color-gold);
+
+    /* === RADIUS === */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-round: 50%;
+
+    /* === SHADOWS === */
+    --shadow-soft: 0 10px 30px rgba(0,0,0,0.1);
+    --shadow-medium: 0 15px 40px rgba(0,0,0,0.15);
+    --shadow-strong: 0 20px 60px rgba(0,0,0,0.25);
+
+    /* === TRANSITIONS === */
+    --transition-fast: 0.2s ease;
+    --transition: 0.3s ease;
+    --transition-slow: 0.5s ease;
+
+    /* === Z-INDEX === */
+    --z-header: 100;
+    --z-menu: 200;
+    --z-overlay: 300;
+    --z-modal: 999;
+
+    /* === TYPOGRAPHY === */
+    --font-main: "Inter", sans-serif;
+    --font-alt: "Oswald", sans-serif;
+    --font-secondary: "Rubik", sans-serif;
+    --font-script: "TheArtist", serif;
+
+    --fs-h1: 64px;
+    --fs-h2: 48px;
+    --fs-h3: 36px;
+    --fs-h4: 28px;
+
+    --fs-text-lg: 20px;
+    --fs-text: 18px;
+    --fs-text-sm: 16px;
+
+    --lh-base: 1.4;
+    --lh-title: 1.2;
+
+    --header-height: 76px;
+
+    --container-max-width: 1540px;
+    --container-side-padding: clamp(16px, 3vw, 40px);
+}
+
+/* === Typography Mobile === */
+@media (max-width: 768px) {
+    :root {
+        --fs-h1: 42px;
+        --fs-h2: 32px;
+        --fs-h3: 26px;
+        --fs-h4: 20px;
+
+        --fs-text-lg: 18px;
+        --fs-text: 16px;
+        --fs-text-sm: 14px;
+
+        --header-height: 89px;
+    }
+}
+
+
+
+/* === Icons === */
+
+// :root{
+//     --icon-instagram: url('../../assets/icons/instagram.svg');
+//     --icon-facebook: url('../../assets/icons/facebook.svg');
+//     --icon-youtube: url('../../assets/icons/youtube.svg');
+// }

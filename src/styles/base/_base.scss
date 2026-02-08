@@ -1,0 +1,68 @@
+@use "../mixins"as*;
+
+html,
+body {
+  scroll-behavior: smooth;
+  overscroll-behavior-y: none;
+  
+  /* Для macOS и iOS — делает шрифт тоньше и чище */
+  -webkit-font-smoothing: antialiased;
+  
+  /* Для Firefox на macOS */
+  -moz-osx-font-smoothing: grayscale;
+  
+  /* Стандартное свойство — помогает сглаживать мелкий текст */
+  font-smooth: always;
+  
+  /* Улучшает отрисовку символов, заставляя браузер отдавать приоритет красоте, а не скорости */
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-main);
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.5;
+  font-size: 14px;
+  color: var(--color-text-primary);
+  background-color: var(--color-white);
+  margin-top: var( --header-height);
+  min-width: 320px;
+  &:has(.hero){
+    margin-top: 0;
+  }
+  @include md-up{
+    font-size: 16px;
+    line-height: 1.65;
+  }
+}
+
+.container {
+  margin-inline: auto;
+  width: 100%;
+  max-width: clamp(960px, 92vw, var(--container-max-width));
+  padding-inline: var(--container-side-padding);
+}
+
+.container-wide {
+  margin: 0 auto;
+  padding: 0 20px;
+  width: 100%;
+  max-width: 100%;
+
+  @include sm-up { max-width: 820px; }     // +100 к base
+  @include md-up { max-width: 1120px; }    // +160
+  @include lg-up { max-width: 1340px; }    // +200
+  @include xl-up { max-width: 1500px; }    // +220
+  @include xxl-up { max-width: 1700px; }   // ≥1920 — твой запрос
+}
+
+
+.wrapper {
+  position: relative;
+  overflow-x: hidden;
+}
+
+[hidden] {
+  display: none !important;
+}

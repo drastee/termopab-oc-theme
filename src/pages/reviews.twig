@@ -1,0 +1,23 @@
+{% extends "html/layouts/_html.twig" %}
+{% set pageTitle = "Огляди пивоварень" %}
+{% set pageClass = "reviews-page" %}
+{% block main %}
+<main>
+
+    {% include "@sections/shared/hero-secondary/_hero-secondary.twig" with {
+        "title": "Огляди пивоварень",
+        "background_image_desktop": "/src/assets/images/reviews-bg.webp",
+        "background_image_mobile": "/src/assets/images/news-bg-mobile.webp"
+    }%}
+
+    {% include "@components/breadcrumbs/_breadcrumbs.twig" with {
+        "background": "white",
+        "breadcrumbs": [
+            {"name": "Огляди пивоварень"}
+        ]
+    }%}
+
+    {% include "@sections/shared/posts/_posts.twig" with {filter: true} %}
+
+</main>
+{% endblock %}

@@ -1,0 +1,58 @@
+<section class="catalog">
+        <div class="filter">
+            <div class="container">
+                <div class="filter__inner">
+                    <button class="filter__button is-active"><span>ЦКТ преміум</span></button>
+                    <button class="filter__button"><span>ЦКТ стандарт</span></button>
+                </div>
+            </div>
+        </div>
+        <div class="products">
+            <div class="container">
+                <div class="catalog__inner">
+                    {% include "@components/product-card/_product-card.twig" with {
+                        image: '/src/assets/images/catalog/1.webp',
+                        title: 'ЦКТ 200',
+                        url: '#',
+                        params: [
+                            { name: 'Продуктивність', value: '300000' }
+                        ],
+                        description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
+                    } %}
+
+                    {% include "@components/product-card/_product-card.twig" with {
+                        image: '/src/assets/images/catalog/2.webp',
+                        title: 'ЦКТ 300',
+                        url: '#',
+                        params: [
+                            { name: 'Продуктивність', value: '300000' },
+                            { name: 'Потужність', value: '28797' }
+                        ],
+                        description: ''
+                    } %}
+                    
+                    {% include "@components/product-card/_product-card.twig" with {
+                        image: '/src/assets/images/catalog/2.webp',
+                        title: 'ЦКТ 300',
+                        url: '#',
+                        params: [
+                            { name: 'Продуктивність', value: '300000' },
+                            { name: 'Потужність', value: '28797' }
+                        ],
+                        description: ''
+                    } %}
+
+                    {% include "@components/product-card/_product-card.twig" with {
+                        image: '/src/assets/images/catalog/1.webp',
+                        title: 'ЦКТ 200',
+                        url: '#',
+                        params: [
+                            { name: 'Продуктивність', value: '300000' }
+                        ],
+                        description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
+                    } %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

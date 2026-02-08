@@ -1,0 +1,87 @@
+@use "src/styles/mixins" as *;
+
+.gallery {
+    // Высота задается тут, все внутренние элементы будут плясать от нее
+    height: 246px; 
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    @include md-up {
+        height: 660px;
+    }
+
+    @include xl-up {
+        height: 760px;
+    }
+
+    @include xxl-up {
+        height: 860px;
+    }
+
+    &__images {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        
+        // --- ОБЩЕЕ ДЛЯ ВСЕХ ССЫЛОК ---
+        a {
+            display: block;
+            height: 100%; // Ссылка всегда во всю высоту
+        }
+
+        // --- ОБЩЕЕ ДЛЯ ВСЕХ КАРТИНОК ---
+        img {
+            display: block; // Убирает отступы снизу
+            height: 100%;   // Картинка всегда во всю высоту блока
+        }
+
+        // --- БОКОВЫЕ ЭЛЕМЕНТЫ (1 и 3) ---
+        a:first-child,
+        a:nth-child(3) {
+            flex: 1;        // Занимают все свободное место
+            min-width: 0;   // Важный фикс для flexbox
+            overflow: hidden; // Обрезаем лишнее
+            
+            img {
+                width: 100%;       // Растягиваем на всю ширину колонки
+                object-fit: cover; // Заполняем пространство (обрезая края)
+            }
+        }
+
+        a:first-child img{
+            object-position: right;
+        }
+        a:nth-child(3) img{
+            object-position: left;
+        }
+        // --- ЦЕНТРАЛЬНЫЙ ЭЛЕМЕНТ (2) ---
+        a:nth-child(2) {
+            flex: 0 0 auto; // Не сжиматься, не растягиваться
+            width: auto;    // Ширина зависит от содержимого (картинки)
+            
+            img {
+                width: auto; // ВАЖНО: Ширина вычисляется браузером исходя из пропорций и высоты
+                // Убираем max-width, чтобы не ломать пропорции на больших экранах
+                // Убираем object-fit, так как нам нужны реальные физические размеры блока
+            }
+        }
+
+        // --- СКРЫТЫЙ ЭЛЕМЕНТ (4) ---
+        a:nth-child(n+4) {
+            display: none;
+        }
+    }
+
+    .marquee-wrapper{
+        bottom: 0;
+        position: absolute;
+        rotate: 5deg;
+        transform: translateY(110%);
+        @include md-up {
+            transform: translateY(50%);
+        }
+    }
+    .marquee{
+        padding-bottom: 0;
+    }
+}

@@ -1,0 +1,97 @@
+@use "src/styles/mixins" as *;
+.hero-secondary{
+    position: relative;
+    
+    &__bg img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: -1; /* Уводим на задний план */
+    }
+    
+    &__title{
+        line-height: 1.2;
+        font-size: 32px;
+        letter-spacing: 3px;
+        @include md-up{
+            font-size: 84px;
+            letter-spacing: 2.7px;
+        }
+    }
+
+    &__subtitle{
+        line-height: 1;
+        font-size: 16px;
+        letter-spacing: 1.3px;
+        @include md-up{
+            letter-spacing: 1.9px;
+            font-size: 30px;
+        }
+    }
+
+    &__title, &__subtitle{
+        color: var(--color-white);
+        font-family: var(--font-alt);
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    &.disoverlay > .hero-secondary__overlay{
+        display: none;
+    }
+
+    &__overlay{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: var(--color-black-opacity-60);
+        z-index: 1;
+        max-height: inherit;
+    }
+    &__inner{
+        position: relative;
+        z-index: 2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+        min-height: 411px;
+        gap: 10px;
+        @include md-up{
+            min-height: 324px;
+            gap: 20px;
+        }
+        @include xxl-up{
+            min-height: 424px;
+        }
+    }
+    &.large{
+        .hero-secondary__inner{
+            height: calc(100vh - var(--header-height));
+        }
+    }
+    h1{
+        font-family: var(--font-alt);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        font-size: 32px;
+        line-height: 1.25;
+        color: var(--color-white);
+        text-align: center;
+        width: max-content;
+        @include md-up{
+            font-size: 64px;
+        }
+        @include xxl-up{
+            font-size: 84px;
+        }
+    }
+}

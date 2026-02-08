@@ -1,0 +1,84 @@
+@use "src/styles/mixins" as *;
+.product-card{
+    display: grid;
+    gap: 20px;
+    grid-template-columns: 57% 1fr;
+    padding-block: 20px 28px;
+    @include md-up{
+        grid-template-columns: 65% 1fr;
+    }
+    &__image{
+        width: 100%;
+        img{
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+    }
+    &__info{
+        display: flex;
+        flex-direction: column;
+        padding-bottom: 28px;
+        font-family: var(--font-secondary);
+        @include md-up{
+            gap: 40px;
+            padding-bottom: 40px;
+        }
+        > *:has(+.link){
+            @include md-down{
+                margin-bottom: 40px;
+            }
+        }
+    }
+    &__description{
+        font-size: 12px;
+        @include md-up{
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    }
+    &__title{
+        font-family: var(--font-alt);
+        color: var(--color-accent); 
+        font-weight: 600;
+        font-size: 24px;
+        line-height: 1.5;
+        margin-bottom: 30px;
+        @include md-up{
+            font-size: 32px;
+            margin-bottom: 0;
+        }
+    }
+    &__params{
+        font-size: 14px;
+        display: flex;
+        flex-direction: column;
+        line-height: 1.6;
+        margin-bottom: 10px;
+        @include md-up{
+            margin-bottom: 0;
+        }
+        dl{
+            margin-bottom: 5px;
+        }
+        dd{
+            margin-bottom: 12px;
+            @include md-up{
+                font-size: 17px;
+            }
+            &:last-child{
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    .link{
+        margin-top: auto;
+        font-weight: 500;
+        font-size: 14px;
+        @include md-up{
+            font-size: 16px;
+            //margin-block: 40px 0;
+        }
+    }
+}

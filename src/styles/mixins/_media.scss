@@ -1,0 +1,99 @@
+// ---------------------------------------------
+// Breakpoints (px)
+// ---------------------------------------------
+$xxl: 1920;  // 2K и большие десктопы
+$xl: 1440;   // большие ноутбуки / широкие экраны
+$lg: 1280;   // классические ноуты
+$md: 1024;   // планшеты горизонтально
+$sm: 768;    // планшеты вертикально
+$xs: 480;    // телефоны (средние)
+$xxs: 360;   // маленькие телефоны
+
+
+// ---------------------------------------------
+// Base mixins
+// ---------------------------------------------
+
+// ≥ width (min-width)
+@mixin up($bp) {
+  @media (min-width: #{$bp}px) {
+    @content;
+  }
+}
+
+// ≤ width (max-width)
+@mixin down($bp) {
+  @media (max-width: #{$bp}px) {
+    @content;
+  }
+}
+
+// min ≤ width ≤ max
+@mixin between($min, $max) {
+  @media (min-width: #{$min}px) and (max-width: #{$max}px) {
+    @content;
+  }
+}
+
+// ≥ height
+@mixin h-up($bp) {
+  @media (min-height: #{$bp}px) {
+    @content;
+  }
+}
+
+// ≤ height
+@mixin h-down($bp) {
+  @media (max-height: #{$bp}px) {
+    @content;
+  }
+}
+
+
+// ---------------------------------------------
+// Mobile-first (min-width) – правильный рост интерфейса
+// ---------------------------------------------
+@mixin xxs-up { @include up($xxs) { @content; } }
+@mixin xs-up  { @include up($xs)  { @content; } }
+@mixin sm-up  { @include up($sm)  { @content; } }
+@mixin md-up  { @include up($md)  { @content; } }
+@mixin lg-up  { @include up($lg)  { @content; } }
+@mixin xl-up  { @include up($xl)  { @content; } }
+@mixin xxl-up { @include up($xxl) { @content; } }
+
+
+// ---------------------------------------------
+// Desktop-first (max-width) – если нужно сужать
+// ---------------------------------------------
+@mixin xxs-down { @include down($xxs) { @content; } }
+@mixin xs-down  { @include down($xs)  { @content; } }
+@mixin sm-down  { @include down($sm)  { @content; } }
+@mixin md-down  { @include down($md)  { @content; } }
+@mixin lg-down  { @include down($lg)  { @content; } }
+@mixin xl-down  { @include down($xl)  { @content; } }
+@mixin xxl-down { @include down($xxl) { @content; } }
+
+
+// ---------------------------------------------
+// Optional: Common ranges
+// ---------------------------------------------
+
+// Phones
+@mixin phone {
+  @include down($sm) { @content; }
+}
+
+// Tablets (768–1023)
+@mixin tablet {
+  @include between($sm, $md - 1) { @content; }
+}
+
+// Small desktops (1024–1439)
+@mixin desktop {
+  @include between($md, $xl - 1) { @content; }
+}
+
+// Large desktops (≥1440)
+@mixin desktop-lg {
+  @include xl-up { @content; }
+}

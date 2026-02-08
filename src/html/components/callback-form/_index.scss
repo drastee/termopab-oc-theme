@@ -1,0 +1,33 @@
+@use "src/styles/mixins" as *;
+form.callback-form{
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    width: 100%;
+    &.light{
+        input{
+            background-color: #CDCDCD;
+            color: currentColor;
+        }
+        p.agreement {
+            color: currentColor;
+        }
+    }
+    button{
+        color: var(--color-white);
+    }
+    p.agreement {
+        color: #F9F5EC;
+        font-size: 11px;
+        line-height: 1.45;
+        letter-spacing: .25px;
+        text-transform: none;
+        a{
+            text-decoration: underline;
+            &:hover{
+                color: var(--color-accent)
+            }
+        }
+    }
+}

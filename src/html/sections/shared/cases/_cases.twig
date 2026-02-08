@@ -1,0 +1,92 @@
+<section class="cases {{type}}">
+    <div class="container">
+
+        {% if(title or linkText) %}
+        <div class="cases__head">
+            <h2 class="cases__title">{{ title }}</h2>
+            <a class="cases__all-cases link" href="#">{{ linkText }} <svg class="link-arrow"><use href="#icon-short-arrow"></use></svg></a>
+        </div>
+        {% endif %}
+
+        <div class="cases__slider swiper">
+            <div class="swiper-wrapper">
+
+                <div class="swiper-slide cases__slide">
+                    <a href="#" class="cases__logo">
+                        <img src="/src/assets/images/cases/underwood.webp" alt="underwood">
+                    </a>
+                    <p class="cases__slider-title">Underwood</p>
+                </div>
+
+                <div class="swiper-slide cases__slide">
+                    <a href="#" class="cases__logo">
+                        <img src="/src/assets/images/cases/castrum.webp" alt="Castrum Inc">
+                    </a>
+                    <p class="cases__slider-title">Castrum UNG</p>
+                </div>
+
+                <div class="swiper-slide cases__slide">
+                    <a href="#" class="cases__logo">
+                        <img src="/src/assets/images/cases/fitchen.webp" alt="Fichten Brewery">
+                    </a>
+                    <p class="cases__slider-title">Fichten Brewery</p>
+                </div>
+
+                <div class="swiper-slide cases__slide">
+                    <a href="#" class="cases__logo">
+                        <img src="/src/assets/images/cases/hrew_brew.webp" alt="Hrew Brew">
+                    </a>
+                    <p class="cases__slider-title">Hrew Brew</p>
+                </div>
+
+                <div class="swiper-slide cases__slide">
+                    <a href="#" class="cases__logo">
+                        <img src="/src/assets/images/cases/brugge.webp" alt="Brugge Co">
+                    </a>
+                    <p class="cases__slider-title">Brugge Co</p>
+                </div>
+
+                <div class="swiper-slide cases__slide">
+                    <a href="#" class="cases__logo">
+                        <img src="/src/assets/images/cases/underwood.webp" alt="underwood">
+                    </a>
+                    <p class="cases__slider-title">Underwood</p>
+                </div>
+
+                <div class="swiper-slide cases__slide">
+                    <a href="#" class="cases__logo">
+                        <img src="/src/assets/images/cases/castrum.webp" alt="Castrum Inc">
+                    </a>
+                    <p class="cases__slider-title">Castrum UNG</p>
+                </div>
+
+                <div class="swiper-slide cases__slide">
+                    <a href="#" class="cases__logo">
+                        <img src="/src/assets/images/cases/fitchen.webp" alt="Fichten Brewery">
+                    </a>
+                    <p class="cases__slider-title">Fichten Brewery</p>
+                </div>
+
+                <div class="swiper-slide cases__slide">
+                    <a href="#" class="cases__logo">
+                        <img src="/src/assets/images/cases/hrew_brew.webp" alt="Hrew Brew">
+                    </a>
+                    <p class="cases__slider-title">Hrew Brew</p>
+                </div>
+
+                <div class="swiper-slide cases__slide">
+                    <a href="#" class="cases__logo">
+                        <img src="/src/assets/images/cases/brugge.webp" alt="Brugge Co">
+                    </a>
+                    <p class="cases__slider-title">Brugge Co</p>
+                </div>
+
+
+            </div>
+            {% if sliderNav %}
+                {% include '@components/swiper-controls-oval/_swiper-controls-oval.twig' %}
+            {% endif %}
+        </div>
+
+    </div>
+</section>

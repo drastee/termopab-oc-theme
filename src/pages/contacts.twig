@@ -1,0 +1,22 @@
+{% extends "html/layouts/_html.twig" %}
+{% set pageTitle = "Контакти" %}
+{% set pageClass = "contacts-page" %}
+{% block main %}
+<main>
+
+
+    {% include "@components/breadcrumbs/_breadcrumbs.twig" with {
+        "background": "black",
+        "breadcrumbs": [
+            {"name": "Контакти"}
+        ]
+    }%}
+
+    {% include "@sections/shared/contacts/_contacts.twig" %}
+    {% include "@sections/shared/map-fullwidth/_map-fullwidth.twig" %}
+
+    
+
+
+</main>
+{% endblock %}

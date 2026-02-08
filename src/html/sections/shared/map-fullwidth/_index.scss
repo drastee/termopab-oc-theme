@@ -1,0 +1,16 @@
+@use "src/styles/mixins" as *;
+
+.map-fullwidth{
+    line-height: 1;
+    iframe{
+        display: block;
+        height: 325px;
+        width: 100%;
+        @include md-up{
+            height: 400px;
+        }
+        @include xl-up{
+            height: 511px;
+        }
+    }
+}

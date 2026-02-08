@@ -1,0 +1,53 @@
+<section class="products-preview">
+    <div class="container">
+
+        <div class="products-preview__slider swiper">
+            <!-- Wrapper -->
+            <div class="swiper-wrapper products-preview__inner">
+
+                {% for item in products %}
+                    <div class="swiper-slide products-preview__slide">
+                        <div class="product-preview-card">
+                            <div class="product-preview-card__leftside">
+                                <img src="{{ item.image }}" class="img-base" alt="">
+                                <img src="{{ item.image_hover }}" class="img-hover" alt="">
+                            </div>
+
+                            <div class="product-preview-card__rightside">
+                                <h3 class="product-preview-card__title">{{ item.title }}</h3>
+
+                                <dl class="product-preview-card__stats">
+                                    {% for param in item.params %}
+                                        <div>
+                                            <dt>{{ param.label }}</dt>
+                                            <dd>{{ param.value }}</dd>
+                                        </div>
+                                    {% endfor %}
+                                </dl>
+
+                                <p class="product-preview-card__text">{{ item.text }}</p>
+
+                                <a href="{{ item.link }}" class="product-preview-card__more link">
+                                    Дізнатися більше  <svg class="link-arrow"><use href="#icon-short-arrow"></use></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+            </div>
+
+
+        </div>
+
+            <!-- Navigation -->
+            <div class="products-preview__nav">
+                <button class="products-preview__prev" aria-label="Previous">
+                    <svg class="nav-arrow"><use href="#icon-arrow"></use></svg>
+                </button>
+                <button class="products-preview__next" aria-label="Next">
+                    <svg class="nav-arrow next"><use href="#icon-arrow"></use></svg>
+                </button>
+            </div>
+    </div>
+</section>

@@ -1,0 +1,48 @@
+<header class="header">
+    <div class="container">
+        <div class="header__left">
+            <div class="header__logo">
+                <a href="#"><img src="/src/assets/images/header-logo-90px.webp" alt=""></a>
+            </div>
+            <div class="header__phones">
+                <ul>
+                    <li><a href="tel:3806740991XX">+38 (067) 409-91-<span>XX</span></a></li>
+                    <li><a href="tel:3806740991XX">+38 (067) 409-91-<span>XX</span></a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="header__right">
+            <ul class="header__socials">
+                <li><a href="#" target="_blank" class="social-icon"><svg class="icon"><use href="/src/assets/icons/icons.svg#icon-instagram"></use></svg></a></li>
+                <li><a href="#" target="_blank" class="social-icon"><svg class="icon"><use href="/src/assets/icons/icons.svg#icon-facebook"></use></svg></a></li>
+                <li><a href="#" target="_blank" class="social-icon"><svg class="icon"><use href="/src/assets/icons/icons.svg#icon-youtube"></use></svg></a></li>
+
+            </ul>
+            <div class="header__dropdowns">
+                <div class="header__languages">
+                    {% include '../../components/dropdown/_dropdown.twig' with {
+                        "selected": "UAH",
+                        "options": ["USD","EUR","GBP"]
+                    } %}
+                </div>
+                <div class="header__currency">
+                    {% include '../../components/dropdown/_dropdown.twig' with {
+                    "selected": "UA",
+                    "options": ["UA","EN","GE","FR"]
+                    } %}
+                </div>
+            </div>
+            <div class="header__nav">
+                  <button
+                        class="menu-button"
+                        aria-expanded="false"
+                        aria-controls="mobile-menu"
+                    >
+                    <span class="burger"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+
+{% include '@components/menu/_menu.twig' %}

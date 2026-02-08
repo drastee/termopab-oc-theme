@@ -1,0 +1,61 @@
+.icon{
+    display: flex;
+    align-items: center;
+    &::before{
+        content: '';
+        width: 20px;
+        height: 20px;
+        mask-size: contain;
+        mask-repeat: no-repeat;
+        mask-position: center;
+        background-color: currentColor;
+        display: inline-block;
+    }
+}
+
+.social{
+    border-radius: 50%;
+    border: 1px solid currentColor;
+    width: 32px;
+    height: 32px;
+    justify-content: center;
+    align-items: center;
+    &::before{
+        width: 50%;
+    }
+    &-instagram{
+        &::before{
+            mask-image: var(--icon-instagram);
+        }   
+    }
+    &-facebook{
+        &::before{
+            mask-image: var(--icon-facebook);
+            width: 27%;
+        }   
+    }
+    &-youtube{
+        &::before{
+            mask-image: var(--icon-youtube);
+            width: 55%;
+        }
+    }
+    &-whatsapp{
+        &::before{
+            mask-image: var(--icon-whatsapp);
+            width: 55%;
+        }
+    }
+    &-telegram{
+        &::before{
+            mask-image: var(--icon-telegram);
+            width: 55%;
+        }
+    }
+    &-messanger{
+        &::before{
+            mask-image: var(--icon-messanger);
+            width: 55%;
+        }
+    }
+}

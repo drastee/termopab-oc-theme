@@ -1,0 +1,41 @@
+{% extends "html/layouts/_html.twig" %}
+{% set pageTitle = "Про нас" %}
+{% set pageClass = "about-us" %}
+{% block main %}
+<main>
+    {# {% include "html/sections/shared/hero/_hero.twig" %} #}
+    {% include "@sections/shared/hero-secondary/_hero-secondary.twig" with {
+        "class": "large disoverlay",
+        "background_image_desktop": "/src/assets/images/about-bg.webp",
+        "background_image_mobile": "/src/assets/images/about-bg.webp"
+    }%}
+
+    {% include "html/sections/shared/gallery/_gallery.twig" with {
+            images: [
+                '/src/assets/images/about/1.webp',
+                '/src/assets/images/about/2.webp',
+                '/src/assets/images/about/3.webp'
+            ]
+        }
+    %}
+    {% include "html/sections/shared/intro/_intro.twig"%}
+    {% include "html/sections/shared/about/_about.twig"  with {
+        title: "Компанія <br>Термопаб<span>це історія про якість</span><span>та довіру наших клієнтів</span>",
+    }%}
+
+    {% include "html/sections/shared/cases/_cases.twig"  with {
+        type: 'simple',
+        title: false,
+        linkText: false,
+        sliderNav: false,
+    }%}
+    
+    {% include "html/sections/pages/about/history/_history.twig" %}
+
+    {% include "html/sections/pages/about/our-team/_our-team.twig" %}
+
+    {% include "html/sections/shared/cta-hop/_cta-hop.twig" %}
+    {% include "html/sections/shared/brewery-reviews/_brewery-reviews.twig" %}
+
+</main>
+{% endblock %}

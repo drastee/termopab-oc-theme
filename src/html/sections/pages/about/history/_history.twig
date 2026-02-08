@@ -1,0 +1,34 @@
+<section class="history">
+
+  {# 
+  // для опенкарт
+  <script type="application/json" id="history-data">
+    {{ history|json_encode|raw }}
+  </script> 
+  #}
+    <div class="history__spikelet">
+        <img src="/src/assets/images/spikelet.webp" alt="">
+    </div>
+    <div class="container" id="history">
+
+            <h2 class="history__title section-title">НАША ІСТОРІЯ</h2>
+
+
+            <!-- YEARS -->
+            <div class="history__years">
+                <div class="history__years-slider swiper">
+                    <div class="swiper-wrapper"></div>
+                </div>
+                {% include '@components/swiper-controls-oval/_swiper-controls-oval.twig' with {className: 'history-slider-nav'} %}
+
+            </div>
+
+            <hr>
+
+            <!-- TEXT -->
+                <div id="history-content" class="history__content"></div>
+
+
+    </div>
+
+</section>

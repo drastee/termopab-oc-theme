@@ -1,0 +1,37 @@
+{% extends "html/layouts/_html.twig" %}
+{% set pageTitle = "Категорія" %}
+{% set pageClass = "category-page" %}
+{% block main %}
+<main>
+
+    {% include "html/sections/shared/hero-secondary/_hero-secondary.twig" with {
+        "title": "Міні-пивоварні <br>на 200, 300, 500 літрів",
+        "background_image_desktop": "/src/assets/images/subcategory-bg.webp",
+        "background_image_mobile": "/src/assets/images/subcategory-bg-mobile.webp"
+    }%}
+
+    {% include "html/components/breadcrumbs/_breadcrumbs.twig" with {
+        "background": "white",
+        "breadcrumbs": [
+            {"name": "Міні-пивоварні на 200, 300, 500 літрів"}
+        ]
+    } %}
+
+    {% include "html/sections/pages/subcategory/subcat-promo-lg/_subcat-promo-lg.twig" %}
+
+    {% include "html/sections/pages/subcategory/subcat-promo/_subcat-promo.twig" %}
+
+    {% include "html/sections/shared/cta-thin-barrel/_cta-thin-barrel.twig" %}
+
+    {% include "html/sections/pages/subcategory/catalog/_catalog.twig" %}
+
+    {% include "html/sections/shared/cta-barometer/_cta-barometer.twig" %}
+
+    {% include "html/sections/shared/brewery-reviews/_brewery-reviews.twig" %}
+
+    {% include "html/sections/shared/text-content/_text-content.twig" %}
+
+
+
+</main>
+{% endblock %}

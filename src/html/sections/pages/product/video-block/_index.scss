@@ -1,0 +1,83 @@
+@use "src/styles/mixins" as *;
+
+.video-block{
+    max-height: 1078px;
+    height: auto;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    position: relative;
+
+    video, img{
+        width: 100%;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+    &__video{
+        cursor: pointer; // Чтобы пользователь понимал, что можно нажать для паузы
+    }
+    
+
+    /* Добавляем анимацию */
+    @keyframes pulse-animation {
+        0% {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 0.8;
+        }
+        100% {
+            transform: translate(-50%, -50%) scale(1.6); /* Насколько широко расходится волна */
+            opacity: 0;
+        }
+    }
+    &__poster {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 1; // Поверх видео
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+        
+        // Когда добавляем класс hidden - картинка исчезает, и мы видим видео под ней
+        &.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none; // Пропускать клики сквозь прозрачный постер на видео
+        }
+    }
+    
+    &__button {
+        bottom: 10%;
+        right: 10%;
+    }
+
+    &__progress {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 5px; // Высота полоски
+        background-color: rgba(255, 255, 255, 0.2); // Полупрозрачный фон трека
+        cursor: pointer; // Чтобы можно было перематывать кликом
+        z-index: 3; // Поверх видео и постера
+        transition: opacity 0.3s ease;
+        
+        // Скрываем полоску, пока видео не запущено (опционально)
+        // Если хотите, чтобы она была всегда, уберите opacity: 0
+        opacity: 0; 
+        &.active {
+            opacity: 1;
+        }
+    }
+
+    // Сама оранжевая линия
+    &__progress-line {
+        height: 100%;
+        width: 0; // Изначально 0
+        background-color: #7E3F06; // Ваш оранжевый цвет
+        transition: width 0.1s linear; // Линейная анимация для плавности
+    }
+}

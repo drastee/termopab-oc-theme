@@ -1,0 +1,75 @@
+@use "src/styles/mixins" as *;
+.intro {
+    border-bottom: 1.5px solid #A0A0A0;
+    @include md-up {
+        padding-inline: 80px;
+    }
+    
+    &__inner {
+        position: relative;
+        align-items: center;
+        padding-block: 73px 134px;
+    }
+
+    &__content {
+        max-width: 100%;
+        @include md-up {
+            max-width: 49%;
+            margin-left: 125px;
+        }
+    }
+    &__title {
+        font-family: var(--font-alt);
+        font-size: 18px;
+        margin-bottom: 20px;
+        font-weight: 600;
+        line-height: 1.44;
+        @include md-up {
+            margin-bottom: 34px;
+        }
+    }
+
+    &__badge{
+        position: absolute;
+        width: 245px;
+        height: 245px;
+        right: 0;
+        bottom: 0;
+        transform: translateY(50%) translateX(17%);
+        @include xs-up {
+            transform: translateY(50%) translateX(-10%);
+            max-width: 270px;
+        }
+        @include sm-up {
+            width: 35%;
+            aspect-ratio: 1 / 1;
+            height: auto;
+            transform: translateY(50%);
+        }
+        @include md-up {
+            max-width: unset;
+        }
+        > img{
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .logo-large {
+            //max-width: 220px;
+            height: auto;
+            width: 98%;
+            display: block;
+            position: absolute;
+        }
+        .logo-shadow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(8px);
+            opacity: 0.6;
+            z-index: -1;  
+            transform: translate(3%, 6%);
+        }
+    } 
+}

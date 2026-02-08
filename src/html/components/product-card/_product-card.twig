@@ -1,0 +1,36 @@
+<div class="product-card">
+
+    <div class="product-card__image">
+        {# Если картинки нет, можно поставить заглушку (default) #}
+        <img src="{{ image }}" alt="{{ title|default('Product image') }}">
+    </div>
+
+    <div class="product-card__info">
+        <h3 class="product-card__title">{{ title }}</h3>
+
+        {# Выводим блок параметров только если массив params не пустой #}
+        {% if params is defined and params is not empty %}
+            <dl class="product-card__params">
+                {% for item in params %}
+                    <dt>{{ item.name }}</dt>
+                    <dd>{{ item.value }}</dd>
+                {% endfor %}
+            </dl>
+        {% endif %}
+
+        {# Выводим описание только если переменная description существует #}
+        {% if description is defined and description %}
+            <div class="product-card__description">
+                <p>{{ description }}</p>
+            </div>
+        {% endif %}
+
+        {# Ссылка может вести на заглушку #, если url не передан #}
+        <a class="link" href="{{ url|default('#') }}">
+            Дізнатися більше
+            <svg class="link-arrow"><use href="#icon-short-arrow"></use></svg>
+        </a>
+
+    </div>
+
+</div>

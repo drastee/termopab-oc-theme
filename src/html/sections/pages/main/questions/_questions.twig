@@ -1,0 +1,27 @@
+<section class="questions">
+    <div class="container">
+        <div class="questions__image-wrapper">
+            <img src="/src/assets/images/welder-with-tank.webp" alt="">
+
+            <video
+                class="explosion"
+                autoplay
+                muted
+                loop
+                playsinline
+                >
+                <source src="/src/assets/videos/explosion.webm" type="video/webm">
+            </video>
+            
+        </div>
+        <div class="questions__content-wrapper">
+    
+            <h2 class="questions__title section-title">Виникли <span>питання?</span></h2>
+
+            <div class="questions__contact-form">
+                
+                {% include "@components/callback-form/_callback-form.twig" %}  
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,67 @@
+{% extends "html/layouts/_html.twig" %}
+{% set pageTitle = "Категорія" %}
+{% set pageClass = "category-page" %}
+{% block main %}
+<main>
+
+
+    {% include "html/sections/pages/product/main-media/_main-media.twig" %}
+
+    {% include "html/sections/shared/gallery/_gallery.twig" with {
+            images: [
+                '/src/assets/images/gallery/1.webp',
+                '/src/assets/images/gallery/2.webp',
+                '/src/assets/images/gallery/3.webp',
+                '/src/assets/images/gallery/4.webp'
+            ]
+        }
+        %}
+    
+    {% include "html/sections/pages/product/video-block/_video-block.twig" %}
+
+    {% include "html/sections/pages/product/characteristics/_characteristics.twig" %}
+
+    {% include "html/sections/shared/cta-hop-2/_cta-hop-2.twig" %}
+    
+    {% include "html/sections/pages/main/products-preview/_products-preview.twig" with {
+        "products": [
+            {
+                "image": "/src/assets/images/products/product-1.webp",
+                "image_hover": "/src/assets/images/products/product-2.webp",
+                "title": "ВП200",
+                "params": [
+                    {"label": "Продуктивність", "value": "300000"},
+                    {"label": "Потужність", "value": "28797"}
+                    ],
+                "text": "",
+                "link": "#"
+            },
+            {
+                "image": "/src/assets/images/products/product-2.webp",
+                "image_hover": "/src/assets/images/products/product-1.webp",
+                "title": "ВП200",
+                "params": [{"label": "Продуктивність","value": "300000"}],
+                "power": "",
+                "text": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                "link": "#"
+            },
+            {
+                "image": "/src/assets/images/products/product-1.webp",
+                "image_hover": "/src/assets/images/products/product-2.webp",
+                "title": "ВП200",
+                "params": [
+                    {"label": "Продуктивність","value": "300000"},
+                    {"label": "Потужність","value": "28797"}
+                    ],
+                "text": "",
+                "link": "#"
+            }
+        ]
+    }%}
+
+    {% include "html/sections/shared/text-content/_text-content.twig" %}
+
+
+
+</main>
+{% endblock %}

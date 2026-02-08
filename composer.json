@@ -1,0 +1,14 @@
+{
+    "name": "termopab/termopab",
+    "type": "opencart-extension",
+    "version": "1.0.0",
+    "description": "Theme for Termopab project",
+    "author": "Termopab",
+    "link": "https://termopab.com",
+    "extra": {
+      "opencart": {
+        "type": "theme",
+        "status": "enabled"
+      }
+    }
+  }

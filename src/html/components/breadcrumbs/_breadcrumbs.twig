@@ -1,0 +1,19 @@
+{# parts/breadcrumbs.twig #}
+<nav class="breadcrumbs {{background}}" aria-label="Breadcrumb">
+    <div class="container">
+        <ul class="breadcrumbs__list">
+            <li class="breadcrumbs__item">
+                <a href="/" class="breadcrumbs__link">Головна</a>
+            </li>
+            {% for item in breadcrumbs %}
+                <li class="breadcrumbs__item">
+                    {% if item.url and not loop.last %}
+                        <a href="{{ item.url }}" class="breadcrumbs__link">{{ item.name }}</a>
+                    {% else %}
+                        <span class="breadcrumbs__current">{{ item.name }}</span>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</nav>

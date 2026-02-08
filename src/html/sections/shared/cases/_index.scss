@@ -1,0 +1,96 @@
+@use "src/styles/mixins" as *;
+.cases {
+    padding-block: 112px 72px;
+    &.simple{
+        padding-block: 20px 80px;
+        @include md-up{
+            padding-block: 27px 121px;
+        }
+        .cases__slider-title{
+            display: none;
+        }
+    }
+    &__title {
+        font-weight: 600;
+        line-height: 1;
+        letter-spacing: 1.9;
+        text-transform: uppercase;
+        font-family: var(--font-alt);
+        color: var(--color-black);
+        margin-bottom: 32px;
+        font-size: 32px;
+        @include md-up{
+            font-size: 46px;
+        }
+    }
+
+    &__all-cases {
+        font-size: 18px;
+    }
+
+    .swiper {
+        overflow: visible;
+        position: relative;
+    }
+
+    .swiper-slide {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        gap: 30px;
+        transition: transform .4s ease, opacity .4s ease;
+        z-index: 1;
+        height: auto;
+        // все слайды немного уменьшены — для правильного эффекта
+        transform: scale(.85);
+        opacity: .5;
+
+        .cases__logo img {
+            transition: transform .4s ease;
+        }
+
+        .cases__slider-title {
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity .3s ease;
+            color: var(--color-black);
+        }
+    }
+
+    // соседние — немного крупнее
+    .swiper-slide-next,
+    .swiper-slide-prev {
+        transform: scale(.95);
+        opacity: .7;
+    }
+
+    // центральный слайд
+    .swiper-slide-active {
+        transform: scale(1.15);
+        opacity: 1;
+        z-index: 2;
+        .cases__slider-title {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .cases__logo img {
+            transform: scale(1.25);
+        }
+    }
+
+    &__logo {
+        width: 244px;
+        height: 244px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img {
+            width: 200px;
+            height: 200px;
+            object-fit: contain;
+            transition: transform .4s ease;
+        }
+    }
+}

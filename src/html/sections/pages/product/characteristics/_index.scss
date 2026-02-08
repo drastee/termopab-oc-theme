@@ -1,0 +1,184 @@
+@use "src/styles/mixins" as *;
+
+.characteristics{
+    .section-title{
+        text-transform: uppercase;
+    }
+    &__inner{
+        padding-block: 60px 20px;
+        @include md-up{
+            padding: 63px 95px 52px;
+        }
+    }
+    &__main{
+        display: grid;
+        @include md-up{
+            grid-template-columns: 1fr 70%;
+            gap: 50px;
+        }
+    }
+    .section-title{
+        margin-bottom: 40px;
+        @include md-up{
+            margin-bottom: 84px;
+        }
+    }
+}
+
+.tabs{
+    &__menu{
+        @include md-down{
+            margin-bottom: 40px;
+        }
+        ul{
+            display: flex;
+            flex-direction: column;
+            @include md-up{
+                gap: 20px;
+            }
+            li{
+                @include md-down{
+                    border-bottom: 1px solid #EBEBEB;
+                    &:first-child{
+                        border-top: 1px solid #EBEBEB;
+                    }
+                }
+
+            }
+        }
+        button{
+            line-height: 1;
+            color: #818181;
+            padding-block: 10px;
+            @include md-down{
+                padding-block: 8px;
+                width: 100%;
+                text-align: center;
+                font-size: 16px;
+                min-height: 44px;
+            }
+            &[aria-selected="true"]{
+                font-weight: 600;
+                color: var(--color-black);
+            }
+            &:hover{
+                color: var(--color-accent)
+            }
+        }
+        .link{
+            color: var(--color-black);
+            @include md-down{
+                width: 100%;
+                border-bottom: 1px solid #EBEBEB;
+                padding-block: 8px;
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                min-height: 44px;
+            }
+            @include md-up{
+                margin-top: 60px;
+            }
+        }
+    }
+}
+.tab-panel{
+    &__title{
+        @include md-down{
+            display: none;
+        }
+        font-weight: 600;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #EFEFEF;
+        width: 100%;
+        margin-bottom: 20px;
+        color: #000207;
+        @include md-up{
+            padding-bottom: 30px;
+            margin-bottom: 32px;
+        }
+    }
+    &__content{
+        &.two-columns {
+            /* 1. Ограничиваем высоту */
+            //height: 420px; /* Или max-height, но height стабильнее для колонок */
+            
+            /* 2. Настройки колонок */
+            column-width: 300px; /* Минимальная ширина одной колонки */
+            column-gap: 60px;    /* Расстояние между колонками */
+           // column-fill: auto;   /* ВАЖНО: Заполнять на всю высоту перед переносом */
+            column-count: 2;
+
+            /* 3. Настройки скролла */
+            overflow-y: hidden; /* Скрываем вертикальный скролл */
+            overflow-x: auto;   /* Включаем горизонтальный скролл, если колонок много */
+            
+            /* 4. Красота (опционально) */
+            width: 100%;
+            padding-bottom: 10px; /* Отступ под скроллбар */
+        }
+    }
+    iframe{
+        aspect-ratio: 16/9;
+    }
+}
+
+
+.specs-list {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    @include md-down{
+        padding-inline: 16px;
+        gap: 16px;
+    }
+    @include md-up{
+        gap: 16px;
+    }
+    &__item {
+      // Критически важно для твоих колонок: запрещает разрыв блока
+      break-inside: avoid; 
+      page-break-inside: avoid; // Для старых браузеров
+      -webkit-column-break-inside: avoid; // Для старых Safari/Chrome
+  
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      // Термин (Заголовок)
+      dt {
+        position: relative;
+        padding-left: 18px; // Отступ под стрелочку
+        
+        font-weight: 600;
+        font-size: 16px;
+        color: #000207;
+  
+        // Треугольник-стрелочка
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 7px; // Точная подгонка по центру первой строки
+          
+          // Рисуем треугольник CSS-границами
+          width: 0;
+          height: 0;
+          border-top: 5px solid transparent;
+          border-bottom: 5px solid transparent;
+          border-left: 7px solid var(--color-accent);
+        }
+      }
+  
+      // Описание (Значение)
+      dd {
+        margin: 0;
+        padding-left: 18px; // Выравнивание текста по заголовку
+        color: var(--color-grey-dark);
+        font-size: 15px;
+        line-height: 1.4;
+      }
+    }
+  }
+  

@@ -1,0 +1,71 @@
+<footer class="footer">
+    <div class="container footer__top">
+
+        <!-- LEFT -->
+        <div class="footer__left">
+            <h2 class="footer__brand">Воп</h2>
+
+            {% include "@termopab/components/phones-styled/_phones-styled.twig" %}
+            {% include "@termopab/components/shedule-styled/_shedule-styled.twig"%}
+
+
+
+            <a href="#" class="footer__button btn btn-transparent">Зателефонувати мені</a>
+            <hr>
+            <a href="mailto:info@termopab.com" class="footer__email">
+                INFO@TERMOPAB.COM
+            </a>
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div class="footer__right">
+            <div class="footer__right-top">
+                <div class="footer__location">
+                    <p class="footer__address">
+                        <svg class="footer__icon-location"><use href="#icon-location"></use></svg>
+                        УКРАЇНА, КИЇВ
+                    </p>
+                    <p class="footer__worknote">
+                        Працюємо по всій Україні та Європі
+                    </p>
+                </div>
+                <div class="footer_socials_wrapper">
+                    {% include "@termopab/components/social-buttons/_social-buttons.twig" %}  
+                </div>
+            </div>
+            <div class="footer__right-bottom">
+                <ul class="footer__menu">
+                    <li><a href="#">Пивоварні</a></li>
+                    <li><a href="#">Бродильний цех</a></li>
+                    <li><a href="#">Комплектуючі товари</a></li>
+                    <li><a href="#">Проекти</a></li>
+                    <li><a href="#">Відгуки</a></li>
+                    <li><a href="#">Огляди пивоварень</a></li>
+                    <li><a href="#">Про компанію</a></li>
+                    <li><a href="#">Новини</a></li>
+                    <li><a href="#">Контакти</a></li>
+                </ul>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- BOTTOM -->
+    <div class="footer__bottom container">
+        <div class="footer__bottom-inner">
+            <div class="footer__copyright">
+                © 2025 Термопаб
+            </div>
+
+            <a href="#" class="footer__privacy">Політика конфіденційності</a>
+
+            <div class="footer__payments">
+                <img src="/src/assets/images/payments/privat.webp" alt="Privat">
+                <img src="/src/assets/images/payments/visa.webp" alt="Visa">
+                <img src="/src/assets/images/payments/liqpay.webp" alt="Liqpay">
+                <img src="/src/assets/images/payments/mastercard.webp" alt="Mastercard">
+            </div>
+        </div>
+    </div>
+</footer>

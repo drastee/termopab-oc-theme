@@ -1,0 +1,78 @@
+@use "src/styles/mixins" as *;
+.our-team{
+    padding-top: 80px;
+    padding-bottom: 0 !important;
+    @include md-up{
+        padding-top: 152px;
+    }
+    &__owner{
+        margin-bottom: 60px;
+        align-items: center;
+        display: grid;
+        row-gap: 25px;
+        grid-template-areas: 
+        "title"
+        "photo"
+        "content"
+        "button"
+        ;
+        @include md-up{
+            margin-bottom: 130px;
+            column-gap: 8%;
+            grid-template-columns: 40% 1fr;
+            grid-template-areas: 
+                "photo title"
+                "photo content"
+                "photo button"
+            ;
+        }
+    }
+
+    &__title{
+        grid-area: button;
+        text-transform: uppercase;
+        grid-area: title;
+        @include md-down{
+            margin-bottom: 20px;
+        }
+    }
+
+    &__all{
+        width: 100%;
+        @include md-up{
+        }
+    }
+}
+.owner{
+    &__photo{
+        grid-area: photo;
+        @include md-down{
+            max-width: 400px;
+            width: 100%;
+            border-radius: 2px;
+        }
+    }
+    &__content{
+        grid-area: content;
+        display: flex;
+        flex-direction: column;
+        gap:20px;
+        @include md-up{
+            gap:34px;
+        }
+    }
+}
+
+
+
+.person{
+    font-family: var(--font-alt);
+    &__name{
+        font-weight: 600;
+        font-size: 20px;
+    }
+    &__role{
+        font-weight: 400;
+        font-size: 18px;
+    }
+ }           

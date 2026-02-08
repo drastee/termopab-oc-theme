@@ -1,0 +1,100 @@
+@use "src/styles/mixins" as *;
+.cta-barometer{
+
+    position: relative;
+    background-color: #EBEBEB;
+    color: var(--color-gray-dark);
+
+    @include md-down{
+        padding-top: 50px;
+    }
+
+    .container{
+        position: relative;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+
+        @include md-down{
+            gap: 33px;
+            align-items: center;
+        }
+
+        @include xs-up{
+            padding-block: 50px 0;
+        }
+        @include sm-up{
+            padding-block: 50px 0;
+        }
+
+        @include md-down{
+            padding-inline: 40px;
+        }
+        @include md-up{
+            padding-block: 66px;
+            justify-content: left;
+            flex-direction: row;
+        }
+    }
+    
+    &__image-wrapper{
+        z-index: 0;
+        overflow: hidden;
+        width: max-content;
+        @include md-down{
+            margin-top: -10%;
+            transform: translateY(20%);
+        }
+        @include md-up{
+            right: 0;
+            bottom: 0;
+            width: max-content;
+            position: absolute;
+            transform: translateY(15%);
+        }
+
+        @include xxl-up{
+
+            transform: translate(-15%, 15%);
+        }
+        
+        img{
+            object-fit: contain;
+            max-width: 100%;
+            max-height: 100%;
+            object-position: bottom center;
+
+            height: 316px;
+
+            @include xs-up{
+                height: 380px;
+            }
+
+            @include sm-up{
+               height: 550px;
+            }
+
+            @include md-up{
+                height: 557px;
+            }
+
+            @include xl-up{
+                height: 757px;
+            }
+
+            @include xxl-up{
+                height: 757px;
+
+            }
+        }
+        
+    }
+
+}
+
+.cta-barometer + section {
+    padding-top: 145px;
+    @include md-up{
+        padding-top: 207px;
+    }
+}
