@@ -22,6 +22,7 @@
             <li class="nav-item"><a href="#tab-main" data-bs-toggle="tab" class="nav-link active">{{ tab_main }}</a></li>
             <li class="nav-item"><a href="#tab-header" data-bs-toggle="tab" class="nav-link">{{ tab_header }}</a></li>
             <li class="nav-item"><a href="#tab-footer" data-bs-toggle="tab" class="nav-link">{{ tab_footer }}</a></li>
+            <li class="nav-item"><a href="#tab-menu" data-bs-toggle="tab" class="nav-link">{{ tab_menu }}</a></li>
             <li class="nav-item"><a href="#tab-status" data-bs-toggle="tab" class="nav-link">{{ tab_status }}</a></li>
           </ul>
           <div class="tab-content">
@@ -79,6 +80,67 @@
                 <p class="text-muted">{{ text_header_empty }}</p>
               </fieldset>
             </div>
+            <div id="tab-menu" class="tab-pane">
+              <fieldset>
+                <legend>{{ tab_menu }}</legend>
+                <p class="text-muted mb-4">{{ help_menu_columns }}</p>
+                {% for col in [1, 2, 3] %}
+                <div class="row mb-4">
+                  <label class="col-sm-2 col-form-label">{{ attribute(_context, 'entry_menu_column' ~ col) }}</label>
+                  <div class="col-sm-10">
+                    <div id="menu-column{{ col }}-items" class="list-group">
+                      {% for idx, item in attribute(_context, 'menu_column' ~ col) %}
+                      <div class="list-group-item menu-item-row" data-type="{{ item.type|default('category') }}">
+                        <div class="row align-items-center">
+                          <div class="col-md-2">
+                            <select name="theme_termopab_menu_column{{ col }}[{{ idx }}][type]" class="form-select form-select-sm menu-item-type">
+                              <option value="category"{% if (item.type|default('category')) == 'category' %} selected{% endif %}>{{ entry_menu_item_category }}</option>
+                              <option value="information"{% if (item.type|default('')) == 'information' %} selected{% endif %}>{{ entry_menu_item_information }}</option>
+                              <option value="custom"{% if (item.type|default('')) == 'custom' %} selected{% endif %}>{{ entry_menu_item_custom }}</option>
+                            </select>
+                          </div>
+                          <div class="col-md-4 menu-field-information {{ (item.type|default('category')) != 'information' ? 'd-none' : '' }}">
+                            <select name="theme_termopab_menu_column{{ col }}[{{ idx }}][information_id]" class="form-select form-select-sm">
+                              <option value="">{{ text_select }}</option>
+                              {% for info in informations %}
+                              <option value="{{ info.information_id }}"{% if (item.information_id|default(0)) == info.information_id %} selected{% endif %}>{{ info.title }}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+                          <div class="col-md-4 menu-field-category {{ (item.type|default('category')) != 'category' ? 'd-none' : '' }}">
+                            <select name="theme_termopab_menu_column{{ col }}[{{ idx }}][category_id]" class="form-select form-select-sm">
+                              <option value="">{{ text_select }}</option>
+                              {% for cat in categories_flat %}
+                              <option value="{{ cat.category_id }}"{% if (item.category_id|default(0)) == cat.category_id %} selected{% endif %}>{{ cat.name }}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+                          <div class="col-md-4 menu-field-custom {{ (item.type|default('category')) != 'custom' ? 'd-none' : '' }}">
+                            {% for lang in languages %}
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                              <img src="{{ lang.image }}" alt="" width="20" height="14" class="rounded flex-shrink-0">
+                              <input type="text" name="theme_termopab_menu_column{{ col }}[{{ idx }}][title][{{ lang.language_id }}]" value="{{ item.title[lang.language_id]|default('') }}" placeholder="{{ entry_menu_item_title }}" class="form-control form-control-sm flex-grow-1">
+                              <input type="text" name="theme_termopab_menu_column{{ col }}[{{ idx }}][href][{{ lang.language_id }}]" value="{{ item.href is iterable and item.href[lang.language_id] is defined ? item.href[lang.language_id] : item.href|default('') }}" placeholder="{{ entry_menu_item_url }}" class="form-control form-control-sm flex-grow-1">
+                            </div>
+                            {% endfor %}
+                          </div>
+                          <div class="col-md-2 d-flex gap-1">
+                            <button type="button" class="btn btn-outline-secondary btn-sm menu-item-up" title="{{ button_up }}"><i class="fa-solid fa-arrow-up"></i></button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm menu-item-down" title="{{ button_down }}"><i class="fa-solid fa-arrow-down"></i></button>
+                            <button type="button" class="btn btn-outline-danger btn-sm menu-item-remove" title="{{ button_remove }}"><i class="fa-solid fa-minus"></i></button>
+                          </div>
+                        </div>
+                      </div>
+                      {% else %}
+                      <div class="text-muted">{{ text_menu_empty }}</div>
+                      {% endfor %}
+                    </div>
+                    <button type="button" class="menu-column-add btn btn-outline-primary btn-sm mt-2" data-column="{{ col }}"><i class="fa-solid fa-plus"></i> {{ button_add }}</button>
+                  </div>
+                </div>
+                {% endfor %}
+              </fieldset>
+            </div>
             <div id="tab-footer" class="tab-pane">
               <fieldset>
                 <legend>{{ tab_footer }}</legend>
@@ -110,6 +172,73 @@
                       </div>
                     </div>
                   {% endfor %}
+                </div>
+                <hr class="my-4">
+                <div class="row mb-3">
+                  <label class="col-sm-2 col-form-label">{{ entry_footer_menu }}</label>
+                  <div class="col-sm-10 d-flex flex-column gap-1">
+                    <div class="form-check">
+                      <input type="radio" name="theme_termopab_footer_menu_use_main" value="1" id="footer-menu-use-main" class="form-check-input"{% if footer_menu_use_main %} checked{% endif %}>
+                      <label for="footer-menu-use-main" class="form-check-label">{{ entry_footer_menu_use_main }}</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="radio" name="theme_termopab_footer_menu_use_main" value="0" id="footer-menu-configure" class="form-check-input"{% if not footer_menu_use_main %} checked{% endif %}>
+                      <label for="footer-menu-configure" class="form-check-label">{{ entry_footer_menu_configure }}</label>
+                    </div>
+                  </div>
+                </div>
+                <div id="footer-menu-items-wrap" class="row mb-3 {{ footer_menu_use_main ? 'd-none' : '' }}">
+                  <label class="col-sm-2 col-form-label">{{ entry_footer_menu_items }}</label>
+                  <div class="col-sm-10">
+                    <div id="footer-menu-items" class="list-group">
+                      {% for idx, item in footer_menu_items %}
+                      <div class="list-group-item menu-item-row" data-type="{{ item.type|default('category') }}">
+                        <div class="row align-items-center">
+                          <div class="col-md-2">
+                            <select name="theme_termopab_footer_menu[{{ idx }}][type]" class="form-select form-select-sm menu-item-type">
+                              <option value="category"{% if (item.type|default('category')) == 'category' %} selected{% endif %}>{{ entry_menu_item_category }}</option>
+                              <option value="information"{% if (item.type|default('')) == 'information' %} selected{% endif %}>{{ entry_menu_item_information }}</option>
+                              <option value="custom"{% if (item.type|default('')) == 'custom' %} selected{% endif %}>{{ entry_menu_item_custom }}</option>
+                            </select>
+                          </div>
+                          <div class="col-md-4 menu-field-information {{ (item.type|default('category')) != 'information' ? 'd-none' : '' }}">
+                            <select name="theme_termopab_footer_menu[{{ idx }}][information_id]" class="form-select form-select-sm">
+                              <option value="">{{ text_select }}</option>
+                              {% for info in informations %}
+                              <option value="{{ info.information_id }}"{% if (item.information_id|default(0)) == info.information_id %} selected{% endif %}>{{ info.title }}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+                          <div class="col-md-4 menu-field-category {{ (item.type|default('category')) != 'category' ? 'd-none' : '' }}">
+                            <select name="theme_termopab_footer_menu[{{ idx }}][category_id]" class="form-select form-select-sm">
+                              <option value="">{{ text_select }}</option>
+                              {% for cat in categories_flat %}
+                              <option value="{{ cat.category_id }}"{% if (item.category_id|default(0)) == cat.category_id %} selected{% endif %}>{{ cat.name }}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+                          <div class="col-md-4 menu-field-custom {{ (item.type|default('category')) != 'custom' ? 'd-none' : '' }}">
+                            {% for lang in languages %}
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                              <img src="{{ lang.image }}" alt="" width="20" height="14" class="rounded flex-shrink-0">
+                              <input type="text" name="theme_termopab_footer_menu[{{ idx }}][title][{{ lang.language_id }}]" value="{{ item.title[lang.language_id]|default('') }}" placeholder="{{ entry_menu_item_title }}" class="form-control form-control-sm flex-grow-1">
+                              <input type="text" name="theme_termopab_footer_menu[{{ idx }}][href][{{ lang.language_id }}]" value="{{ item.href is iterable and item.href[lang.language_id] is defined ? item.href[lang.language_id] : item.href|default('') }}" placeholder="{{ entry_menu_item_url }}" class="form-control form-control-sm flex-grow-1">
+                            </div>
+                            {% endfor %}
+                          </div>
+                          <div class="col-md-2 d-flex gap-1">
+                            <button type="button" class="btn btn-outline-secondary btn-sm menu-item-up" title="{{ button_up }}"><i class="fa-solid fa-arrow-up"></i></button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm menu-item-down" title="{{ button_down }}"><i class="fa-solid fa-arrow-down"></i></button>
+                            <button type="button" class="btn btn-outline-danger btn-sm menu-item-remove" title="{{ button_remove }}"><i class="fa-solid fa-minus"></i></button>
+                          </div>
+                        </div>
+                      </div>
+                      {% else %}
+                      <div class="text-muted">{{ text_menu_empty }}</div>
+                      {% endfor %}
+                    </div>
+                    <button type="button" id="footer-menu-add" class="btn btn-outline-primary btn-sm mt-2"><i class="fa-solid fa-plus"></i> {{ button_add }}</button>
+                  </div>
                 </div>
               </fieldset>
             </div>
@@ -144,6 +273,91 @@ $('#telephone-list').on('click', '.remove-telephone', function() {
   if (rows.length > 1) {
     $(this).closest('.telephone-row').remove();
   }
+});
+
+// Menu item type toggle (main menu + footer)
+$('#form-theme').on('change', '.menu-item-type', function() {
+  var $row = $(this).closest('.menu-item-row');
+  var type = $(this).val();
+  $row.find('.menu-field-information').toggleClass('d-none', type !== 'information');
+  $row.find('.menu-field-category').toggleClass('d-none', type !== 'category');
+  $row.find('.menu-field-custom').toggleClass('d-none', type !== 'custom');
+  $row.attr('data-type', type);
+});
+$('#tab-menu .menu-item-type, #tab-footer .menu-item-type').each(function() {
+  $(this).trigger('change');
+});
+
+// Footer menu: use main vs configure
+$('input[name="theme_termopab_footer_menu_use_main"]').on('change', function() {
+  $('#footer-menu-items-wrap').toggleClass('d-none', $(this).val() === '1');
+});
+
+// Menu columns 1, 2, 3 - add item (unified structure)
+function menuItemRowHtml(col, idx, langs, infos, cats, texts) {
+  var infosArr = Array.isArray(infos) ? infos : (infos ? Object.values(infos) : []);
+  var catsArr = Array.isArray(cats) ? cats : (cats ? Object.values(cats) : []);
+  var langsArr = Array.isArray(langs) ? langs : (langs ? Object.values(langs) : []);
+  var infoOpts = infosArr.map(function(i) { return '<option value="' + (i.information_id || '') + '">' + (i.title || '') + '</option>'; }).join('');
+  var catOpts = catsArr.map(function(c) { return '<option value="' + (c.category_id || '') + '">' + (c.name || '') + '</option>'; }).join('');
+  var langInputs = langsArr.map(function(l) {
+    var img = (l.image || '').replace(/'/g, "\\'");
+    return '<div class="d-flex align-items-center gap-2 mb-2"><img src="' + img + '" alt="" width="20" height="14" class="rounded flex-shrink-0"><input type="text" name="theme_termopab_menu_column' + col + '[' + idx + '][title][' + (l.language_id || '') + ']" placeholder="' + (texts.entry_menu_item_title || '') + '" class="form-control form-control-sm flex-grow-1"><input type="text" name="theme_termopab_menu_column' + col + '[' + idx + '][href][' + (l.language_id || '') + ']" placeholder="' + (texts.entry_menu_item_url || '') + '" class="form-control form-control-sm flex-grow-1"></div>';
+  }).join('');
+  return '<div class="list-group-item menu-item-row" data-type="category"><div class="row align-items-center"><div class="col-md-2"><select name="theme_termopab_menu_column' + col + '[' + idx + '][type]" class="form-select form-select-sm menu-item-type"><option value="category" selected>' + (texts.entry_menu_item_category || '') + '</option><option value="information">' + (texts.entry_menu_item_information || '') + '</option><option value="custom">' + (texts.entry_menu_item_custom || '') + '</option></select></div><div class="col-md-4 menu-field-information d-none"><select name="theme_termopab_menu_column' + col + '[' + idx + '][information_id]" class="form-select form-select-sm"><option value="">' + (texts.text_select || '') + '</option>' + infoOpts + '</select></div><div class="col-md-4 menu-field-category"><select name="theme_termopab_menu_column' + col + '[' + idx + '][category_id]" class="form-select form-select-sm"><option value="">' + (texts.text_select || '') + '</option>' + catOpts + '</select></div><div class="col-md-4 menu-field-custom d-none">' + langInputs + '</div><div class="col-md-2 d-flex gap-1"><button type="button" class="btn btn-outline-secondary btn-sm menu-item-up" title="' + (texts.button_up || '') + '"><i class="fa-solid fa-arrow-up"></i></button><button type="button" class="btn btn-outline-secondary btn-sm menu-item-down" title="' + (texts.button_down || '') + '"><i class="fa-solid fa-arrow-down"></i></button><button type="button" class="btn btn-outline-danger btn-sm menu-item-remove" title="' + (texts.button_remove || '') + '"><i class="fa-solid fa-minus"></i></button></div></div></div>';
+}
+var menuTexts = { entry_menu_item_information: '{{ entry_menu_item_information|escape('js') }}', entry_menu_item_category: '{{ entry_menu_item_category|escape('js') }}', entry_menu_item_custom: '{{ entry_menu_item_custom|escape('js') }}', entry_menu_item_title: '{{ entry_menu_item_title|escape('js') }}', entry_menu_item_url: '{{ entry_menu_item_url|escape('js') }}', text_select: '{{ text_select|escape('js') }}', button_up: '{{ button_up|escape('js') }}', button_down: '{{ button_down|escape('js') }}', button_remove: '{{ button_remove|escape('js') }}' };
+var menuLangs = {{ (menu_languages|default([]))|json_encode|raw }};
+var menuInfos = {{ (menu_informations|default([]))|json_encode|raw }};
+var menuCats = {{ (categories_flat|default([]))|json_encode|raw }};
+if (!Array.isArray(menuLangs)) menuLangs = Object.values(menuLangs || {});
+if (!Array.isArray(menuInfos)) menuInfos = Object.values(menuInfos || {});
+if (!Array.isArray(menuCats)) menuCats = Object.values(menuCats || {});
+
+function menuAddItem(col) {
+  var $container = $('#menu-column' + col + '-items');
+  $container.find('.text-muted').remove();
+  var idx = $container.find('.menu-item-row').length;
+  var html = menuItemRowHtml(col, idx, menuLangs, menuInfos, menuCats, menuTexts);
+  $container.append(html);
+  $container.find('.menu-item-type').last().trigger('change');
+}
+$('#tab-menu').on('click', '.menu-column-add', function() { menuAddItem(parseInt($(this).data('column'), 10)); });
+
+// Footer menu - add item
+function footerMenuItemRowHtml(idx, langs, infos, cats, texts) {
+  var infosArr = Array.isArray(infos) ? infos : (infos ? Object.values(infos) : []);
+  var catsArr = Array.isArray(cats) ? cats : (cats ? Object.values(cats) : []);
+  var langsArr = Array.isArray(langs) ? langs : (langs ? Object.values(langs) : []);
+  var infoOpts = infosArr.map(function(i) { return '<option value="' + (i.information_id || '') + '">' + (i.title || '') + '</option>'; }).join('');
+  var catOpts = catsArr.map(function(c) { return '<option value="' + (c.category_id || '') + '">' + (c.name || '') + '</option>'; }).join('');
+  var langInputs = langsArr.map(function(l) {
+    var img = (l.image || '').replace(/'/g, "\\'");
+    return '<div class="d-flex align-items-center gap-2 mb-2"><img src="' + img + '" alt="" width="20" height="14" class="rounded flex-shrink-0"><input type="text" name="theme_termopab_footer_menu[' + idx + '][title][' + (l.language_id || '') + ']" placeholder="' + (texts.entry_menu_item_title || '') + '" class="form-control form-control-sm flex-grow-1"><input type="text" name="theme_termopab_footer_menu[' + idx + '][href][' + (l.language_id || '') + ']" placeholder="' + (texts.entry_menu_item_url || '') + '" class="form-control form-control-sm flex-grow-1"></div>';
+  }).join('');
+  return '<div class="list-group-item menu-item-row" data-type="category"><div class="row align-items-center"><div class="col-md-2"><select name="theme_termopab_footer_menu[' + idx + '][type]" class="form-select form-select-sm menu-item-type"><option value="category" selected>' + (texts.entry_menu_item_category || '') + '</option><option value="information">' + (texts.entry_menu_item_information || '') + '</option><option value="custom">' + (texts.entry_menu_item_custom || '') + '</option></select></div><div class="col-md-4 menu-field-information d-none"><select name="theme_termopab_footer_menu[' + idx + '][information_id]" class="form-select form-select-sm"><option value="">' + (texts.text_select || '') + '</option>' + infoOpts + '</select></div><div class="col-md-4 menu-field-category"><select name="theme_termopab_footer_menu[' + idx + '][category_id]" class="form-select form-select-sm"><option value="">' + (texts.text_select || '') + '</option>' + catOpts + '</select></div><div class="col-md-4 menu-field-custom d-none">' + langInputs + '</div><div class="col-md-2 d-flex gap-1"><button type="button" class="btn btn-outline-secondary btn-sm menu-item-up" title="' + (texts.button_up || '') + '"><i class="fa-solid fa-arrow-up"></i></button><button type="button" class="btn btn-outline-secondary btn-sm menu-item-down" title="' + (texts.button_down || '') + '"><i class="fa-solid fa-arrow-down"></i></button><button type="button" class="btn btn-outline-danger btn-sm menu-item-remove" title="' + (texts.button_remove || '') + '"><i class="fa-solid fa-minus"></i></button></div></div></div>';
+}
+$('#footer-menu-add').on('click', function() {
+  var $container = $('#footer-menu-items');
+  $container.find('.text-muted').remove();
+  var idx = $container.find('.menu-item-row').length;
+  var html = footerMenuItemRowHtml(idx, menuLangs, menuInfos, menuCats, menuTexts);
+  $container.append(html);
+  $container.find('.menu-item-type').last().trigger('change');
+});
+
+$('#form-theme').on('click', '.menu-item-remove', function() {
+  $(this).closest('.menu-item-row').remove();
+});
+$('#form-theme').on('click', '.menu-item-up', function() {
+  var $row = $(this).closest('.menu-item-row');
+  var $prev = $row.prev('.menu-item-row');
+  if ($prev.length) $prev.before($row);
+});
+$('#form-theme').on('click', '.menu-item-down', function() {
+  var $row = $(this).closest('.menu-item-row');
+  var $next = $row.next('.menu-item-row');
+  if ($next.length) $next.after($row);
 });
 //--></script>
 {{ footer }}

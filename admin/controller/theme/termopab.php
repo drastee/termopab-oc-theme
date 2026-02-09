@@ -44,8 +44,15 @@ class Termopab extends \Opencart\System\Engine\Controller {
 
 		$this->load->model('setting/setting');
 		$this->load->model('localisation/language');
+		$this->load->model('catalog/category');
+		$this->load->model('catalog/information');
 
 		$data['languages'] = $this->model_localisation_language->getLanguages();
+		$data['categories'] = $this->model_catalog_category->getCategories(['filter_parent_id' => 0]);
+		$data['categories_flat'] = $this->model_catalog_category->getCategories();
+		$data['informations'] = $this->model_catalog_information->getInformations() ?: [];
+		$data['menu_languages'] = array_values($data['languages']);
+		$data['menu_informations'] = array_values($data['informations']);
 
 		$setting_info = $this->model_setting_setting->getSetting('theme_termopab', $store_id);
 
@@ -63,6 +70,35 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		$data['theme_termopab_email'] = is_array($email_raw) ? (string)reset($email_raw) : (string)$email_raw;
 		$data['theme_termopab_schedule'] = isset($setting_info['theme_termopab_schedule']) ? $setting_info['theme_termopab_schedule'] : [];
 		$data['theme_termopab_worknote'] = isset($setting_info['theme_termopab_worknote']) ? $setting_info['theme_termopab_worknote'] : [];
+
+		$data['footer_menu_use_main'] = !isset($setting_info['theme_termopab_footer_menu_use_main']) || $setting_info['theme_termopab_footer_menu_use_main'];
+		$data['footer_menu_items'] = [];
+		if (!empty($setting_info['theme_termopab_footer_menu'])) {
+			$items = is_string($setting_info['theme_termopab_footer_menu'])
+				? json_decode($setting_info['theme_termopab_footer_menu'], true) : $setting_info['theme_termopab_footer_menu'];
+			$data['footer_menu_items'] = is_array($items) ? array_values($items) : [];
+		}
+
+		foreach ([1, 2, 3] as $col) {
+			$key = 'theme_termopab_menu_column' . $col;
+			$raw = $setting_info[$key] ?? null;
+			$items = is_string($raw) ? json_decode($raw, true) : $raw;
+			$items = is_array($items) ? array_values($items) : [];
+
+			// Migrate old column1 format: [id, id, id] -> [{type:'category', category_id:id}, ...]
+			if ($col === 1 && !empty($items) && is_numeric($items[0])) {
+				$migrated = [];
+				foreach ($items as $cid) {
+					$cid = (int)$cid;
+					if ($cid > 0) {
+						$migrated[] = ['type' => 'category', 'category_id' => $cid];
+					}
+				}
+				$items = $migrated;
+			}
+
+			$data['menu_column' . $col] = $items;
+		}
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
@@ -102,7 +138,26 @@ class Termopab extends \Opencart\System\Engine\Controller {
 				'theme_termopab_email'   => '',
 				'theme_termopab_schedule'=> [],
 				'theme_termopab_worknote'=> [],
+				'theme_termopab_footer_menu_use_main' => 1,
+				'theme_termopab_footer_menu' => [],
+				'theme_termopab_menu_column1' => [],
+				'theme_termopab_menu_column2' => [],
+				'theme_termopab_menu_column3' => [],
 			], $this->request->post);
+
+			if (isset($post['theme_termopab_footer_menu_use_main'])) {
+				$post['theme_termopab_footer_menu_use_main'] = (int)$post['theme_termopab_footer_menu_use_main'];
+			}
+			if (isset($post['theme_termopab_footer_menu']) && is_array($post['theme_termopab_footer_menu'])) {
+				$post['theme_termopab_footer_menu'] = json_encode(array_values($post['theme_termopab_footer_menu']));
+			}
+
+			foreach ([1, 2, 3] as $col) {
+				$key = 'theme_termopab_menu_column' . $col;
+				if (isset($post[$key]) && is_array($post[$key])) {
+					$post[$key] = json_encode(array_values($post[$key]));
+				}
+			}
 
 			if (isset($post['theme_termopab_telephone']) && is_array($post['theme_termopab_telephone'])) {
 				$post['theme_termopab_telephone'] = implode("\n", array_filter(array_map('trim', $post['theme_termopab_telephone'])));

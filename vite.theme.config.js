@@ -2,6 +2,7 @@ import { resolve } from 'path';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 export default {
+  base: './',
   plugins: [
     viteStaticCopy({
       targets: [

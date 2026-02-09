@@ -38,15 +38,9 @@
                 </div>
                 <div class="footer__right-bottom">
                     <ul class="footer__menu">
-                        <li><a href="#">Пивоварні</a></li>
-                        <li><a href="#">Бродильний цех</a></li>
-                        <li><a href="#">Комплектуючі товари</a></li>
-                        <li><a href="#">Проекти</a></li>
-                        <li><a href="#">Відгуки</a></li>
-                        <li><a href="#">Огляди пивоварень</a></li>
-                        <li><a href="#">Про компанію</a></li>
-                        <li><a href="#">Новини</a></li>
-                        <li><a href="#">Контакти</a></li>
+                        {% for item in footer_menu|default([]) %}
+                        <li><a href="{{ item.href }}">{{ item.name }}</a></li>
+                        {% endfor %}
                     </ul>
                 </div>
             </div>

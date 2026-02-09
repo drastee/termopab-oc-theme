@@ -11,6 +11,7 @@ $_['text_edit']        = 'Edit Termopab Theme';
 $_['tab_main']         = 'Main';
 $_['tab_header']       = 'Header';
 $_['tab_footer']       = 'Footer';
+$_['tab_menu']         = 'Main menu';
 $_['tab_status']       = 'Status';
 
 // Entry
@@ -21,12 +22,36 @@ $_['entry_telephone']  = 'Phones';
 $_['entry_email']      = 'Email';
 $_['entry_schedule']   = 'Opening hours';
 $_['entry_worknote']   = 'Work area note';
+$_['entry_footer_menu'] = 'Footer menu';
+$_['entry_footer_menu_use_main'] = 'Use main menu';
+$_['entry_footer_menu_configure'] = 'Configure menu';
+$_['entry_footer_menu_items'] = 'Menu items';
+$_['entry_menu_column1'] = 'Column 1';
+$_['entry_menu_column2'] = 'Column 2';
+$_['entry_menu_column3'] = 'Column 3';
+$_['entry_menu_item_type'] = 'Type';
+$_['entry_menu_item_information'] = 'Information page';
+$_['entry_menu_item_category'] = 'Category';
+$_['entry_menu_item_custom'] = 'Custom link';
+$_['entry_menu_item_title'] = 'Title';
+$_['entry_menu_item_url'] = 'URL';
+
+// Button
+$_['button_add']       = 'Add';
+$_['button_up']        = 'Move up';
+$_['button_down']      = 'Move down';
+$_['button_remove']    = 'Remove';
 
 // Text
 $_['text_header_empty'] = 'Header settings will be added here later.';
 
 // Help
 $_['help_telephone']   = 'Enter one phone number per line. E.g.: +38 (067) 123-45-67';
+$_['help_menu_columns'] = 'All three columns have the same structure. Add menu items with the "Add" button. Type: information page, product category, or custom link.';
+
+// Text
+$_['text_menu_empty']  = 'No items. Click "Add" to add.';
+$_['text_select']     = ' --- Please Select --- ';
 
 // Error
 $_['error_permission'] = 'Warning: You do not have permission to modify the Termopab theme!';

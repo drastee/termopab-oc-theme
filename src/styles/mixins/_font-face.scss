@@ -1,9 +1,8 @@
-// Variable font mixin
+// Variable font mixin (ttf only - woff2 not in assets)
 @mixin font-variable($family, $path, $weight-range: 100 900, $style: normal) {
   @font-face {
     font-family: $family;
-    src: url("#{$path}.woff2") format("woff2-variations"),
-         url("#{$path}.ttf") format("truetype-variations");
+    src: url("#{$path}.ttf") format("truetype-variations");
     font-weight: $weight-range;
     font-style: $style;
     font-display: swap;

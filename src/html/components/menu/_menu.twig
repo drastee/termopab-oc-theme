@@ -1,47 +1,49 @@
+{% set menu_cols = menu_columns|default({}) %}
+{% set col1 = menu_cols[1]|default([]) %}
+{% set col2 = menu_cols[2]|default([]) %}
+{% set col3 = menu_cols[3]|default([]) %}
+{% set default_image = (col1|length > 0 and col1[0].image) ? col1[0].image : (base is defined and base ? base ~ 'extension/termopab/catalog/view/image/product-bg.webp' : '/src/assets/images/gallery/2.webp') %}
 <nav id="mobile-menu" class="nav" hidden>
     <div class="main-wrapper">
         <div class="container-full-left nav__wrapper">
                 <div class="nav__image">
-                    <img class="nav-img active" src="/src/assets/images/gallery/3.webp" alt="">
-                    <img class="nav-img next" src="" alt=""> 
+                    <img class="nav-img active" src="{{ default_image }}" alt="">
+                    <img class="nav-img next" src="" alt="">
                 </div>
                 <div class="nav__columns">
                     <ul class="nav__list">
+                        {% for item in col1 %}
                         <li>
-                            <button data-image="/src/assets/images/gallery/2.webp">Пивоварні</button>
+                            {% if item.children|length > 0 %}
+                            <button{% if item.image %} data-image="{{ item.image }}"{% endif %}>{{ item.name }}</button>
                             <ul class="nav__submenu" hidden>
-                                <li><a href="/category">Малі пивоварні</a></li>
-                                <li><a href="/category">Промислові</a></li>
-                                <li><a href="/category">Під ключ</a></li>
+                                {% for child in item.children %}
+                                <li><a href="{{ child.href }}">{{ child.name }}</a></li>
+                                {% endfor %}
                             </ul>
+                            {% else %}
+                            <a href="{{ item.href }}"{% if item.image %} data-image="{{ item.image }}"{% endif %}>{{ item.name }}</a>
+                            {% endif %}
                         </li>
-                        <li><a href="#">Бродильний цех</a></li>
-                        <li data-image="/src/assets/images/subcategory-bg-mobile.webp">
-                            <button>Комплектуючі товари</button>
-                            <ul class="nav__submenu" hidden>
-                                <li><a href="#">варильний порядок</a></li>
-                                <li><a href="#">Кег/СІП Мийки</a></li>
-                                <li><a href="#">Охмеління пива</a></li>
-                                <li><a href="#">парогенератор</a></li>
-                                <li><a href="#">холодильна станція</a></li>
-                                <li><a href="#">Дистилляція и Ректификація</a></li>
-                            </ul>
-                        </li>
-                        </ul>
-
-                        <ul class="nav__list">
-                        <li><a href="/news">Наші замовники</a></li>
-                        <li><a href="/projects">Проєкти</a></li>
-                        <li><a href="/testimonials">Відгуки</a></li>
-                        <li><a href="/testimonial">Огляди пивоварень</a></li>
-                        </ul>
-
-                        <ul class="nav__list">
-                        <li><a href="/about">Про компанію</a></li>
-                        <li><a href="/news">Новини</a></li>
-                        <li><a href="/contacts">Контакти</a></li>
+                        {% endfor %}
                     </ul>
-                    </div>
+
+                    <ul class="nav__list">
+                        {% for item in col2 %}
+                        <li>
+                            <a href="{{ item.href }}"{% if item.image %} data-image="{{ item.image }}"{% endif %}>{{ item.name }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+
+                    <ul class="nav__list">
+                        {% for item in col3 %}
+                        <li>
+                            <a href="{{ item.href }}"{% if item.image %} data-image="{{ item.image }}"{% endif %}>{{ item.name }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
                 </div>
         </div>
+    </div>
 </nav>

@@ -11,6 +11,7 @@ $_['text_edit']        = 'Редагування теми Termopab';
 $_['tab_main']         = 'Основне';
 $_['tab_header']       = 'Шапка';
 $_['tab_footer']       = 'Підвал';
+$_['tab_menu']         = 'Основне меню';
 $_['tab_status']       = 'Статус';
 
 // Entry
@@ -21,12 +22,36 @@ $_['entry_telephone']  = 'Телефони';
 $_['entry_email']      = 'Email';
 $_['entry_schedule']   = 'Час роботи';
 $_['entry_worknote']   = 'Примітка про зону роботи';
+$_['entry_footer_menu'] = 'Меню підвалу';
+$_['entry_footer_menu_use_main'] = 'Використовувати основне меню';
+$_['entry_footer_menu_configure'] = 'Налаштувати меню';
+$_['entry_footer_menu_items'] = 'Пункти меню';
+$_['entry_menu_column1'] = 'Колонка 1';
+$_['entry_menu_column2'] = 'Колонка 2';
+$_['entry_menu_column3'] = 'Колонка 3';
+$_['entry_menu_item_type'] = 'Тип';
+$_['entry_menu_item_information'] = 'Інформаційна сторінка';
+$_['entry_menu_item_category'] = 'Категорія';
+$_['entry_menu_item_custom'] = 'Довільне посилання';
+$_['entry_menu_item_title'] = 'Назва';
+$_['entry_menu_item_url'] = 'URL';
+
+// Button
+$_['button_add']       = 'Додати';
+$_['button_up']        = 'Вгору';
+$_['button_down']      = 'Вниз';
+$_['button_remove']    = 'Видалити';
 
 // Text
 $_['text_header_empty'] = 'Налаштування шапки будуть додані пізніше.';
 
 // Help
 $_['help_telephone']   = 'Введіть один номер телефону на рядок. Наприклад: +38 (067) 123-45-67';
+$_['help_menu_columns'] = 'Усі три колонки мають однакову структуру. Додайте пункти меню кнопкою «Додати». Тип: інформаційна сторінка, категорія товарів або довільне посилання.';
+
+// Text
+$_['text_menu_empty']  = 'Немає пунктів. Натисніть «Додати».';
+$_['text_select']     = ' --- Оберіть --- ';
 
 // Error
 $_['error_permission'] = 'У вас немає прав для зміни налаштувань теми Termopab!';

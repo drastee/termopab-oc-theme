@@ -45,4 +45,30 @@
     </div>
 </header>
 
-{% include '@components/menu/_menu.twig' %}
+{% set menu_columns = menu_columns|default({
+    1: [
+        { name: "Пивоварні", href: "/category/breweries", image: "/src/assets/images/gallery/2.webp", children: [
+            { name: "Малі пивоварні", href: "/category/small" },
+            { name: "Промислові", href: "/category/industrial" },
+            { name: "Під ключ", href: "/category/turnkey" }
+        ]},
+        { name: "Бродильний цех", href: "/category/fermentation", image: "", children: [] },
+        { name: "Комплектуючі товари", href: "/category/components", image: "/src/assets/images/subcategory-bg-mobile.webp", children: [
+            { name: "Варильний порядок", href: "/category/brewing" },
+            { name: "Кег/СІП Мийки", href: "/category/keg-washers" },
+            { name: "Охмеління пива", href: "/category/hopping" }
+        ]}
+    ],
+    2: [
+        { name: "Наші замовники", href: "/news", image: "" },
+        { name: "Проєкти", href: "/projects", image: "" },
+        { name: "Відгуки", href: "/testimonials", image: "" },
+        { name: "Огляди пивоварень", href: "/testimonial", image: "" }
+    ],
+    3: [
+        { name: "Про компанію", href: "/about", image: "" },
+        { name: "Новини", href: "/news", image: "" },
+        { name: "Контакти", href: "/contacts", image: "" }
+    ]
+}) %}
+{% include '@components/menu/_menu.twig' with { menu_columns: menu_columns } %}
