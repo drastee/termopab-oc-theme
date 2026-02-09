@@ -5,7 +5,7 @@
     <div class="swiper-controls__pagination">
         <span class="swiper-controls__current">1</span> 
         <span>/</span>
-        <span class="swiper-controls__total">3</span>
+        <span class="swiper-controls__total">{{ total|default(3) }}</span>
     </div>
     <button class="swiper-controls__button swiper-button-next" aria-label="Next">
         <svg class="nav-arrow"><use href="#icon-arrow"></use></svg>

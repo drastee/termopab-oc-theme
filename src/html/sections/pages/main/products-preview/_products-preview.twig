@@ -28,7 +28,7 @@
                                 <p class="product-preview-card__text">{{ item.text }}</p>
 
                                 <a href="{{ item.link }}" class="product-preview-card__more link">
-                                    Дізнатися більше  <svg class="link-arrow"><use href="#icon-short-arrow"></use></svg>
+                                    {{ text_learn_more|default('Дізнатися більше') }}  <svg class="link-arrow"><use href="#icon-short-arrow"></use></svg>
                                 </a>
                             </div>
                         </div>

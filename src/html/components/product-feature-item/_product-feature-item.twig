@@ -1,24 +1,28 @@
 <div class="swiper-slide">
     <div class="product-feature__wrapper">
         <div class="product-feature__left-side">
-            <p class="product-feature__product-title">Броварня 200 літрів</p>
-            <p>Lorem Ipsum is simply dummy text of the printing 
-            and typesetting industry. Lorem Ipsum has been   
-            Lorem Ipsum is simply dummy text of the printing and 
-            typesetting industry. Lorem Ipsum Lorem Ipsum is simply 
-            dummy text of the printing and typesetting industry. 
-            Lorem Ipsum has been. Lorem Ipsum is simply dummy 
-            text of the printing and typesetting industry. Lorem Ipsum</p>
+            <p class="product-feature__product-title">{{ name }}</p>
+            <p>{{ description_short }}</p>
         </div>
         <div class="product-feature__middle-side">
-            <img src="/src/assets/images/products/product-4.webp" class="img-base" alt="">
-            <img src="/src/assets/images/products/product-2.webp" class="img-hover" alt="">
+            <a href="{{ href }}">
+                <img src="{{ thumb }}" class="img-base" alt="{{ name }}" title="{{ name }}">
+                <img src="{{ thumb_hover }}" class="img-hover" alt="{{ name }}" title="{{ name }}">
+            </a>
         </div>
         <div class="product-feature__right-side">
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been   Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been   Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum </p>
-            
-            <a class="link" href="#">Дізнатися більше <svg class="link-arrow"><use href="#icon-short-arrow"></use></svg></a>
-            
+            <p>{{ description }}</p>
+            {% if attributes is defined and attributes|length > 0 %}
+            <dl class="product-feature__attributes">
+                {% for attr in attributes %}
+                <div class="product-feature__attr">
+                    <dt>{{ attr.name }}</dt>
+                    <dd>{{ attr.text }}</dd>
+                </div>
+                {% endfor %}
+            </dl>
+            {% endif %}
+            <a class="link" href="{{ href }}">{{ text_learn_more }} <svg class="link-arrow"><use href="#icon-short-arrow"></use></svg></a>
         </div>
     </div>
 </div>
