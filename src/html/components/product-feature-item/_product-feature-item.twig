@@ -1,17 +1,18 @@
 <div class="swiper-slide">
     <div class="product-feature__wrapper">
         <div class="product-feature__left-side">
-            <p class="product-feature__product-title">{{ name }}</p>
-            <p>{{ description_short }}</p>
+            <p class="product-feature__product-title">{{ title|default(name|default('')) }}</p>
+            <p>{{ text_before|default(description_short|default('')) }}</p>
         </div>
         <div class="product-feature__middle-side">
-            <a href="{{ href }}">
-                <img src="{{ thumb }}" class="img-base" alt="{{ name }}" title="{{ name }}">
-                <img src="{{ thumb_hover }}" class="img-hover" alt="{{ name }}" title="{{ name }}">
+            {% set slide_href = href|default('#') %}
+            <a href="{{ slide_href }}">
+                <img src="{{ image|default(thumb) }}" class="img-base" alt="{{ title|default(name|default('')) }}" title="{{ title|default(name|default('')) }}">
+                <img src="{{ image_hover|default(thumb_hover|default(image|default(thumb))) }}" class="img-hover" alt="{{ title|default(name|default('')) }}" title="{{ title|default(name|default('')) }}">
             </a>
         </div>
         <div class="product-feature__right-side">
-            <p>{{ description }}</p>
+            <p>{{ text_after|default(description|default('')) }}</p>
             {% if attributes is defined and attributes|length > 0 %}
             <dl class="product-feature__attributes">
                 {% for attr in attributes %}
@@ -22,7 +23,9 @@
                 {% endfor %}
             </dl>
             {% endif %}
-            <a class="link" href="{{ href }}">{{ text_learn_more }} <svg class="link-arrow"><use href="#icon-short-arrow"></use></svg></a>
+            {% if href is defined and href %}
+            <a class="link" href="{{ href }}">{{ text_learn_more|default('Дізнатися більше') }} <svg class="link-arrow"><use href="#icon-short-arrow"></use></svg></a>
+            {% endif %}
         </div>
     </div>
 </div>

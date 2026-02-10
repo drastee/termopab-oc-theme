@@ -1,0 +1,275 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="float-end">
+        <button type="submit" form="form-module" data-bs-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa-solid fa-save"></i></button>
+        <a href="{{ back }}" data-bs-toggle="tooltip" title="{{ button_back }}" class="btn btn-light"><i class="fa-solid fa-reply"></i></a>
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ol class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+          <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-header"><i class="fa-solid fa-pencil"></i> {{ text_edit }}</div>
+      <div class="card-body">
+        <form id="form-module" action="{{ save }}" method="post" data-oc-toggle="ajax">
+          <div class="row mb-3">
+            <label for="input-name" class="col-sm-2 col-form-label">{{ entry_name }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control"/>
+              <div id="error-name" class="invalid-feedback"></div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_slides }}</label>
+            <div class="col-sm-10">
+              <div id="product-feature-slides" class="border rounded p-3 bg-light" data-no-slides="{{ text_no_slides|e('html_attr') }}">
+                {% for slide in slides %}
+                  <div class="product-feature-slide-row card mb-3" data-slide-index="{{ loop.index0 }}">
+                    <div class="card-header d-flex justify-content-between align-items-center py-2">
+                      <span class="d-flex align-items-center gap-2 flex-grow-1">
+                        <span class="btn-group btn-group-sm">
+                          <button type="button" class="btn btn-outline-secondary btn-slide-up" title="{{ button_up }}"><i class="fa-solid fa-arrow-up"></i></button>
+                          <button type="button" class="btn btn-outline-secondary btn-slide-down" title="{{ button_down }}"><i class="fa-solid fa-arrow-down"></i></button>
+                        </span>
+                        <span class="product-feature-slide-title" data-bs-toggle="collapse" data-bs-target="#slide-body-pf-{{ loop.index0 }}" aria-expanded="true" style="cursor: pointer;">{{ entry_slide }} {{ loop.index }}</span>
+                      </span>
+                      <button type="button" class="btn btn-outline-secondary btn-sm btn-slide-toggle" data-bs-toggle="collapse" data-bs-target="#slide-body-pf-{{ loop.index0 }}" aria-expanded="true" title="{{ text_collapse }}"><i class="fa-solid fa-chevron-up"></i></button>
+                      <button type="button" class="btn btn-danger btn-sm btn-remove-slide"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                    <div class="collapse show" id="slide-body-pf-{{ loop.index0 }}">
+                    <div class="card-body">
+                      <ul class="nav nav-tabs mb-2" role="tablist">
+                        {% for language in languages %}
+                          <li class="nav-item">
+                            <a class="nav-link{% if loop.first %} active{% endif %}" data-bs-toggle="tab" href="#slide-pf-{{ loop.parent.loop.index0 }}-lang-{{ language.language_id }}">{% if language.image %}<img src="{{ language.image }}" alt="" class="me-1"/>{% endif %}{{ language.name }}</a>
+                          </li>
+                        {% endfor %}
+                      </ul>
+                      <div class="tab-content">
+                        {% for language in languages %}
+                          <div id="slide-pf-{{ loop.parent.loop.index0 }}-lang-{{ language.language_id }}" class="tab-pane{% if loop.first %} active{% endif %}">
+                            <div class="mb-3">
+                              <label class="form-label">{{ entry_slide_title }}</label>
+                              <input type="text" name="slide[{{ loop.parent.loop.index0 }}][title][{{ language.language_id }}]" value="{{ (slide.title[language.language_id] ?? '') }}" class="form-control"/>
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label">{{ entry_text_before }}</label>
+                              <textarea name="slide[{{ loop.parent.loop.index0 }}][text_before][{{ language.language_id }}]" class="form-control" rows="3">{{ (slide.text_before[language.language_id] ?? '') }}</textarea>
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label">{{ entry_text_after }}</label>
+                              <textarea name="slide[{{ loop.parent.loop.index0 }}][text_after][{{ language.language_id }}]" class="form-control" rows="3">{{ (slide.text_after[language.language_id] ?? '') }}</textarea>
+                            </div>
+                          </div>
+                        {% endfor %}
+                      </div>
+                      <div class="row mt-3">
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">{{ entry_image }}</label>
+                          <div class="border rounded d-block mb-2" style="max-width: 200px;">
+                            <img src="{{ slide.image ? (slide.image_thumb ?? placeholder) : placeholder }}" alt="" id="thumb-slide-pf-{{ loop.index0 }}-image" data-oc-placeholder="{{ placeholder }}" class="img-fluid"/>
+                            <input type="hidden" name="slide[{{ loop.index0 }}][image]" value="{{ slide.image ?? '' }}" id="input-slide-pf-{{ loop.index0 }}-image"/>
+                            <div class="d-grid p-2">
+                              <button type="button" data-oc-toggle="image" data-oc-target="#input-slide-pf-{{ loop.index0 }}-image" data-oc-thumb="#thumb-slide-pf-{{ loop.index0 }}-image" class="btn btn-primary btn-sm"><i class="fa-solid fa-pencil"></i></button>
+                              <button type="button" data-oc-toggle="clear" data-oc-target="#input-slide-pf-{{ loop.index0 }}-image" data-oc-thumb="#thumb-slide-pf-{{ loop.index0 }}-image" class="btn btn-warning btn-sm"><i class="fa-regular fa-trash-can"></i></button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">{{ entry_image_hover }}</label>
+                          <div class="border rounded d-block mb-2" style="max-width: 200px;">
+                            <img src="{{ slide.image_hover ? (slide.image_hover_thumb ?? placeholder) : placeholder }}" alt="" id="thumb-slide-pf-{{ loop.index0 }}-image-hover" data-oc-placeholder="{{ placeholder }}" class="img-fluid"/>
+                            <input type="hidden" name="slide[{{ loop.index0 }}][image_hover]" value="{{ slide.image_hover ?? '' }}" id="input-slide-pf-{{ loop.index0 }}-image-hover"/>
+                            <div class="d-grid p-2">
+                              <button type="button" data-oc-toggle="image" data-oc-target="#input-slide-pf-{{ loop.index0 }}-image-hover" data-oc-thumb="#thumb-slide-pf-{{ loop.index0 }}-image-hover" class="btn btn-primary btn-sm"><i class="fa-solid fa-pencil"></i></button>
+                              <button type="button" data-oc-toggle="clear" data-oc-target="#input-slide-pf-{{ loop.index0 }}-image-hover" data-oc-thumb="#thumb-slide-pf-{{ loop.index0 }}-image-hover" class="btn btn-warning btn-sm"><i class="fa-regular fa-trash-can"></i></button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                  </div>
+                {% else %}
+                  <p class="text-muted mb-0">{{ text_no_slides }}</p>
+                {% endfor %}
+              </div>
+              <div class="mt-2">
+                <button type="button" id="btn-add-slide" class="btn btn-success"><i class="fa-solid fa-plus"></i> {{ button_add_slide }}</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_status }}</label>
+            <div class="col-sm-10">
+              <div class="form-check form-switch form-switch-lg">
+                <input type="hidden" name="status" value="0"/>
+                <input type="checkbox" name="status" value="1" id="input-status" class="form-check-input"{% if status %} checked{% endif %}/>
+              </div>
+            </div>
+          </div>
+          <input type="hidden" name="module_id" value="{{ module_id }}" id="input-module-id"/>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<template id="product-feature-slide-template">
+  <div class="product-feature-slide-row card mb-3" data-slide-index="__INDEX__">
+    <div class="card-header d-flex justify-content-between align-items-center py-2">
+      <span class="d-flex align-items-center gap-2 flex-grow-1">
+        <span class="btn-group btn-group-sm">
+          <button type="button" class="btn btn-outline-secondary btn-slide-up" title="{{ button_up }}"><i class="fa-solid fa-arrow-up"></i></button>
+          <button type="button" class="btn btn-outline-secondary btn-slide-down" title="{{ button_down }}"><i class="fa-solid fa-arrow-down"></i></button>
+        </span>
+        <span class="product-feature-slide-title" data-bs-toggle="collapse" data-bs-target="#slide-body-pf-__INDEX__" aria-expanded="true" style="cursor: pointer;">{{ entry_slide }} __NUM__</span>
+      </span>
+      <button type="button" class="btn btn-outline-secondary btn-sm btn-slide-toggle" data-bs-toggle="collapse" data-bs-target="#slide-body-pf-__INDEX__" aria-expanded="true" title="{{ text_collapse }}"><i class="fa-solid fa-chevron-up"></i></button>
+      <button type="button" class="btn btn-danger btn-sm btn-remove-slide"><i class="fa-solid fa-trash"></i></button>
+    </div>
+    <div class="collapse show" id="slide-body-pf-__INDEX__">
+    <div class="card-body">
+      <ul class="nav nav-tabs mb-2" role="tablist">
+        {% for language in languages %}
+        <li class="nav-item">
+          <a class="nav-link{% if loop.first %} active{% endif %}" data-bs-toggle="tab" href="#slide-pf-__INDEX__-lang-{{ language.language_id }}">{% if language.image %}<img src="{{ language.image }}" alt="" class="me-1"/>{% endif %}{{ language.name }}</a>
+        </li>
+        {% endfor %}
+      </ul>
+      <div class="tab-content">
+        {% for language in languages %}
+        <div id="slide-pf-__INDEX__-lang-{{ language.language_id }}" class="tab-pane{% if loop.first %} active{% endif %}">
+          <div class="mb-3">
+            <label class="form-label">{{ entry_slide_title }}</label>
+            <input type="text" name="slide[__INDEX__][title][{{ language.language_id }}]" value="" class="form-control"/>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">{{ entry_text_before }}</label>
+            <textarea name="slide[__INDEX__][text_before][{{ language.language_id }}]" class="form-control" rows="3"></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">{{ entry_text_after }}</label>
+            <textarea name="slide[__INDEX__][text_after][{{ language.language_id }}]" class="form-control" rows="3"></textarea>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="row mt-3">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">{{ entry_image }}</label>
+          <div class="border rounded d-block mb-2" style="max-width: 200px;">
+            <img src="{{ placeholder }}" alt="" id="thumb-slide-pf-__INDEX__-image" class="img-fluid"/>
+            <input type="hidden" name="slide[__INDEX__][image]" value="" id="input-slide-pf-__INDEX__-image"/>
+            <div class="d-grid p-2">
+              <button type="button" data-oc-toggle="image" data-oc-target="#input-slide-pf-__INDEX__-image" data-oc-thumb="#thumb-slide-pf-__INDEX__-image" class="btn btn-primary btn-sm"><i class="fa-solid fa-pencil"></i></button>
+              <button type="button" data-oc-toggle="clear" data-oc-target="#input-slide-pf-__INDEX__-image" data-oc-thumb="#thumb-slide-pf-__INDEX__-image" class="btn btn-warning btn-sm"><i class="fa-regular fa-trash-can"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">{{ entry_image_hover }}</label>
+          <div class="border rounded d-block mb-2" style="max-width: 200px;">
+            <img src="{{ placeholder }}" alt="" id="thumb-slide-pf-__INDEX__-image-hover" class="img-fluid"/>
+            <input type="hidden" name="slide[__INDEX__][image_hover]" value="" id="input-slide-pf-__INDEX__-image-hover"/>
+            <div class="d-grid p-2">
+              <button type="button" data-oc-toggle="image" data-oc-target="#input-slide-pf-__INDEX__-image-hover" data-oc-thumb="#thumb-slide-pf-__INDEX__-image-hover" class="btn btn-primary btn-sm"><i class="fa-solid fa-pencil"></i></button>
+              <button type="button" data-oc-toggle="clear" data-oc-target="#input-slide-pf-__INDEX__-image-hover" data-oc-thumb="#thumb-slide-pf-__INDEX__-image-hover" class="btn btn-warning btn-sm"><i class="fa-regular fa-trash-can"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+</template>
+
+<script type="text/javascript"><!--
+var productFeatureSlideIndex = {{ slides|length|default(0) }};
+
+$('#product-feature-slides').on('click', '.btn-slide-up', function(e) {
+  e.preventDefault();
+  var $row = $(this).closest('.product-feature-slide-row');
+  var $prev = $row.prev('.product-feature-slide-row');
+  if ($prev.length) { $prev.before($row); renumberProductFeatureSlides(); }
+});
+$('#product-feature-slides').on('click', '.btn-slide-down', function(e) {
+  e.preventDefault();
+  var $row = $(this).closest('.product-feature-slide-row');
+  var $next = $row.next('.product-feature-slide-row');
+  if ($next.length) { $next.after($row); renumberProductFeatureSlides(); }
+});
+
+$('#btn-add-slide').on('click', function() {
+  var tpl = document.getElementById('product-feature-slide-template');
+  if (!tpl || !tpl.innerHTML) return;
+  var html = tpl.innerHTML.replace(/__INDEX__/g, productFeatureSlideIndex).replace(/__NUM__/g, productFeatureSlideIndex + 1);
+  if ($('#product-feature-slides .product-feature-slide-row').length === 0) {
+    $('#product-feature-slides').html(html);
+  } else {
+    $('#product-feature-slides .product-feature-slide-row:last').after(html);
+  }
+  productFeatureSlideIndex++;
+  renumberProductFeatureSlides();
+  $('[data-bs-toggle="tooltip"]').tooltip('dispose');
+  $('[data-bs-toggle="tooltip"]').tooltip();
+});
+
+$('#product-feature-slides').on('click', '.btn-remove-slide', function(e) {
+  e.preventDefault();
+  $(this).closest('.product-feature-slide-row').remove();
+  renumberProductFeatureSlides();
+  if ($('#product-feature-slides .product-feature-slide-row').length === 0) {
+    $('#product-feature-slides').html('<p class="text-muted mb-0">' + ($('#product-feature-slides').data('no-slides') || '') + '</p>');
+  }
+});
+
+function renumberProductFeatureSlides() {
+  $('#product-feature-slides .product-feature-slide-row').each(function(i) {
+    var $row = $(this);
+    $row.attr('data-slide-index', i);
+    $row.find('.product-feature-slide-title').text(({{ (entry_slide|default('Slide'))|json_encode }}) + ' ' + (i + 1));
+    $row.find('[name^="slide["]').each(function() {
+      var name = $(this).attr('name');
+      name = name.replace(/slide\[\d+\]/, 'slide[' + i + ']');
+      $(this).attr('name', name);
+    });
+    $row.find('[id^="slide-pf-"], [id^="thumb-slide-pf-"], [id^="input-slide-pf-"]').each(function() {
+      var id = $(this).attr('id');
+      id = id.replace(/slide-pf-\d+-/, 'slide-pf-' + i + '-').replace(/thumb-slide-pf-\d+-/, 'thumb-slide-pf-' + i + '-').replace(/input-slide-pf-\d+-/, 'input-slide-pf-' + i + '-');
+      $(this).attr('id', id);
+    });
+    $row.find('[data-oc-target], [data-oc-thumb]').each(function() {
+      var $el = $(this);
+      var target = $el.attr('data-oc-target');
+      var thumb = $el.attr('data-oc-thumb');
+      if (target) target = target.replace(/#input-slide-pf-\d+-/, '#input-slide-pf-' + i + '-');
+      if (thumb) thumb = thumb.replace(/#thumb-slide-pf-\d+-/, '#thumb-slide-pf-' + i + '-');
+      $el.attr('data-oc-target', target);
+      $el.attr('data-oc-thumb', thumb);
+    });
+    $row.find('[data-bs-target^="#slide-body-pf-"]').attr('data-bs-target', '#slide-body-pf-' + i);
+    $row.find('[id^="slide-body-pf-"]').attr('id', 'slide-body-pf-' + i);
+  });
+  productFeatureSlideIndex = $('#product-feature-slides .product-feature-slide-row').length;
+}
+
+$(document).ready(function() {
+  $('#product-feature-slides').on('show.bs.collapse', '[id^="slide-body-pf-"]', function() {
+    $(this).closest('.product-feature-slide-row').find('.btn-slide-toggle i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+  });
+  $('#product-feature-slides').on('hidden.bs.collapse', '[id^="slide-body-pf-"]', function() {
+    $(this).closest('.product-feature-slide-row').find('.btn-slide-toggle i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+  });
+});
+//--></script>
+{{ footer }}

@@ -1,18 +1,18 @@
 <section class="product-feature">
     <div class="container">
-
         <div class="swiper product-feature__inner">
-            
             <div class="swiper-wrapper">
-
-                {% include '../../../../components/product-feature-item/_product-feature-item.twig' %}
-                {% include '../../../../components/product-feature-item/_product-feature-item.twig' %}
-                {% include '../../../../components/product-feature-item/_product-feature-item.twig' %}
-
+                {% if slides is defined and slides|length > 0 %}
+                    {% for slide in slides %}
+                        {% include '@components/product-feature-item/_product-feature-item.twig' with slide %}
+                    {% endfor %}
+                {% else %}
+                    {% include '@components/product-feature-item/_product-feature-item.twig' %}
+                    {% include '@components/product-feature-item/_product-feature-item.twig' %}
+                    {% include '@components/product-feature-item/_product-feature-item.twig' %}
+                {% endif %}
             </div>
-
-            {% include '../../../../components/swiper-controls/_swiper-controls.twig' %}
-            
+            {% include '@components/swiper-controls/_swiper-controls.twig' with { total: slides|default([])|length|default(3) } %}
         </div>
     </div>
 </section>
