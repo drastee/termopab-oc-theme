@@ -1,12 +1,11 @@
 <?php
 namespace Opencart\Admin\Controller\Extension\Termopab\Module;
 
-class ProductFeature extends \Opencart\System\Engine\Controller {
+class ProductsPreview extends \Opencart\System\Engine\Controller {
 	public function index(): void {
-		// Ensure template path is registered (for local dev when extension may not be in extension_install)
 		$this->template->addPath('extension/termopab', DIR_EXTENSION . 'termopab/admin/view/template/');
 
-		$this->load->language('extension/termopab/module/product_feature');
+		$this->load->language('extension/termopab/module/products_preview');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
@@ -26,10 +25,10 @@ class ProductFeature extends \Opencart\System\Engine\Controller {
 
 		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('extension/termopab/module/product_feature', 'user_token=' . $this->session->data['user_token'] . ($module_id ? '&module_id=' . $module_id : ''))
+			'href' => $this->url->link('extension/termopab/module/products_preview', 'user_token=' . $this->session->data['user_token'] . ($module_id ? '&module_id=' . $module_id : ''))
 		];
 
-		$data['save'] = $this->url->link('extension/termopab/module/product_feature.save', 'user_token=' . $this->session->data['user_token'] . ($module_id ? '&module_id=' . $module_id : ''));
+		$data['save'] = $this->url->link('extension/termopab/module/products_preview.save', 'user_token=' . $this->session->data['user_token'] . ($module_id ? '&module_id=' . $module_id : ''));
 		$data['back'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=module');
 
 		$module_info = [];
@@ -44,7 +43,6 @@ class ProductFeature extends \Opencart\System\Engine\Controller {
 		$data['status'] = $module_info['status'] ?? 1;
 		$data['module_id'] = $module_id;
 
-		// Items: [{ product_id, attribute: [ids], description: { lang_id: text } }]
 		$items = $module_info['items'] ?? [];
 		$data['items'] = [];
 
@@ -64,13 +62,10 @@ class ProductFeature extends \Opencart\System\Engine\Controller {
 
 		foreach ($items as $item) {
 			$product_id = (int)($item['product_id'] ?? 0);
-			if (!$product_id) {
-				continue;
-			}
+			if (!$product_id) continue;
+
 			$product_info = $this->model_catalog_product->getProduct($product_id);
-			if (!$product_info) {
-				continue;
-			}
+			if (!$product_info) continue;
 
 			$attribute_ids = $item['attribute'] ?? [];
 			$product_attrs = $this->model_catalog_product->getAttributes($product_id);
@@ -100,30 +95,20 @@ class ProductFeature extends \Opencart\System\Engine\Controller {
 		}
 
 		$data['next_row'] = $row_index;
-
-		// Template for new rows (used in <template> with __ROW__ placeholder)
 		$data['description_template_html'] = $this->buildDescriptionHtml($data['languages'], [], '__ROW__', $entry_description);
 
 		$data['user_token'] = $this->session->data['user_token'];
-		$data['attributes_url'] = 'index.php?route=extension/termopab/module/product_feature.attributes&user_token=' . $this->session->data['user_token'];
+		$data['attributes_url'] = 'index.php?route=extension/termopab/module/products_preview.attributes&user_token=' . $this->session->data['user_token'];
 		$data['product_autocomplete_url'] = 'index.php?route=catalog/product.autocomplete&user_token=' . $this->session->data['user_token'];
+		$data['product_initial_url'] = 'index.php?route=extension/termopab/module/products_preview.initialProducts&user_token=' . $this->session->data['user_token'];
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
 
-		$this->response->setOutput($this->load->view('extension/termopab/module/product_feature', $data));
+		$this->response->setOutput($this->load->view('extension/termopab/module/products_preview', $data));
 	}
 
-	/**
-	 * Build description block HTML (row layout with flags).
-	 *
-	 * @param array  $langs
-	 * @param array  $descriptions
-	 * @param int|string $row_index
-	 * @param string $entry_description
-	 * @return string
-	 */
 	protected function buildDescriptionHtml(array $langs, array $descriptions, $row_index, string $entry_description): string {
 		if (empty($langs)) {
 			$langs = [['language_id' => 1, 'name' => 'Default', 'image' => '']];
@@ -144,12 +129,45 @@ class ProductFeature extends \Opencart\System\Engine\Controller {
 		return $html;
 	}
 
+	/**
+	 * Return first 10 products for initial dropdown (on focus without search).
+	 */
+	public function initialProducts(): void {
+		$json = [];
+
+		if (!$this->user->hasPermission('modify', 'extension/termopab/module/products_preview')) {
+			$this->response->addHeader('Content-Type: application/json');
+			$this->response->setOutput(json_encode($json));
+			return;
+		}
+
+		$this->load->model('catalog/product');
+
+		$filter_data = [
+			'sort'  => 'pd.name',
+			'order' => 'ASC',
+			'start' => 0,
+			'limit' => 10,
+		];
+		$results = $this->model_catalog_product->getProducts($filter_data);
+
+		foreach ($results as $result) {
+			$json[] = [
+				'product_id' => $result['product_id'],
+				'name'       => strip_tags(html_entity_decode($result['name'], ENT_QUOTES, 'UTF-8')),
+			];
+		}
+
+		$this->response->addHeader('Content-Type: application/json; charset=utf-8');
+		$this->response->setOutput(json_encode($json));
+	}
+
 	public function attributes(): void {
-		$this->load->language('extension/termopab/module/product_feature');
+		$this->load->language('extension/termopab/module/products_preview');
 
 		$json = [];
 
-		if (!$this->user->hasPermission('modify', 'extension/termopab/module/product_feature')) {
+		if (!$this->user->hasPermission('modify', 'extension/termopab/module/products_preview')) {
 			$json['error'] = $this->language->get('error_permission');
 		}
 
@@ -178,11 +196,11 @@ class ProductFeature extends \Opencart\System\Engine\Controller {
 	}
 
 	public function save(): void {
-		$this->load->language('extension/termopab/module/product_feature');
+		$this->load->language('extension/termopab/module/products_preview');
 
 		$json = [];
 
-		if (!$this->user->hasPermission('modify', 'extension/termopab/module/product_feature')) {
+		if (!$this->user->hasPermission('modify', 'extension/termopab/module/products_preview')) {
 			$json['error']['warning'] = $this->language->get('error_permission');
 		}
 
@@ -200,17 +218,12 @@ class ProductFeature extends \Opencart\System\Engine\Controller {
 			foreach ($item_keys as $key) {
 				$item = $this->request->post['item'][$key] ?? [];
 				$product_id = (int)($item['product_id'] ?? 0);
-				if (!$product_id) {
-					continue;
-				}
+				if (!$product_id) continue;
+
 				$attribute = $item['attribute'] ?? [];
-				if (!is_array($attribute)) {
-					$attribute = [];
-				}
+				if (!is_array($attribute)) $attribute = [];
 				$description = $item['description'] ?? [];
-				if (!is_array($description)) {
-					$description = [];
-				}
+				if (!is_array($description)) $description = [];
 
 				$items[] = [
 					'product_id'  => $product_id,
@@ -231,7 +244,7 @@ class ProductFeature extends \Opencart\System\Engine\Controller {
 
 			$module_id = (int)($this->request->post['module_id'] ?? 0);
 			if (!$module_id) {
-				$json['module_id'] = $this->model_setting_module->addModule('termopab.product_feature', $post);
+				$json['module_id'] = $this->model_setting_module->addModule('termopab.products_preview', $post);
 			} else {
 				$this->model_setting_module->editModule($module_id, $post);
 			}

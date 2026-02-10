@@ -1,11 +1,11 @@
 <?php
 // Heading
-$_['heading_title']    = 'Product Feature (Termopab)';
+$_['heading_title']    = 'Products Preview (слайдер товарів)';
 
 // Text
 $_['text_extension']   = 'Розширення';
-$_['text_success']     = 'Успіх: Модуль Product Feature змінено!';
-$_['text_edit']        = 'Редагувати модуль Product Feature';
+$_['text_success']     = 'Успіх: Модуль Products Preview змінено!';
+$_['text_edit']        = 'Редагувати модуль Products Preview';
 $_['text_no_items']    = 'Позицій ще немає. Натисніть +, щоб додати товар.';
 
 // Entry
@@ -29,5 +29,5 @@ $_['button_back']      = 'Назад';
 $_['button_add']       = 'Додати товар';
 
 // Error
-$_['error_permission'] = 'Увага: Немає прав для зміни модуля Product Feature!';
+$_['error_permission'] = 'Увага: Немає прав для зміни модуля Products Preview!';
 $_['error_name']       = 'Назва модуля повинна бути від 3 до 64 символів!';

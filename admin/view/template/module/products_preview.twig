@@ -29,9 +29,9 @@
           <div class="row mb-3">
             <label class="col-sm-2 col-form-label">{{ entry_items }}</label>
             <div class="col-sm-10">
-              <div id="product-feature-items" class="border rounded p-3 bg-light">
+              <div id="products-preview-items" class="border rounded p-3 bg-light">
                 {% for item in items %}
-                  <div class="product-feature-row card mb-3" data-row="{{ item.row }}">
+                  <div class="products-preview-row card mb-3" data-row="{{ item.row }}">
                     <div class="card-body">
                       <div class="row mb-2">
                         <div class="col-md-6">
@@ -98,8 +98,7 @@
   </div>
 </div>
 
-{# Hidden template for description block - cloned when adding new rows (inside item-details) #}
-<template id="product-feature-description-template">
+<template id="products-preview-description-template">
   <div class="row mb-2">
     <div class="col-12">
       <label class="form-label">{{ entry_description }}</label>
@@ -109,13 +108,14 @@
 </template>
 
 <script type="text/javascript"><!--
-var productFeatureRow = {{ next_row }};
-var productFeatureAttributesUrl = '{{ attributes_url|e('js') }}';
-var productFeatureAutocompleteUrl = '{{ product_autocomplete_url|e('js') }}';
+var productsPreviewRow = {{ next_row }};
+var productsPreviewAttributesUrl = '{{ attributes_url|e('js') }}';
+var productsPreviewAutocompleteUrl = '{{ product_autocomplete_url|e('js') }}';
+var productsPreviewInitialUrl = '{{ product_initial_url|e('js') }}';
+var productsPreviewSearchTimer = null;
 
-// Template for new row (empty, product not selected yet)
 function getNewRowHtml(rowIdx) {
-  var html = '<div class="product-feature-row card mb-3" data-row="' + rowIdx + '">';
+  var html = '<div class="products-preview-row card mb-3" data-row="' + rowIdx + '">';
   html += '<div class="card-body">';
   html += '<div class="row mb-2">';
   html += '<div class="col-md-6 position-relative">';
@@ -133,7 +133,7 @@ function getNewRowHtml(rowIdx) {
   html += '<label class="form-label">{{ entry_attribute|e('js') }}</label>';
   html += '<select name="item[' + rowIdx + '][attribute][]" class="form-select item-attributes" multiple size="4"></select>';
   html += '</div></div>';
-  var tpl = document.getElementById('product-feature-description-template');
+  var tpl = document.getElementById('products-preview-description-template');
   var descHtml = tpl ? tpl.innerHTML.replace(/__ROW__/g, rowIdx) : '';
   html += descHtml;
   html += '</div>';
@@ -142,60 +142,76 @@ function getNewRowHtml(rowIdx) {
 }
 
 $('#btn-add-item').on('click', function() {
-  var html = getNewRowHtml(productFeatureRow);
-  if ($('#product-feature-items .product-feature-row').length === 0) {
-    $('#product-feature-items').html(html);
+  var html = getNewRowHtml(productsPreviewRow);
+  if ($('#products-preview-items .products-preview-row').length === 0) {
+    $('#products-preview-items').html(html);
   } else {
-    $('#product-feature-items .product-feature-row:last').after(html);
+    $('#products-preview-items .products-preview-row:last').after(html);
   }
-  productFeatureRow++;
+  productsPreviewRow++;
   initNewRowAutocomplete();
 });
+
+function fetchProductsAndShow($row, url) {
+  var $menu = $row.find('.item-product-dropdown');
+  $menu.empty().show().append('<li class="dropdown-item text-muted"><i class="fa-solid fa-circle-notch fa-spin"></i> {{ "Завантаження..."|e('js') }}</li>');
+  $.ajax({
+    url: url,
+    dataType: 'json',
+    success: function(json) {
+      $menu.empty();
+      if (json && json.length > 0) {
+        $.each(json, function(i, item) {
+          $menu.append('<li><a class="dropdown-item" href="#" data-id="' + item.product_id + '" data-name="' + (item.name || '').replace(/"/g, '&quot;') + '">' + (item.name || '') + '</a></li>');
+        });
+      } else {
+        $menu.append('<li class="dropdown-item text-muted">{{ "Товарів не знайдено"|e('js') }}</li>');
+      }
+      $menu.css('display', 'block').show();
+    },
+    error: function() {
+      $menu.empty().append('<li class="dropdown-item text-muted">{{ "Помилка завантаження"|e('js') }}</li>').show();
+    }
+  });
+}
 
 function initNewRowAutocomplete() {
   $('.item-product-autocomplete').off('input focus').on('input focus', function() {
     var $input = $(this);
-    var $row = $input.closest('.product-feature-row');
+    var $row = $input.closest('.products-preview-row');
     if ($row.data('product-selected')) return;
 
-    var filter = $input.val();
-    if (filter.length < 2) {
-      $row.find('.item-product-dropdown').empty().hide();
+    if (productsPreviewSearchTimer) clearTimeout(productsPreviewSearchTimer);
+
+    var filter = ($input.val() || '').trim();
+
+    if (filter.length === 0) {
+      fetchProductsAndShow($row, productsPreviewInitialUrl);
       return;
     }
 
-    $.ajax({
-      url: productFeatureAutocompleteUrl + '&filter_name=' + encodeURIComponent(filter),
-      dataType: 'json',
-      success: function(json) {
-        var $menu = $row.find('.item-product-dropdown');
-        $menu.empty();
-        $.each(json, function(i, item) {
-          $menu.append('<li><a class="dropdown-item" href="#" data-id="' + item.product_id + '" data-name="' + item.name.replace(/"/g, '&quot;') + '">' + item.name + '</a></li>');
-        });
-        $menu.css('display', 'block').show();
-      }
-    });
+    productsPreviewSearchTimer = setTimeout(function() {
+      fetchProductsAndShow($row, productsPreviewAutocompleteUrl + '&filter_name=' + encodeURIComponent(filter));
+    }, 250);
   });
 
-  $('#product-feature-items').off('click', '.item-product-dropdown .dropdown-item').on('click', '.item-product-dropdown .dropdown-item', function(e) {
+  $('#products-preview-items').off('click', '.item-product-dropdown .dropdown-item').on('click', '.item-product-dropdown .dropdown-item', function(e) {
     e.preventDefault();
     e.stopPropagation();
     var $a = $(e.currentTarget);
-    var $row = $a.closest('.product-feature-row');
     var productId = $a.data('id');
     var productName = $a.data('name');
+    if (productId === undefined || productId === '') return;
 
+    var $row = $a.closest('.products-preview-row');
     $row.find('.item-product-id').val(productId);
     $row.find('.item-product-autocomplete').val(productName).prop('readonly', true);
     $row.find('.item-product-dropdown').empty().hide();
     $row.data('product-selected', true);
 
-    // Show attributes & description section immediately
     $row.find('.item-details').show();
 
-    // Load attributes
-    var attrsUrl = productFeatureAttributesUrl + (productFeatureAttributesUrl.indexOf('?') >= 0 ? '&' : '?') + 'product_id=' + productId;
+    var attrsUrl = productsPreviewAttributesUrl + (productsPreviewAttributesUrl.indexOf('?') >= 0 ? '&' : '?') + 'product_id=' + productId;
     $.ajax({
       url: attrsUrl,
       dataType: 'json',
@@ -209,36 +225,35 @@ function initNewRowAutocomplete() {
         }
       },
       error: function(xhr) {
-        console.error('Product Feature: attributes load failed', xhr.status, xhr.responseText);
+        console.error('Products Preview: attributes load failed', xhr.status, xhr.responseText);
       }
     });
   });
 }
 
-$(document).on('click', function() {
-  $('.item-product-dropdown').empty().hide();
+$(document).on('click', function(e) {
+  if ($(e.target).closest('.item-product-autocomplete, .item-product-dropdown').length) return;
+  $('#products-preview-items .item-product-dropdown').empty().hide();
 });
 
-$('#product-feature-items').on('click', '.item-product-dropdown', function(e) {
+$('#products-preview-items').on('click', '.item-product-dropdown', function(e) {
   e.stopPropagation();
 });
 
-$('#product-feature-items').on('click', '.btn-remove-item', function(e) {
+$('#products-preview-items').on('click', '.btn-remove-item', function(e) {
   e.preventDefault();
-  $(this).closest('.product-feature-row').remove();
+  $(this).closest('.products-preview-row').remove();
 });
 
-// Renumber rows before submit
 $('#form-module').on('submit', function() {
   var index = 0;
-  $('#product-feature-items .product-feature-row').each(function() {
+  $('#products-preview-items .products-preview-row').each(function() {
     var $row = $(this);
     $row.attr('data-row', index);
     $row.find('[name^="item["]').each(function() {
-      var $el = $(this);
-      var name = $el.attr('name');
+      var name = $(this).attr('name');
       name = name.replace(/item\[\d+\]/, 'item[' + index + ']');
-      $el.attr('name', name);
+      $(this).attr('name', name);
     });
     index++;
   });

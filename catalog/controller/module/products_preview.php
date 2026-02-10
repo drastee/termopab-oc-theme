@@ -1,7 +1,7 @@
 <?php
 namespace Opencart\Catalog\Controller\Extension\Termopab\Module;
 
-class ProductFeature extends \Opencart\System\Engine\Controller {
+class ProductsPreview extends \Opencart\System\Engine\Controller {
 	public function index(array $setting): string {
 		$this->load->language('extension/termopab/theme/termopab');
 
@@ -17,14 +17,10 @@ class ProductFeature extends \Opencart\System\Engine\Controller {
 
 		foreach ($items as $item) {
 			$product_id = (int)($item['product_id'] ?? 0);
-			if (!$product_id) {
-				continue;
-			}
+			if (!$product_id) continue;
 
 			$product_info = $this->model_catalog_product->getProduct($product_id);
-			if (!$product_info) {
-				continue;
-			}
+			if (!$product_info) continue;
 
 			if ($product_info['image']) {
 				$thumb = $this->model_tool_image->resize(
@@ -87,6 +83,6 @@ class ProductFeature extends \Opencart\System\Engine\Controller {
 			return '';
 		}
 
-		return $this->load->view('extension/termopab/module/product_feature', $data);
+		return $this->load->view('extension/termopab/module/products_preview', $data);
 	}
 }
