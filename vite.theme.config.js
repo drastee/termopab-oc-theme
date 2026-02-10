@@ -14,6 +14,14 @@ export default {
           src: 'src/assets/images/payments/*',
           dest: 'image/images/payments',
         },
+        {
+          src: 'src/assets/images/logo-large.webp',
+          dest: 'image',
+        },
+        {
+          src: 'src/assets/images/logo-large-shadow.webp',
+          dest: 'image',
+        },
       ],
     }),
   ],

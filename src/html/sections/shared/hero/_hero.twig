@@ -1,17 +1,21 @@
 <section class="hero">
 
-    <video class="hero__video" autoplay muted loop playsinline poster="/src/assets/images/hero-bg.webp">
-        <source src="/src/assets/videos/hero.mp4" type="video/mp4">
-        <source src="/src/assets/videos/hero.webm" type="video/webm">
+    <video class="hero__video" autoplay muted loop playsinline poster="{{ poster_url|default('/src/assets/images/hero-bg.webp') }}">
+        {% if video_url %}
+            <source src="{{ video_url }}" type="video/mp4">
+        {% else %}
+            <source src="/src/assets/videos/hero.mp4" type="video/mp4">
+            <source src="/src/assets/videos/hero.webm" type="video/webm">
+        {% endif %}
     </video>
 
     <div class="hero__overlay"></div>
     
     <div class="container hero__inner">
         <h1 class="hero__title">
-            <span>Зробимо</span>
-            <span>найкраще пиво</span>
-            <span>разом</span>
+            {% for line in title_lines|default(['Зробимо', 'найкраще пиво', 'разом']) %}
+                <span>{{ line }}</span>
+            {% endfor %}
         </h1>
     </div>
     

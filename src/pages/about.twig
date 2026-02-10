@@ -19,8 +19,18 @@
         }
     %}
     {% include "html/sections/shared/intro/_intro.twig"%}
-    {% include "html/sections/shared/about/_about.twig"  with {
-        title: "Компанія <br>Термопаб<span>це історія про якість</span><span>та довіру наших клієнтів</span>",
+    {% include "html/sections/shared/about/_about.twig" with {
+        title_first: "Компанія Термопаб",
+        title_rest: ["це історія про якість", "та довіру наших клієнтів"],
+        description: "Виробник пивоварного обладнання «Термо-Паб», розпочав свою діяльність у 2017 році та постійно розширюючи географію проектів, вже у 2019-му заявив про себе на ринку Європейського Союзу!",
+        button_text: "Дізнайтеся більше про нас у відео",
+        button_url: "#",
+        facts: [
+            { title: "40+ кейсів", text: "Більше 40 задоволених клієнтів", url: "#" },
+            { title: "Сертифікати", text: "Вся наша продукція відповідає стандартам якості", url: "#" },
+            { title: "20+ працівників", text: "Наша продукція відповідає усім параметрам якості!", url: "#" },
+            { title: "Ми в медіа", text: "Наші проекти публікуються у провідних виданнях", url: "#" }
+        ]
     }%}
 
     {% include "html/sections/shared/cases/_cases.twig"  with {

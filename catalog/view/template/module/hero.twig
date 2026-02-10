@@ -1,0 +1,31 @@
+<section class="hero">
+    <video class="hero__video" autoplay muted loop playsinline poster="{{ poster_url|default('') }}">
+        {% if video_url %}
+            <source src="{{ video_url }}" type="video/mp4">
+        {% else %}
+            <source src="/src/assets/videos/hero.mp4" type="video/mp4">
+            <source src="/src/assets/videos/hero.webm" type="video/webm">
+        {% endif %}
+    </video>
+
+    <div class="hero__overlay"></div>
+
+    <div class="container hero__inner">
+        <h1 class="hero__title">
+            {% for line in title_lines|default(['Зробимо', 'найкраще пиво', 'разом']) %}
+                <span>{{ line }}</span>
+            {% endfor %}
+        </h1>
+    </div>
+
+    <button class="scrolldown" aria-label="Scroll down">
+        <svg width="10" height="13" viewBox="0 0 10 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clip-path="url(#clip0_158_126)"><path d="M3.83989 6.10352e-05L3.83989 10.0199L0.95036 6.91139L-0.00181675 7.93573L4.51338 12.7931L9.02858 7.93573L8.07641 6.91139L5.18687 10.0199V6.10352e-05L3.83989 6.10352e-05Z" fill="#F9F5EC"/></g>
+            <defs>
+                <clipPath id="clip0_158_126">
+                    <rect width="12.7931" height="9.0304" fill="white" transform="matrix(0 1 -1 0 9.0304 0)"/>
+                </clipPath>
+            </defs>
+        </svg>
+    </button>
+</section>

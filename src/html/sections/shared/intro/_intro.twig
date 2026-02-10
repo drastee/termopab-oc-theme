@@ -1,13 +1,8 @@
 <section class="intro">
     <div class="container intro__inner">
         <div class="intro__content">
-            <p class="intro__title">Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
-            <p class="intro__text">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                Lorem Ipsum has been  Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                Lorem Ipsum Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                Lorem Ipsum has been Lorem Ipsum is simply dummy dummy.
-            </p>
+            <p class="intro__title">{{ title|default('Lorem Ipsum is simply dummy text of the printing and typesetting industry') }}</p>
+            <p class="intro__text">{{ text|default('Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s.') }}</p>
         </div>
         <div class="intro__badge">
             <img src="/src/assets/images/logo-large.webp" class="logo-large js-rotate-item" alt="Termopab badge">

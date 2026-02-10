@@ -25,6 +25,7 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		$loader = $loaderProp->getValue($adaptor);
 
 		$loader->addPath(DIR_OPENCART . 'extension/termopab/src/html', 'termopab');
+		$loader->addPath(DIR_OPENCART . 'extension/termopab/src/html/components', 'components');
 		$loader->addPath(DIR_OPENCART . 'extension/termopab/catalog/view/image', 'assets');
 	}
 

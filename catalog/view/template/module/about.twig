@@ -2,10 +2,10 @@
     <div class="container about__inner">
 
         <h2 class="section-title about__title">
-            {{ title_first|default('Компанія Термопаб') }}{% if (title_rest|default([]))|length > 0 %}<br>{% for line in title_rest %}<span>{{ line }}</span>{% endfor %}{% endif %}
+            {{ title_first }}{% if title_rest|length > 0 %}<br>{% for line in title_rest %}<span>{{ line }}</span>{% endfor %}{% endif %}
         </h2>
 
-        {% if description|default('') or button_text|default('') or (facts|default([]))|length > 0 %}
+        {% if description or button_text or facts|length > 0 %}
             <div class="about__content">
 
                 <div class="about__text">
@@ -14,7 +14,7 @@
                     {% endif %}
 
                     {% if button_text %}
-                        <a href="{{ button_url|default('#') }}" class="button-play" target="_blank" rel="noopener">
+                        <a href="{{ button_url }}" class="button-play" target="_blank" rel="noopener">
                             <span class="button-play__icon">
                                 <svg class="play-icon">
                                     <use xlink:href="#svg-play"></use>
@@ -25,10 +25,10 @@
                     {% endif %}
                 </div>
 
-                {% if facts|default([])|length > 0 %}
+                {% if facts|length > 0 %}
                     <div class="about__facts">
                         {% for fact in facts %}
-                            <a class="about__fact" href="{{ fact.url|default('#') }}">
+                            <a class="about__fact" href="{{ fact.url }}">
                                 <span class="about__fact-title">{{ fact.title }}</span>
                                 {% if fact.text %}
                                     <p class="about__fact-text">{{ fact.text }}</p>
