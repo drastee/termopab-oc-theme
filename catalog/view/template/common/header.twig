@@ -60,9 +60,12 @@
                 </div>
                 <div class="header__right">
                     <ul class="header__socials">
-                        <li><a href="#" target="_blank" class="social-icon"><svg class="icon"><use href="{{ base }}extension/termopab/catalog/view/image/icons/icons.svg#icon-instagram"></use></svg></a></li>
-                        <li><a href="#" target="_blank" class="social-icon"><svg class="icon"><use href="{{ base }}extension/termopab/catalog/view/image/icons/icons.svg#icon-facebook"></use></svg></a></li>
-                        <li><a href="#" target="_blank" class="social-icon"><svg class="icon"><use href="{{ base }}extension/termopab/catalog/view/image/icons/icons.svg#icon-youtube"></use></svg></a></li>
+                        {% set header_links = header_social_links|default(social_links|default({})) %}
+                        {% for key in ['instagram', 'whatsapp', 'telegram', 'facebook', 'youtube'] %}
+                            {% if header_links[key] is defined and header_links[key] is not same as('') %}
+                                <li><a href="{{ header_links[key] }}" target="_blank" rel="noopener noreferrer" class="social-icon"><svg class="icon"><use href="{{ base }}extension/termopab/catalog/view/image/icons/icons.svg#icon-{{ key }}"></use></svg></a></li>
+                            {% endif %}
+                        {% endfor %}
                     </ul>
                     <div class="header__dropdowns">
                         {{ currency }}

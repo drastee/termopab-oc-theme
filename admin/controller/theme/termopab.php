@@ -71,6 +71,14 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		$data['theme_termopab_schedule'] = isset($setting_info['theme_termopab_schedule']) ? $setting_info['theme_termopab_schedule'] : [];
 		$data['theme_termopab_worknote'] = isset($setting_info['theme_termopab_worknote']) ? $setting_info['theme_termopab_worknote'] : [];
 
+		$social_keys = ['instagram', 'whatsapp', 'telegram', 'facebook', 'youtube'];
+		foreach ($social_keys as $key) {
+			$data['theme_termopab_social_' . $key] = isset($setting_info['theme_termopab_social_' . $key]) ? $setting_info['theme_termopab_social_' . $key] : '';
+			// Header/footer display: default 1 (show) when not set
+			$data['theme_termopab_header_social_' . $key] = isset($setting_info['theme_termopab_header_social_' . $key]) ? (int)$setting_info['theme_termopab_header_social_' . $key] : 1;
+			$data['theme_termopab_footer_social_' . $key] = isset($setting_info['theme_termopab_footer_social_' . $key]) ? (int)$setting_info['theme_termopab_footer_social_' . $key] : 1;
+		}
+
 		$data['footer_menu_use_main'] = !isset($setting_info['theme_termopab_footer_menu_use_main']) || $setting_info['theme_termopab_footer_menu_use_main'];
 		$data['footer_menu_items'] = [];
 		if (!empty($setting_info['theme_termopab_footer_menu'])) {
@@ -130,6 +138,12 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		if (!$json) {
 			$this->load->model('setting/setting');
 
+			$social_defaults = [];
+			foreach (['instagram', 'whatsapp', 'telegram', 'facebook', 'youtube'] as $key) {
+				$social_defaults['theme_termopab_social_' . $key] = '';
+				$social_defaults['theme_termopab_header_social_' . $key] = 1;
+				$social_defaults['theme_termopab_footer_social_' . $key] = 1;
+			}
 			$post = array_merge([
 				'theme_termopab_status'   => 0,
 				'theme_termopab_brand'   => [],
@@ -143,7 +157,7 @@ class Termopab extends \Opencart\System\Engine\Controller {
 				'theme_termopab_menu_column1' => [],
 				'theme_termopab_menu_column2' => [],
 				'theme_termopab_menu_column3' => [],
-			], $this->request->post);
+			], $social_defaults, $this->request->post);
 
 			if (isset($post['theme_termopab_footer_menu_use_main'])) {
 				$post['theme_termopab_footer_menu_use_main'] = (int)$post['theme_termopab_footer_menu_use_main'];
@@ -164,6 +178,11 @@ class Termopab extends \Opencart\System\Engine\Controller {
 			}
 			if (isset($post['theme_termopab_email']) && is_array($post['theme_termopab_email'])) {
 				$post['theme_termopab_email'] = (string)reset($post['theme_termopab_email']);
+			}
+			// Checkboxes: unchecked = not sent in POST, so check request->post directly (merge had defaults 1)
+			foreach (['instagram', 'whatsapp', 'telegram', 'facebook', 'youtube'] as $key) {
+				$post['theme_termopab_header_social_' . $key] = isset($this->request->post['theme_termopab_header_social_' . $key]) && $this->request->post['theme_termopab_header_social_' . $key] ? 1 : 0;
+				$post['theme_termopab_footer_social_' . $key] = isset($this->request->post['theme_termopab_footer_social_' . $key]) && $this->request->post['theme_termopab_footer_social_' . $key] ? 1 : 0;
 			}
 
 			$this->model_setting_setting->editSetting('theme_termopab', $post, $store_id);

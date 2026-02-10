@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<name>Termopab: пункт меню «Тема Termopab» в разделе Дизайн</name>
+	<code>termopab_admin_menu</code>
+	<version>1.0.0</version>
+	<author>Termopab</author>
+	<link>https://termopab.com</link>
+	<description>Добавляет в админ-меню (Design) ссылку на настройки темы Termopab. Пункт появляется при установленной теме.</description>
+	<file path="admin/controller/common/column_left.php">
+		<operation>
+			<search trim="true"><![CDATA['name'     => $this->language->get('text_theme'),]]></search>
+			<add position="after" offset="4" trim="true"><![CDATA[
+
+			// Installed theme extensions (e.g. Termopab) — link to theme settings
+			$this->load->model('setting/extension');
+			$theme_extensions = $this->model_setting_extension->getExtensionsByType('theme');
+			foreach ($theme_extensions as $theme_ext) {
+				$perm = 'extension/' . $theme_ext['extension'] . '/theme/' . $theme_ext['code'];
+				if ($this->user->hasPermission('access', $perm) && is_file(DIR_EXTENSION . $theme_ext['extension'] . '/admin/controller/theme/' . $theme_ext['code'] . '.php')) {
+					$this->load->language('extension/' . $theme_ext['extension'] . '/theme/' . $theme_ext['code'], $theme_ext['code']);
+					$design[] = [
+						'name'     => $this->language->get($theme_ext['code'] . '_heading_title'),
+						'href'     => $this->url->link('extension/' . $theme_ext['extension'] . '/theme/' . $theme_ext['code'], 'user_token=' . $this->session->data['user_token'] . '&store_id=0'),
+						'children' => []
+					];
+				}
+			}]]></add>
+		</operation>
+	</file>
+</modification>

@@ -20,6 +20,12 @@ $_['entry_brand']      = 'Бренд';
 $_['entry_address']    = 'Адрес';
 $_['entry_telephone']  = 'Телефоны';
 $_['entry_email']      = 'Email';
+$_['entry_social_links'] = 'Соцсети и мессенджеры';
+$_['entry_social_instagram'] = 'Instagram';
+$_['entry_social_whatsapp']  = 'WhatsApp';
+$_['entry_social_telegram']  = 'Telegram';
+$_['entry_social_facebook']  = 'Facebook';
+$_['entry_social_youtube']   = 'YouTube';
 $_['entry_schedule']   = 'Время работы';
 $_['entry_worknote']   = 'Примечание о зоне работы';
 $_['entry_footer_menu'] = 'Меню подвала';
@@ -47,7 +53,12 @@ $_['text_header_empty'] = 'Настройки шапки будут добавл
 
 // Help
 $_['help_telephone']   = 'Введите один номер телефона на строку. Например: +38 (067) 123-45-67';
+$_['help_header_socials'] = 'Выберите, какие соцсети показывать в шапке сайта. Ссылки задаются на вкладке «Основное».';
+$_['help_footer_socials'] = 'Выберите, какие соцсети показывать в подвале. Ссылки задаются на вкладке «Основное».';
 $_['help_menu_columns'] = 'Все три колонки имеют одинаковую структуру. Добавляйте пункты меню кнопкой «Добавить». Тип: информационная страница, категория товаров или произвольная ссылка.';
+
+$_['entry_header_socials'] = 'Соцсети в шапке';
+$_['entry_footer_socials'] = 'Соцсети в подвале';
 
 // Text
 $_['text_header_empty'] = 'Настройки шапки будут добавлены позже.';

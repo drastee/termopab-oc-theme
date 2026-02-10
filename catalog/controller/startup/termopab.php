@@ -87,6 +87,34 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		$worknote = $this->config->get('theme_termopab_worknote');
 		$data['worknote'] = (is_array($worknote) && isset($worknote[$language_id])) ? $worknote[$language_id] : '';
 
+		$social_keys = ['instagram', 'whatsapp', 'telegram', 'facebook', 'youtube'];
+		$all_social_links = [
+			'instagram' => trim((string)$this->config->get('theme_termopab_social_instagram')),
+			'whatsapp'  => trim((string)$this->config->get('theme_termopab_social_whatsapp')),
+			'telegram'  => trim((string)$this->config->get('theme_termopab_social_telegram')),
+			'facebook'  => trim((string)$this->config->get('theme_termopab_social_facebook')),
+			'youtube'   => trim((string)$this->config->get('theme_termopab_social_youtube')),
+		];
+		$data['social_links'] = $all_social_links;
+
+		$header_social_links = [];
+		$footer_social_links = [];
+		foreach ($social_keys as $key) {
+			$url = $all_social_links[$key] ?? '';
+			$url = $url !== '' ? $url : '#';
+			// Show if checkbox not explicitly 0 (not set or 1 = show); allow empty URL to show icon with #
+			$header_val = $this->config->get('theme_termopab_header_social_' . $key);
+			if ($header_val !== 0 && $header_val !== '0') {
+				$header_social_links[$key] = $url;
+			}
+			$footer_val = $this->config->get('theme_termopab_footer_social_' . $key);
+			if ($footer_val !== 0 && $footer_val !== '0') {
+				$footer_social_links[$key] = $url;
+			}
+		}
+		$data['header_social_links'] = $header_social_links;
+		$data['footer_social_links'] = $footer_social_links;
+
 		$this->load->language('extension/termopab/theme/termopab');
 		$data['text_call_me'] = $this->language->get('text_call_me');
 

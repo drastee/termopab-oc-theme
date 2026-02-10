@@ -20,6 +20,12 @@ $_['entry_brand']      = 'Бренд';
 $_['entry_address']    = 'Адреса';
 $_['entry_telephone']  = 'Телефони';
 $_['entry_email']      = 'Email';
+$_['entry_social_links'] = 'Соцмережі та месенджери';
+$_['entry_social_instagram'] = 'Instagram';
+$_['entry_social_whatsapp']  = 'WhatsApp';
+$_['entry_social_telegram']  = 'Telegram';
+$_['entry_social_facebook']  = 'Facebook';
+$_['entry_social_youtube']   = 'YouTube';
 $_['entry_schedule']   = 'Час роботи';
 $_['entry_worknote']   = 'Примітка про зону роботи';
 $_['entry_footer_menu'] = 'Меню підвалу';
@@ -47,7 +53,12 @@ $_['text_header_empty'] = 'Налаштування шапки будуть до
 
 // Help
 $_['help_telephone']   = 'Введіть один номер телефону на рядок. Наприклад: +38 (067) 123-45-67';
+$_['help_header_socials'] = 'Оберіть, які соцмережі показувати в шапці сайту. Посилання задаються на вкладці «Основне».';
+$_['help_footer_socials'] = 'Оберіть, які соцмережі показувати в підвалі. Посилання задаються на вкладці «Основне».';
 $_['help_menu_columns'] = 'Усі три колонки мають однакову структуру. Додайте пункти меню кнопкою «Додати». Тип: інформаційна сторінка, категорія товарів або довільне посилання.';
+
+$_['entry_header_socials'] = 'Соцмережі в шапці';
+$_['entry_footer_socials'] = 'Соцмережі в підвалі';
 
 // Text
 $_['text_menu_empty']  = 'Немає пунктів. Натисніть «Додати».';

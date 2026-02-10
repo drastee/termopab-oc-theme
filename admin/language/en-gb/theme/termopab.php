@@ -20,6 +20,12 @@ $_['entry_brand']      = 'Brand';
 $_['entry_address']    = 'Address';
 $_['entry_telephone']  = 'Phones';
 $_['entry_email']      = 'Email';
+$_['entry_social_links'] = 'Social networks & messengers';
+$_['entry_social_instagram'] = 'Instagram';
+$_['entry_social_whatsapp']  = 'WhatsApp';
+$_['entry_social_telegram']  = 'Telegram';
+$_['entry_social_facebook']  = 'Facebook';
+$_['entry_social_youtube']   = 'YouTube';
 $_['entry_schedule']   = 'Opening hours';
 $_['entry_worknote']   = 'Work area note';
 $_['entry_footer_menu'] = 'Footer menu';
@@ -47,7 +53,12 @@ $_['text_header_empty'] = 'Header settings will be added here later.';
 
 // Help
 $_['help_telephone']   = 'Enter one phone number per line. E.g.: +38 (067) 123-45-67';
+$_['help_header_socials'] = 'Choose which social networks to show in the header. URLs are set on the Main tab.';
+$_['help_footer_socials'] = 'Choose which social networks to show in the footer. URLs are set on the Main tab.';
 $_['help_menu_columns'] = 'All three columns have the same structure. Add menu items with the "Add" button. Type: information page, product category, or custom link.';
+
+$_['entry_header_socials'] = 'Header social links';
+$_['entry_footer_socials'] = 'Footer social links';
 
 // Text
 $_['text_menu_empty']  = 'No items. Click "Add" to add.';

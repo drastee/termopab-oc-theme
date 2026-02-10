@@ -33,7 +33,7 @@
                         {% endif %}
                     </div>
                     <div class="footer_socials_wrapper">
-                        {% include "@termopab/components/social-buttons/_social-buttons.twig" %}  
+                        {% include "@termopab/components/social-buttons/_social-buttons.twig" with { social_links: footer_social_links|default(social_links|default({})) } %}
                     </div>
                 </div>
                 <div class="footer__right-bottom">

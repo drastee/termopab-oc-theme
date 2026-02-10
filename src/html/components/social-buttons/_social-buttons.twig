@@ -1,5 +1,19 @@
+{#
+  Expects social_links (optional): { instagram, whatsapp, telegram, facebook, youtube }
+  Only outputs items that have a non-empty URL.
+#}
+{% set links = social_links|default({}) %}
+{% set items = [
+  { key: 'instagram', class: 'social-instagram' },
+  { key: 'whatsapp',  class: 'social-whatsapp' },
+  { key: 'telegram',  class: 'social-telegram' },
+  { key: 'facebook',  class: 'social-facebook' },
+  { key: 'youtube',   class: 'social-youtube' },
+] %}
 <ul class="social-buttons">
-    <li><a href="#" target="_blank" class="icon social social-instagram"></a></li>
-    <li><a href="#" target="_blank" class="icon social social-facebook"></a></li>
-    <li><a href="#" target="_blank" class="icon social social-youtube"></a></li>
+  {% for item in items %}
+    {% if links[item.key]|default('')|trim != '' %}
+      <li><a href="{{ links[item.key] }}" target="_blank" rel="noopener noreferrer" class="icon social {{ item.class }}"></a></li>
+    {% endif %}
+  {% endfor %}
 </ul>
