@@ -3,6 +3,11 @@ import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 export default {
   base: './',
+  resolve: {
+    alias: {
+      '@assets': resolve(__dirname, 'src/assets'),
+    },
+  },
   plugins: [
     viteStaticCopy({
       targets: [
@@ -28,6 +33,10 @@ export default {
         },
         {
           src: 'src/assets/images/welder-mob.webp',
+          dest: 'image',
+        },
+        {
+          src: 'src/assets/images/bottle.webp',
           dest: 'image',
         },
         {
