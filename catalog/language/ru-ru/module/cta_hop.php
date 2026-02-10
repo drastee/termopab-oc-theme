@@ -1,0 +1,8 @@
+<?php
+// CTA Hop module – form labels (frontend)
+$_['form_label_name']         = 'Ваше имя';
+$_['form_placeholder_name']   = 'Имя';
+$_['form_label_phone']        = 'Ваш телефон';
+$_['form_placeholder_phone']  = '+_ (___) ___-__-__';
+$_['form_button_text']        = 'Получить консультацию';
+$_['form_agreement']          = 'Нажимая на кнопку, вы даёте согласие на обработку персональных данных и соглашаетесь с <a href="#">Политикой конфиденциальности</a>';

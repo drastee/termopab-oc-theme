@@ -1,19 +1,46 @@
 <div class="assortment">
     <div class="container">
-        <h2 class="section-title">Наш ассортимент</h2>
+        <h2 class="section-title">{{ title|default('Наш асортимент') }}</h2>
 
         <div class="swiper assortment__inner">
-            
+
             <div class="swiper-wrapper">
-                {% include '../../../../components/assortment-item/_assortment-item.twig' %}
-                {% include '../../../../components/assortment-item/_assortment-item.twig' %}
-                {% include '../../../../components/assortment-item/_assortment-item.twig' %}
-                {% include '../../../../components/assortment-item/_assortment-item.twig' %}
-                {% include '../../../../components/assortment-item/_assortment-item.twig' %}
-                {% include '../../../../components/assortment-item/_assortment-item.twig' %}
+                {% if slides is defined and slides|length > 0 %}
+                    {% for slide in slides %}
+                        <div class="swiper-slide">
+                            <div class="assortment__product">
+                                <div class="assortment__product-left-side">
+                                    <p class="assortment__product-title">{{ slide.title }}</p>
+                                    <a class="link" href="{{ slide.link|default('#') }}">{{ slide.button_text|default('Детальніше') }} <svg class="link-arrow"><use href="#icon-short-arrow"></use></svg></a>
+                                    {% if slide.description %}
+                                    <div class="assortment__product-description">
+                                        {{ slide.description|raw }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="assortment__product-right-side">
+                                    {% if slide.image_url %}
+                                    <img src="{{ slide.image_url }}" class="img-base" alt="{{ slide.title }}">
+                                    <img src="{{ slide.image_hover_url|default(slide.image_url) }}" class="img-hover" alt="{{ slide.title }}">
+                                    {% else %}
+                                    <img src="/src/assets/images/products/product-3.webp" class="img-base" alt="">
+                                    <img src="/src/assets/images/products/product-2.webp" class="img-hover" alt="">
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    {% include '@components/assortment-item/_assortment-item.twig' %}
+                    {% include '@components/assortment-item/_assortment-item.twig' %}
+                    {% include '@components/assortment-item/_assortment-item.twig' %}
+                    {% include '@components/assortment-item/_assortment-item.twig' %}
+                    {% include '@components/assortment-item/_assortment-item.twig' %}
+                    {% include '@components/assortment-item/_assortment-item.twig' %}
+                {% endif %}
             </div>
 
         </div>
-        {% include '../../../../components/swiper-controls/_swiper-controls.twig' %}
+        {% include '@components/swiper-controls/_swiper-controls.twig' with { total: total|default(6) } %}
     </div>
 </div>

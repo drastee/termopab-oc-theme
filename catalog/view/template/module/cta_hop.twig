@@ -1,0 +1,48 @@
+<section class="cta-hop">
+    <div class="container">
+
+        <div class="cta-hop__image-wrapper">
+            <picture>
+                <source srcset="{{ image_welder_mob }}" media="(max-width: 1024px)">
+                <img src="{{ image_welder }}" alt="">
+            </picture>
+            <video class="explosion" autoplay muted loop playsinline>
+                <source src="{{ video_explosion }}" type="video/webm">
+            </video>
+        </div>
+
+        <div class="cta-form">
+            <h2 class="cta-form__title section-title">
+                {{ title_first }}{% if title_rest|length > 0 %}<br>{% for line in title_rest %}<span>{{ line }}</span>{% endfor %}{% endif %}
+            </h2>
+
+            <div class="cta-form__wrapper">
+                {% if social_block_enabled and (intro_text or social_links|length > 0) %}
+                {% if intro_text %}<p>{{ intro_text }}</p>{% endif %}
+                {% if social_links|length > 0 %}
+                <ul class="social-buttons">
+                    {% for key, url in social_links %}
+                    <li><a href="{{ url }}" target="_blank" rel="noopener noreferrer" class="icon social social-{{ key }}"></a></li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% endif %}
+
+                <form class="callback-form" action="" id="cta-hop-form">
+                    <label class="label" for="cta-hop-name">{{ form_label_name }}</label>
+                    <input id="cta-hop-name" name="name" type="text" placeholder="{{ form_placeholder_name }}">
+
+                    <label class="label" for="cta-hop-phone">{{ form_label_phone }}</label>
+                    <input id="cta-hop-phone" name="phone" type="text" placeholder="{{ form_placeholder_phone }}">
+
+                    <button type="submit" class="btn btn-primary">
+                        {{ form_button_text }}
+                        <svg class="icon-arrow"><use href="#icon-short-arrow"></use></svg>
+                    </button>
+
+                    {% if form_agreement %}<p class="agreement">{{ form_agreement|raw }}</p>{% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

@@ -22,6 +22,18 @@ export default {
           src: 'src/assets/images/logo-large-shadow.webp',
           dest: 'image',
         },
+        {
+          src: 'src/assets/images/welder.webp',
+          dest: 'image',
+        },
+        {
+          src: 'src/assets/images/welder-mob.webp',
+          dest: 'image',
+        },
+        {
+          src: 'src/assets/videos/explosion.webm',
+          dest: 'image',
+        },
       ],
     }),
   ],
