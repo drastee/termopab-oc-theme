@@ -40,6 +40,8 @@ class ProductFeature extends \Opencart\System\Engine\Controller {
 		$data['name'] = $module_info['name'] ?? '';
 		$data['status'] = $module_info['status'] ?? 1;
 		$data['module_id'] = $module_id;
+		$data['width'] = (int)($module_info['width'] ?? 0) ?: 600;
+		$data['height'] = (int)($module_info['height'] ?? 0) ?: 600;
 
 		$slides_raw = $module_info['slides'] ?? [];
 		$data['slides'] = [];
@@ -94,6 +96,7 @@ class ProductFeature extends \Opencart\System\Engine\Controller {
 				$slide_title = [];
 				$slide_text_before = [];
 				$slide_text_after = [];
+				$slide_button_text = [];
 				foreach ($slide['title'] ?? [] as $lid => $v) {
 					$slide_title[(int)$lid] = trim((string)$v);
 				}
@@ -103,18 +106,32 @@ class ProductFeature extends \Opencart\System\Engine\Controller {
 				foreach ($slide['text_after'] ?? [] as $lid => $v) {
 					$slide_text_after[(int)$lid] = trim((string)$v);
 				}
+				foreach ($slide['button_text'] ?? [] as $lid => $v) {
+					$slide_button_text[(int)$lid] = trim((string)$v);
+				}
+				$slide_href = [];
+				foreach ($slide['href'] ?? [] as $lid => $v) {
+					$slide_href[(int)$lid] = trim((string)$v);
+				}
 
 				$slides[] = [
 					'title'       => $slide_title,
 					'text_before' => $slide_text_before,
 					'text_after'  => $slide_text_after,
+					'button_text' => $slide_button_text,
+					'href'        => $slide_href,
 					'image'       => trim($slide['image'] ?? ''),
 					'image_hover' => trim($slide['image_hover'] ?? ''),
 				];
 			}
 
+			$width = (int)($this->request->post['width'] ?? 0) ?: 600;
+			$height = (int)($this->request->post['height'] ?? 0) ?: 600;
+
 			$post = [
 				'name'   => $name,
+				'width'  => $width,
+				'height' => $height,
 				'slides' => $slides,
 				'status' => (int)($this->request->post['status'] ?? 0),
 			];

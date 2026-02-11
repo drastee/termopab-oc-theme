@@ -1,0 +1,13 @@
+<section class="contact-bar">
+    <div class="contact-bar__spikelet">
+        <img src="{{ spikelet_url }}" alt="">
+    </div>
+    <div class="container contact-bar__inner">
+        <h2 class="section-title title section-title--secondary">{{ title }}</h2>
+        <div class="contact-bar__phones">
+            {% for phone in telephones %}
+            <a class="contact-bar__phone" href="tel:{{ phone|replace({' ': '', '-': '', '(': '', ')': ''}) }}">{{ phone }}</a>
+            {% endfor %}
+        </div>
+    </div>
+</section>

@@ -40,6 +40,10 @@ export default {
           dest: 'image',
         },
         {
+          src: 'src/assets/images/spikelet.webp',
+          dest: 'image',
+        },
+        {
           src: 'src/assets/videos/explosion.webm',
           dest: 'image',
         },

@@ -28,6 +28,18 @@
           </div>
 
           <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_width }}</label>
+            <div class="col-sm-2">
+              <input type="number" name="width" value="{{ width }}" min="1" max="2000" class="form-control" placeholder="600"/>
+            </div>
+            <label class="col-sm-2 col-form-label">{{ entry_height }}</label>
+            <div class="col-sm-2">
+              <input type="number" name="height" value="{{ height }}" min="1" max="2000" class="form-control" placeholder="600"/>
+            </div>
+            <div class="col-sm-4"><small class="text-muted">{{ help_image_size }}</small></div>
+          </div>
+
+          <div class="row mb-3">
             <label class="col-sm-2 col-form-label">{{ entry_slides }}</label>
             <div class="col-sm-10">
               <div id="product-feature-slides" class="border rounded p-3 bg-light" data-no-slides="{{ text_no_slides|e('html_attr') }}">
@@ -67,6 +79,16 @@
                             <div class="mb-3">
                               <label class="form-label">{{ entry_text_after }}</label>
                               <textarea name="slide[{{ loop.parent.loop.index0 }}][text_after][{{ language.language_id }}]" class="form-control" rows="3">{{ (slide.text_after[language.language_id] ?? '') }}</textarea>
+                            </div>
+                            <div class="row align-items-end">
+                              <div class="col-md mb-3 mb-md-0">
+                                <label class="form-label">{{ entry_button_text }}</label>
+                                <input type="text" name="slide[{{ loop.parent.loop.index0 }}][button_text][{{ language.language_id }}]" value="{{ (slide.button_text[language.language_id] ?? '') }}" class="form-control" placeholder="{{ entry_button_text }}"/>
+                              </div>
+                              <div class="col-md mb-3 mb-md-0">
+                                <label class="form-label">{{ entry_link }}</label>
+                                <input type="text" name="slide[{{ loop.parent.loop.index0 }}][href][{{ language.language_id }}]" value="{{ (slide.href[language.language_id] ?? slide.href ?? '') }}" class="form-control" placeholder="https://... або /category/..."/>
+                              </div>
                             </div>
                           </div>
                         {% endfor %}
@@ -160,6 +182,16 @@
           <div class="mb-3">
             <label class="form-label">{{ entry_text_after }}</label>
             <textarea name="slide[__INDEX__][text_after][{{ language.language_id }}]" class="form-control" rows="3"></textarea>
+          </div>
+          <div class="row align-items-end">
+            <div class="col-md mb-3 mb-md-0">
+              <label class="form-label">{{ entry_button_text }}</label>
+              <input type="text" name="slide[__INDEX__][button_text][{{ language.language_id }}]" value="" class="form-control" placeholder="{{ entry_button_text }}"/>
+            </div>
+            <div class="col-md mb-3 mb-md-0">
+              <label class="form-label">{{ entry_link }}</label>
+              <input type="text" name="slide[__INDEX__][href][{{ language.language_id }}]" value="" class="form-control" placeholder="https://... or /category/..."/>
+            </div>
           </div>
         </div>
         {% endfor %}

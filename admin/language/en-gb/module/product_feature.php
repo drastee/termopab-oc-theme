@@ -17,6 +17,11 @@ $_['entry_text_before'] = 'Text (before image)';
 $_['entry_text_after']  = 'Text (after image)';
 $_['entry_image']      = 'Image (base)';
 $_['entry_image_hover'] = 'Image (on hover)';
+$_['entry_button_text'] = 'Button text';
+$_['entry_link']        = 'Link';
+$_['entry_width']       = 'Image width (px)';
+$_['entry_height']      = 'Image height (px)';
+$_['help_image_size']   = 'Recommended 600×600 or more to avoid blur.';
 $_['entry_status']     = 'Status';
 
 $_['text_collapse']    = 'Collapse / Expand';
