@@ -120,6 +120,12 @@ class Termopab extends \Opencart\System\Engine\Controller {
 
 		$data['menu_columns'] = $this->buildMenuColumns($language_id);
 		$data['footer_menu'] = $this->buildFooterMenu($language_id);
+		// Append Projects link (extension/termopab/project)
+		$this->load->language('extension/termopab/project/list');
+		$data['footer_menu'][] = [
+			'name' => $this->language->get('heading_title'),
+			'href' => $this->url->link('extension/termopab/project', 'language=' . $this->config->get('config_language')),
+		];
 	}
 
 	/**

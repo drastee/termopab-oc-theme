@@ -48,6 +48,11 @@ $_['button_up']        = 'Вверх';
 $_['button_down']      = 'Вниз';
 $_['button_remove']    = 'Удалить';
 
+$_['text_install_project_tables'] = 'Создать таблицы проектов';
+$_['text_projects']    = 'Проекты';
+$_['text_projects_add'] = 'Создать проект';
+$_['text_quick_links'] = 'Быстрые действия';
+
 // Text
 $_['text_header_empty'] = 'Настройки шапки будут добавлены позже.';
 

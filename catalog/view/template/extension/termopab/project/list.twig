@@ -1,0 +1,39 @@
+{{ header }}
+<main id="content">
+  <div class="container py-4">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+          <li class="breadcrumb-item{% if loop.last %} active{% endif %}">
+            {% if not loop.last %}<a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>{% else %}{{ breadcrumb.text }}{% endif %}
+          </li>
+        {% endfor %}
+      </ol>
+    </nav>
+    <h1 class="mb-4">{{ heading_title }}</h1>
+    {% if projects is empty %}
+      <p class="text-muted">{{ text_empty }}</p>
+    {% else %}
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for project in projects %}
+          <div class="col">
+            <div class="card h-100">
+              {% if project.image %}
+                <a href="{{ project.href }}"><img src="{{ project.image }}" class="card-img-top" alt="{{ project.title }}"/></a>
+              {% endif %}
+              <div class="card-body">
+                <h2 class="card-title h5"><a href="{{ project.href }}" class="text-decoration-none">{{ project.title }}</a></h2>
+                {% if project.description %}
+                  <p class="card-text text-muted small">{{ project.description }}</p>
+                {% endif %}
+                <a href="{{ project.href }}" class="btn btn-outline-primary btn-sm">{{ text_read_more }}</a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      <div class="mt-4">{{ pagination }}</div>
+    {% endif %}
+  </div>
+</main>
+{{ footer }}

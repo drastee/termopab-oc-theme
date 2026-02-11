@@ -43,6 +43,10 @@ $_['entry_menu_item_title'] = 'Title';
 $_['entry_menu_item_url'] = 'URL';
 
 // Button
+$_['text_install_project_tables'] = 'Create project tables';
+$_['text_projects']    = 'Projects';
+$_['text_projects_add'] = 'Add project';
+$_['text_quick_links'] = 'Quick links';
 $_['button_add']       = 'Add';
 $_['button_up']        = 'Move up';
 $_['button_down']      = 'Move down';

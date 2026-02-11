@@ -1,0 +1,57 @@
+{{ header }}
+<main id="content">
+  <div class="container py-4">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+          <li class="breadcrumb-item{% if loop.last %} active{% endif %}">
+            {% if not loop.last %}<a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>{% else %}{{ breadcrumb.text }}{% endif %}
+          </li>
+        {% endfor %}
+      </ol>
+    </nav>
+    <h1 class="mb-2">{{ heading|default(title) }}</h1>
+    {% if heading and title %}<p class="text-muted mb-3">{{ title }}</p>{% endif %}
+    {% if logo %}
+      <figure class="mb-4">
+        <img src="{{ logo }}" alt="{{ title }}" class="project-logo img-fluid"/>
+      </figure>
+    {% endif %}
+    {% if video_url %}
+      <figure class="mb-4">
+        <video class="project-video w-100 rounded" controls playsinline preload="metadata">
+          <source src="{{ video_url }}" type="video/mp4"/>
+        </video>
+      </figure>
+    {% endif %}
+    {% if project_images is not empty %}
+      <section class="project-gallery mb-4">
+        <h2 class="h5 mb-3">{{ text_gallery }}</h2>
+        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
+          {% for img in project_images %}
+            <div class="col">
+              <a href="{{ img.image }}" class="d-block" target="_blank" rel="noopener">
+                <img src="{{ img.thumb }}" alt="" class="img-fluid rounded"/>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+      </section>
+    {% endif %}
+    {% if image %}
+      <figure class="mb-4">
+        <img src="{{ image }}" alt="{{ title }}" class="img-fluid rounded"/>
+      </figure>
+    {% endif %}
+    {% if description %}
+      <p class="lead text-muted">{{ description }}</p>
+    {% endif %}
+    {% if article %}
+      <div class="project-article">{{ article }}</div>
+    {% endif %}
+    <p class="mt-4">
+      <a href="{{ back_list }}" class="btn btn-outline-secondary">{{ text_back_list }}</a>
+    </p>
+  </div>
+</main>
+{{ footer }}

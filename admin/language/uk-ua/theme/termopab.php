@@ -43,6 +43,10 @@ $_['entry_menu_item_title'] = 'Назва';
 $_['entry_menu_item_url'] = 'URL';
 
 // Button
+$_['text_install_project_tables'] = 'Створити таблиці проєктів';
+$_['text_projects']    = 'Проєкти';
+$_['text_projects_add'] = 'Створити проєкт';
+$_['text_quick_links'] = 'Швидкі дії';
 $_['button_add']       = 'Додати';
 $_['button_up']        = 'Вгору';
 $_['button_down']      = 'Вниз';

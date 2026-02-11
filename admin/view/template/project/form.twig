@@ -1,0 +1,249 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="float-end">
+        <button type="submit" form="form-project" data-bs-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa-solid fa-save"></i></button>
+        <a href="{{ cancel }}" data-bs-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-light"><i class="fa-solid fa-reply"></i></a>
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ol class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+          <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if success %}
+      <div class="alert alert-success alert-dismissible"><i class="fa-solid fa-check-circle"></i> {{ success }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    {% endif %}
+    {% if error_warning %}
+      <div class="alert alert-danger alert-dismissible"><i class="fa-solid fa-exclamation-triangle"></i> {{ error_warning }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    {% endif %}
+    <div class="card">
+      <div class="card-header"><i class="fa-solid fa-pencil"></i> {{ text_form }}</div>
+      <div class="card-body">
+        <form id="form-project" action="{{ save }}" method="post">
+          <input type="hidden" name="project_id" value="{{ project_id }}"/>
+
+          <ul class="nav nav-tabs" role="tablist">
+            {% for language in languages %}
+              <li class="nav-item">
+                <a class="nav-link{% if loop.first %} active{% endif %}" data-bs-toggle="tab" href="#language-{{ language.language_id }}">{% if language.image %}<img src="{{ language.image }}" alt="" class="me-1"/>{% endif %}{{ language.name }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+
+          <div class="tab-content">
+            {% for language in languages %}
+              <div id="language-{{ language.language_id }}" class="tab-pane{% if loop.first %} active{% endif %}">
+                <div class="row mb-3">
+                  <label class="col-sm-2 col-form-label">{{ entry_heading }}</label>
+                  <div class="col-sm-10">
+                    <input type="text" name="project_description[{{ language.language_id }}][heading]" value="{{ project_description[language.language_id].heading }}" placeholder="{{ entry_heading }}" class="form-control"/>
+                  </div>
+                </div>
+                <div class="row mb-3 required">
+                  <label class="col-sm-2 col-form-label">{{ entry_project_name }}</label>
+                  <div class="col-sm-10">
+                    <input type="text" name="project_description[{{ language.language_id }}][title]" value="{{ project_description[language.language_id].title }}" placeholder="{{ entry_project_name }}" class="form-control"/>
+                    <div id="error-title-{{ language.language_id }}" class="invalid-feedback"></div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label class="col-sm-2 col-form-label">{{ entry_description }}</label>
+                  <div class="col-sm-10">
+                    <textarea name="project_description[{{ language.language_id }}][description]" rows="3" placeholder="{{ entry_description }}" class="form-control">{{ project_description[language.language_id].description }}</textarea>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label class="col-sm-2 col-form-label">{{ entry_article }}</label>
+                  <div class="col-sm-10">
+                    <textarea name="project_description[{{ language.language_id }}][article]" rows="12" placeholder="{{ entry_article }}" class="form-control">{{ project_description[language.language_id].article }}</textarea>
+                  </div>
+                </div>
+                <hr/>
+                <h5>{{ entry_meta_title }}</h5>
+                <div class="row mb-3">
+                  <label class="col-sm-2 col-form-label">{{ entry_meta_title }}</label>
+                  <div class="col-sm-10">
+                    <input type="text" name="project_description[{{ language.language_id }}][meta_title]" value="{{ project_description[language.language_id].meta_title }}" class="form-control"/>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label class="col-sm-2 col-form-label">{{ entry_meta_description }}</label>
+                  <div class="col-sm-10">
+                    <textarea name="project_description[{{ language.language_id }}][meta_description]" rows="2" class="form-control">{{ project_description[language.language_id].meta_description }}</textarea>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label class="col-sm-2 col-form-label">{{ entry_meta_keyword }}</label>
+                  <div class="col-sm-10">
+                    <input type="text" name="project_description[{{ language.language_id }}][meta_keyword]" value="{{ project_description[language.language_id].meta_keyword }}" class="form-control"/>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+
+          <hr/>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_image }}</label>
+            <div class="col-sm-10">
+              <div class="border rounded d-inline-block mb-2" style="max-width: 100px;">
+                <img src="{{ image_thumb }}" alt="" id="thumb-image" data-oc-placeholder="{{ placeholder }}" class="img-fluid"/>
+                <input type="hidden" name="image" value="{{ image }}" id="input-image"/>
+                <div class="d-grid p-1">
+                  <button type="button" data-oc-toggle="image" data-oc-target="#input-image" data-oc-thumb="#thumb-image" class="btn btn-primary btn-sm"><i class="fa-solid fa-pencil"></i></button>
+                  <button type="button" data-oc-toggle="clear" data-oc-target="#input-image" data-oc-thumb="#thumb-image" class="btn btn-warning btn-sm"><i class="fa-regular fa-trash-can"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_logo }}</label>
+            <div class="col-sm-10">
+              <div class="border rounded d-inline-block mb-2" style="max-width: 100px;">
+                <img src="{{ logo_thumb }}" alt="" id="thumb-logo" data-oc-placeholder="{{ placeholder }}" class="img-fluid"/>
+                <input type="hidden" name="logo" value="{{ logo }}" id="input-logo"/>
+                <div class="d-grid p-1">
+                  <button type="button" data-oc-toggle="image" data-oc-target="#input-logo" data-oc-thumb="#thumb-logo" class="btn btn-primary btn-sm"><i class="fa-solid fa-pencil"></i></button>
+                  <button type="button" data-oc-toggle="clear" data-oc-target="#input-logo" data-oc-thumb="#thumb-logo" class="btn btn-warning btn-sm"><i class="fa-regular fa-trash-can"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_video }}</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <input type="text" name="video" value="{{ video }}" placeholder="catalog/project/video.mp4" id="input-video" class="form-control"/>
+                <input type="file" id="input-video-file" accept="video/mp4,.mp4" class="d-none"/>
+                <button type="button" id="btn-upload-video" class="btn btn-primary"><i class="fa-solid fa-upload"></i> {{ button_upload }}</button>
+              </div>
+              <div id="project-video-error" class="invalid-feedback d-none"></div>
+              <div class="form-text">{{ help_video }}</div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_gallery }}</label>
+            <div class="col-sm-10">
+              <div id="project-gallery" class="border rounded p-3 bg-light" data-empty-text="{{ text_no_gallery|e('html_attr') }}">
+                {% for img in project_image %}
+                  <div class="project-gallery-row mb-3 d-flex align-items-center gap-2" data-index="{{ loop.index0 }}">
+                    <div class="border rounded" style="width: 60px; height: 60px; overflow: hidden;">
+                      <img src="{{ img.image_thumb }}" alt="" id="thumb-gallery-{{ loop.index0 }}" class="project-gallery-thumb img-fluid" data-oc-placeholder="{{ placeholder }}"/>
+                    </div>
+                    <input type="hidden" name="project_image[{{ loop.index0 }}][image]" value="{{ img.image }}" id="input-gallery-{{ loop.index0 }}" class="project-gallery-input"/>
+                    <button type="button" class="btn btn-sm btn-outline-secondary project-gallery-pick" data-oc-toggle="image" data-oc-target="#input-gallery-{{ loop.index0 }}" data-oc-thumb="#thumb-gallery-{{ loop.index0 }}"><i class="fa-solid fa-pencil"></i></button>
+                    <button type="button" class="btn btn-sm btn-danger project-gallery-remove"><i class="fa-solid fa-trash"></i></button>
+                  </div>
+                {% else %}
+                  <p class="text-muted mb-0" id="project-gallery-empty">{{ text_no_gallery }}</p>
+                {% endfor %}
+              </div>
+              <button type="button" id="btn-add-gallery-image" class="btn btn-success btn-sm mt-2"><i class="fa-solid fa-plus"></i> {{ button_add_image }}</button>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_sort_order }}</label>
+            <div class="col-sm-10">
+              <input type="number" name="sort_order" value="{{ sort_order }}" class="form-control" style="max-width: 100px;"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_status }}</label>
+            <div class="col-sm-10">
+              <div class="form-check form-switch form-switch-lg">
+                <input type="hidden" name="status" value="0"/>
+                <input type="checkbox" name="status" value="1" id="input-status" class="form-check-input"{% if status %} checked{% endif %}/>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<template id="project-gallery-row-tpl">
+  <div class="project-gallery-row mb-3 d-flex align-items-center gap-2" data-index="__IDX__">
+    <div class="border rounded" style="width: 60px; height: 60px; overflow: hidden;">
+      <img src="{{ placeholder }}" alt="" id="thumb-gallery-__IDX__" class="project-gallery-thumb img-fluid" data-oc-placeholder="{{ placeholder }}"/>
+    </div>
+    <input type="hidden" name="project_image[__IDX__][image]" value="" id="input-gallery-__IDX__" class="project-gallery-input"/>
+    <button type="button" class="btn btn-sm btn-outline-secondary project-gallery-pick" data-oc-toggle="image" data-oc-target="#input-gallery-__IDX__" data-oc-thumb="#thumb-gallery-__IDX__"><i class="fa-solid fa-pencil"></i></button>
+    <button type="button" class="btn btn-sm btn-danger project-gallery-remove"><i class="fa-solid fa-trash"></i></button>
+  </div>
+</template>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var gallery = document.getElementById('project-gallery');
+  var emptyEl = document.getElementById('project-gallery-empty');
+  var tpl = document.getElementById('project-gallery-row-tpl');
+
+  function galleryCount() {
+    return gallery ? gallery.querySelectorAll('.project-gallery-row').length : 0;
+  }
+  function renumberGallery() {
+    if (!gallery) return;
+    var rows = gallery.querySelectorAll('.project-gallery-row');
+    rows.forEach(function(row, i) {
+      row.setAttribute('data-index', i);
+      var inp = row.querySelector('.project-gallery-input');
+      var thumb = row.querySelector('.project-gallery-thumb');
+      var pick = row.querySelector('.project-gallery-pick');
+      if (inp) { inp.name = 'project_image[' + i + '][image]'; inp.id = 'input-gallery-' + i; }
+      if (thumb) thumb.id = 'thumb-gallery-' + i;
+      if (pick) { pick.setAttribute('data-oc-target', '#input-gallery-' + i); pick.setAttribute('data-oc-thumb', '#thumb-gallery-' + i); }
+    });
+    if (rows.length === 0 && gallery.getAttribute('data-empty-text')) {
+      gallery.innerHTML = '<p class="text-muted mb-0" id="project-gallery-empty">' + gallery.getAttribute('data-empty-text') + '</p>';
+    }
+    if (emptyEl) emptyEl.style.display = rows.length ? 'none' : '';
+  }
+  document.getElementById('btn-add-gallery-image')?.addEventListener('click', function() {
+    if (!tpl || !tpl.innerHTML || !gallery) return;
+    var idx = galleryCount();
+    var html = tpl.innerHTML.replace(/__IDX__/g, idx);
+    if (emptyEl) emptyEl.style.display = 'none';
+    gallery.insertAdjacentHTML('beforeend', html);
+    renumberGallery();
+  });
+  gallery?.addEventListener('click', function(e) {
+    if (e.target.closest('.project-gallery-remove')) {
+      e.target.closest('.project-gallery-row')?.remove();
+      renumberGallery();
+    }
+  });
+  // Video upload
+  document.getElementById('btn-upload-video')?.addEventListener('click', function() {
+    document.getElementById('input-video-file')?.click();
+  });
+  document.getElementById('input-video-file')?.addEventListener('change', function() {
+    var fileInput = this;
+    var file = fileInput.files[0];
+    if (!file) return;
+    var fd = new FormData();
+    fd.append('video', file);
+    var btn = document.getElementById('btn-upload-video');
+    var err = document.getElementById('project-video-error');
+    var input = document.getElementById('input-video');
+    if (btn) btn.disabled = true;
+    if (err) { err.classList.add('d-none'); err.textContent = ''; }
+    fetch('index.php?route=extension/termopab/project/form.upload&user_token={{ user_token }}', { method: 'POST', body: fd })
+      .then(function(r) { return r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)); })
+      .then(function(json) {
+        if (json.error && err) { err.textContent = json.error; err.classList.remove('d-none'); }
+        if (json.path && input) { input.value = json.path; if (err) err.classList.add('d-none'); }
+      })
+      .catch(function(e) { if (err) { err.textContent = e.message || 'Error'; err.classList.remove('d-none'); } })
+      .finally(function() { if (btn) btn.disabled = false; fileInput.value = ''; });
+  });
+});
+</script>
+{{ footer }}

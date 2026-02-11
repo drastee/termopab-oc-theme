@@ -1,28 +1,17 @@
-Установка OCMOD «Termopab Admin Menu»
-=====================================
+Termopab Theme — установка
+==========================
 
-Этот модификатор добавляет в меню админки (Design) пункт «Тема Termopab» со ссылкой
-на настройки темы. Пункт появляется только при установленной теме Termopab.
+Меню админки (Тема Termopab, Проекти) добавляется через систему событий OC4 при установке темы.
+OCMOD не используется.
 
-Установка:
-----------
-1. Создайте zip-архив termopab_admin_menu.ocmod.zip со структурой:
-   - install.json (из этой папки)
-   - ocmod/termopab_admin_menu.ocmod.xml (файл .ocmod.xml в папке ocmod/)
+Добавить меню БЕЗ переустановки темы (если уже всё настроено):
+  Выполните install/add_event_manual.sql в phpMyAdmin (префикс tp_, замените при необходимости).
 
-2. Загрузите архив: Extensions → Installer → Upload (выберите .ocmod.zip)
+При установке расширения:
+- Регистрируется событие admin/view/common/column_left/before
+- В меню Design появляются: «Тема Termopab», «Проекти» (список + створити)
 
-3. Нажмите Install для установки
+При удалении — событие снимается.
 
-4. Extensions → Modifications — включите модификатор «Termopab Admin Menu» (если выключен)
-
-5. Нажмите Refresh, чтобы применить модификатор
-
-Готово. В меню Design появится пункт «Тема Termopab».
-
-Создание zip из командной строки:
----------------------------------
-cd opencart/extension/termopab/install
-mkdir -p ocmod
-cp termopab_admin_menu.ocmod.xml ocmod/
-zip -r termopab_admin_menu.ocmod.zip install.json ocmod/
+Таблицы проектов (project, project_description, project_image):
+- Создаются при первом посещении extension/termopab/install или по кнопке «Створити таблиці» на странице списка проектов.

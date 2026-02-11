@@ -14,6 +14,7 @@ class Termopab extends \Opencart\System\Engine\Controller {
 	public function index(): void {
 		$this->load->language('extension/termopab/theme/termopab');
 
+		// OC4: menu via Event System (extension/termopab/event/menu)
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		if (isset($this->request->get['store_id'])) {
@@ -41,6 +42,9 @@ class Termopab extends \Opencart\System\Engine\Controller {
 
 		$data['save'] = $this->url->link('extension/termopab/theme/termopab.save', 'user_token=' . $this->session->data['user_token'] . '&store_id=' . $store_id);
 		$data['back'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=theme');
+		$data['install_project_tables'] = $this->url->link('extension/termopab/project', 'user_token=' . $this->session->data['user_token'] . '&install_tables=1');
+		$data['projects_list'] = $this->url->link('extension/termopab/project', 'user_token=' . $this->session->data['user_token']);
+		$data['projects_add'] = $this->url->link('extension/termopab/project/form', 'user_token=' . $this->session->data['user_token']);
 
 		$this->load->model('setting/setting');
 		$this->load->model('localisation/language');
@@ -195,25 +199,80 @@ class Termopab extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
-	 * Install - set default theme status
+	 * Install - startup + event for admin menu
 	 *
 	 * @return void
 	 */
 	public function install(): void {
-	    if ($this->user->hasPermission('modify', 'extension/theme')) {
-	      // Add startup to catalog
-	      $startup_data = [
-	        'code'        => 'termopab',
-	        'description' => 'termopab theme extension',
-	        'action'      => 'catalog/extension/termopab/startup/termopab',
-	        'status'      => 1,
-	        'sort_order'  => 2
-	      ];
+		if ($this->user->hasPermission('modify', 'extension/theme')) {
+			// Ensure termopab is in extension_install so autoloader registers paths (required for event menu)
+			$this->load->model('setting/extension');
+			if (!$this->model_setting_extension->getInstallByCode('termopab')) {
+				$id = $this->model_setting_extension->addInstall([
+					'extension_id' => 0, 'extension_download_id' => 0,
+					'name' => 'Termopab', 'description' => 'Termopab theme', 'code' => 'termopab',
+					'version' => '1.0', 'author' => '', 'link' => '',
+				]);
+				$this->model_setting_extension->editStatus($id, true);
+			}
 
-	      // Add startup for admin
-	      $this->load->model('setting/startup');
+			// Add permissions for all user groups (whoever can manage themes gets termopab access)
+			$this->load->model('user/user_group');
+			$routes = [
+				'extension/termopab/theme/termopab', 'extension/termopab/project',
+				'extension/termopab/project', 'extension/termopab/project/form',
+				'extension/termopab/project/delete', 'extension/termopab/install',
+			];
+			$groups = $this->db->query("SELECT user_group_id, name, permission FROM `" . DB_PREFIX . "user_group`")->rows;
+			foreach ($groups as $row) {
+				$perm = $row['permission'] ? json_decode($row['permission'], true) : ['access' => [], 'modify' => []];
+				foreach (['access', 'modify'] as $type) {
+					$list = $perm[$type] ?? [];
+					foreach ($routes as $route) {
+						if (!in_array($route, $list, true)) {
+							$list[] = $route;
+						}
+					}
+					$perm[$type] = $list;
+				}
+				$this->db->query("UPDATE `" . DB_PREFIX . "user_group` SET `permission` = '" . $this->db->escape(json_encode($perm)) . "' WHERE `user_group_id` = '" . (int)$row['user_group_id'] . "'");
+			}
 
-	      $this->model_setting_startup->addStartup($startup_data);
-	    }
-	  }
+			// Add startup to catalog
+			$this->load->model('setting/startup');
+			$this->model_setting_startup->addStartup([
+				'code'        => 'termopab',
+				'description' => 'termopab theme extension',
+				'action'      => 'catalog/extension/termopab/startup/termopab',
+				'status'      => 1,
+				'sort_order'  => 2
+			]);
+
+			// Event: admin menu (Тема Termopab + Проекти) — no OCMOD
+			$this->load->model('setting/event');
+			$this->model_setting_event->deleteEventByCode('termopab_admin_menu');
+			$this->model_setting_event->addEvent([
+				'code'        => 'termopab_admin_menu',
+				'description' => 'Termopab: меню «Тема Termopab» і «Проекти» в розділі Дизайн',
+				'trigger'     => 'admin/view/common/column_left/before',
+				'action'      => 'extension/termopab/event/menu.onColumnLeft',
+				'status'      => 1,
+				'sort_order'  => 0,
+			]);
+		}
+	}
+
+	/**
+	 * Uninstall - remove startup and event
+	 *
+	 * @return void
+	 */
+	public function uninstall(): void {
+		$this->load->model('setting/startup');
+		$this->model_setting_startup->deleteStartupByCode('termopab');
+
+		$this->load->model('setting/event');
+		$this->model_setting_event->deleteEventByCode('termopab_admin_menu');
+	}
+
 }
