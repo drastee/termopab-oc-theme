@@ -83,7 +83,7 @@ class Menu extends \Opencart\System\Engine\Controller {
 						'id'       => 'menu-termopab-projects-add',
 						'icon'     => '',
 						'name'     => $this->language->get('button_add'),
-						'href'     => $this->url->link('extension/termopab/project/form', 'user_token=' . $this->session->data['user_token']),
+						'href'     => $this->url->link('extension/termopab/project.form', 'user_token=' . $this->session->data['user_token']),
 						'children' => [],
 					],
 				],

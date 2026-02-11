@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var input = document.getElementById('input-video');
     if (btn) btn.disabled = true;
     if (err) { err.classList.add('d-none'); err.textContent = ''; }
-    fetch('index.php?route=extension/termopab/project/form.upload&user_token={{ user_token }}', { method: 'POST', body: fd })
+    fetch('index.php?route=extension/termopab/project.upload&user_token={{ user_token }}', { method: 'POST', body: fd })
       .then(function(r) { return r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)); })
       .then(function(json) {
         if (json.error && err) { err.textContent = json.error; err.classList.remove('d-none'); }

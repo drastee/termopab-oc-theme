@@ -44,7 +44,7 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		$data['back'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=theme');
 		$data['install_project_tables'] = $this->url->link('extension/termopab/project', 'user_token=' . $this->session->data['user_token'] . '&install_tables=1');
 		$data['projects_list'] = $this->url->link('extension/termopab/project', 'user_token=' . $this->session->data['user_token']);
-		$data['projects_add'] = $this->url->link('extension/termopab/project/form', 'user_token=' . $this->session->data['user_token']);
+		$data['projects_add'] = $this->url->link('extension/termopab/project.form', 'user_token=' . $this->session->data['user_token']);
 
 		$this->load->model('setting/setting');
 		$this->load->model('localisation/language');
@@ -220,8 +220,7 @@ class Termopab extends \Opencart\System\Engine\Controller {
 			$this->load->model('user/user_group');
 			$routes = [
 				'extension/termopab/theme/termopab', 'extension/termopab/project',
-				'extension/termopab/project', 'extension/termopab/project/form',
-				'extension/termopab/project/delete', 'extension/termopab/install',
+				'extension/termopab/install',
 			];
 			$groups = $this->db->query("SELECT user_group_id, name, permission FROM `" . DB_PREFIX . "user_group`")->rows;
 			foreach ($groups as $row) {
