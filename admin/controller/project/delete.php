@@ -13,7 +13,7 @@ class Delete extends \Opencart\System\Engine\Controller {
 		} else {
 			$project_id = (int)($this->request->get['project_id'] ?? 0);
 			if ($project_id) {
-				$this->ensureProjectModel();
+				$this->load->model('extension/termopab/project');
 				$this->model_extension_termopab_project->deleteProject($project_id);
 				$this->session->data['success'] = $this->language->get('text_success');
 			}
@@ -22,17 +22,4 @@ class Delete extends \Opencart\System\Engine\Controller {
 		$this->response->redirect($this->url->link('extension/termopab/project', 'user_token=' . $this->session->data['user_token']));
 	}
 
-	private function ensureProjectModel(): void {
-		$key = 'model_extension_termopab_project';
-		if ($this->registry->has($key)) {
-			return;
-		}
-		$path = DIR_EXTENSION . 'termopab/admin/model/extension/termopab/project.php';
-		if (is_file($path)) {
-			require_once $path;
-			$this->registry->set($key, new \Opencart\Admin\Model\Extension\Termopab\Project($this->registry));
-		} else {
-			$this->load->model('extension/termopab/project');
-		}
-	}
 }

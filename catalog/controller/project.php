@@ -48,7 +48,7 @@ class Project extends \Opencart\System\Engine\Controller {
 			$data['projects'][] = [
 				'project_id'   => $row['project_id'],
 				'title'        => $row['title'] ?: ('Project #' . $row['project_id']),
-				'description'  => $row['description'] ?: '',
+				'description' => $row['description'] ?: '',
 				'image'        => $img,
 				'href'         => $this->url->link('extension/termopab/project/info', 'language=' . $this->config->get('config_language') . '&project_id=' . $row['project_id']),
 			];

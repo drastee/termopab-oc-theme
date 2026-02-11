@@ -40,7 +40,7 @@ class Form extends \Opencart\System\Engine\Controller {
 		$data['project_id'] = $project_id;
 		$data['user_token'] = $this->session->data['user_token'];
 
-		$this->ensureProjectModel();
+		$this->load->model('extension/termopab/project');
 		$this->load->model('localisation/language');
 		$this->load->model('tool/image');
 
@@ -158,7 +158,7 @@ class Form extends \Opencart\System\Engine\Controller {
 				];
 			}
 
-			$this->ensureProjectModel();
+			$this->load->model('extension/termopab/project');
 			if (!$project_id) {
 				$project_id = $this->model_extension_termopab_project->addProject($data);
 				$json['redirect'] = $this->url->link('extension/termopab/project/form', 'user_token=' . $this->session->data['user_token'] . '&project_id=' . $project_id);
@@ -257,17 +257,4 @@ class Form extends \Opencart\System\Engine\Controller {
 		$this->response->setOutput(json_encode($json));
 	}
 
-	private function ensureProjectModel(): void {
-		$key = 'model_extension_termopab_project';
-		if ($this->registry->has($key)) {
-			return;
-		}
-		$path = DIR_EXTENSION . 'termopab/admin/model/extension/termopab/project.php';
-		if (is_file($path)) {
-			require_once $path;
-			$this->registry->set($key, new \Opencart\Admin\Model\Extension\Termopab\Project($this->registry));
-		} else {
-			$this->load->model('extension/termopab/project');
-		}
-	}
 }

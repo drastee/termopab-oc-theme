@@ -53,7 +53,7 @@ class Project extends \Opencart\System\Engine\Controller {
 		$limit = (int)($this->config->get('config_pagination_admin') ?: 20);
 		$start = ($page - 1) * $limit;
 
-		$this->ensureProjectModel();
+		$this->load->model('extension/termopab/project');
 		$this->load->model('tool/image');
 
 		$total = $this->model_extension_termopab_project->getTotalProjects();
@@ -87,21 +87,6 @@ class Project extends \Opencart\System\Engine\Controller {
 		$data['footer'] = $this->load->controller('common/footer');
 
 		$this->response->setOutput($this->load->view('extension/termopab/project/list', $data));
-	}
-
-	/** Load project model from extension path if loader did not find it (OC4 admin model path). */
-	private function ensureProjectModel(): void {
-		$key = 'model_extension_termopab_project';
-		if ($this->registry->has($key)) {
-			return;
-		}
-		$path = DIR_EXTENSION . 'termopab/admin/model/extension/termopab/project.php';
-		if (is_file($path)) {
-			require_once $path;
-			$this->registry->set($key, new \Opencart\Admin\Model\Extension\Termopab\Project($this->registry));
-		} else {
-			$this->load->model('extension/termopab/project');
-		}
 	}
 
 	private function runInstallTables(): void {
