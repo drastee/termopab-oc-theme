@@ -54,8 +54,10 @@
                     <td class="text-center">{{ project.sort_order }}</td>
                     <td class="text-center">{% if project.status %}<span class="badge bg-success">ON</span>{% else %}<span class="badge bg-secondary">OFF</span>{% endif %}</td>
                     <td class="text-end">
-                      <a href="{{ project.edit }}" class="btn btn-primary btn-sm"><i class="fa-solid fa-pencil"></i> {{ button_edit }}</a>
-                      <a href="{{ project.delete }}" class="btn btn-danger btn-sm" onclick="return confirm('Delete this project?');"><i class="fa-solid fa-trash"></i> {{ button_delete }}</a>
+                      <a href="{{ project.view }}" class="btn btn-outline-secondary btn-sm" title="{{ button_view }}" target="_blank" rel="noopener"><i class="fa-solid fa-external-link"></i></a>
+                      <a href="{{ project.edit }}" class="btn btn-primary btn-sm" title="{{ button_edit }}"><i class="fa-solid fa-pencil"></i></a>
+                      <a href="{{ project.copy }}" class="btn btn-secondary btn-sm" title="{{ button_copy }}"><i class="fa-solid fa-copy"></i></a>
+                      <a href="{{ project.delete }}" class="btn btn-danger btn-sm" title="{{ button_delete }}" onclick="return confirm('{{ button_delete }}?');"><i class="fa-solid fa-trash"></i></a>
                     </td>
                   </tr>
                 {% endfor %}

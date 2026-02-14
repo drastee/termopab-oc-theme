@@ -1,11 +1,12 @@
+{% set video_url = video_src|default('/src/assets/videos/hero.mp4') %}
+{% set poster_url = (poster_src is defined and poster_src) ? poster_src : '/src/assets/images/project/1.webp' %}
 <div class="video-md">
     <div class="video-md__inner">
         <video class="video-md__video" playsinline>
-            <source src="/src/assets/videos/hero.mp4" type="video/mp4">
-            <source src="/src/assets/videos/hero.webm" type="video/webm">
+            <source src="{{ video_url }}" type="video/mp4">
         </video>
 
-        <img src="/src/assets/images/project/1.webp" alt="" class="video-md__poster">
+        <img src="{{ poster_url }}" alt="" class="video-md__poster">
         
         <span class="video-md__overlay"></span>
 

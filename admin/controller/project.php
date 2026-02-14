@@ -47,6 +47,7 @@ class Project extends \Opencart\System\Engine\Controller {
 		$total = $this->model_extension_termopab_project->getTotalProjects();
 		$results = $this->model_extension_termopab_project->getProjects(['start' => $start, 'limit' => $limit, 'sort' => 'p.sort_order', 'order' => 'ASC']);
 
+		$store_url = rtrim((string)$this->config->get('config_url'), '/');
 		$data['projects'] = [];
 		$placeholder = $this->model_tool_image->resize('no_image.png', 40, 40);
 		foreach ($results as $row) {
@@ -58,7 +59,9 @@ class Project extends \Opencart\System\Engine\Controller {
 				'image'       => $img,
 				'sort_order'  => $row['sort_order'],
 				'status'      => $row['status'],
+				'view'        => $store_url . '/index.php?route=extension/termopab/project.info' . '&project_id=' . $row['project_id'],
 				'edit'        => $this->url->link('extension/termopab/project.form', 'user_token=' . $this->session->data['user_token'] . '&project_id=' . $row['project_id']),
+				'copy'        => $this->url->link('extension/termopab/project.copy', 'user_token=' . $this->session->data['user_token'] . '&project_id=' . $row['project_id']),
 				'delete'      => $this->url->link('extension/termopab/project.delete', 'user_token=' . $this->session->data['user_token'] . '&project_id=' . $row['project_id']),
 			];
 		}
@@ -265,6 +268,29 @@ class Project extends \Opencart\System\Engine\Controller {
 				$this->model_extension_termopab_project->deleteProject($project_id);
 				$this->session->data['success'] = $this->language->get('text_success');
 			}
+		}
+
+		$this->response->redirect($this->url->link('extension/termopab/project', 'user_token=' . $this->session->data['user_token']));
+	}
+
+	public function copy(): void {
+		$this->addPaths();
+		$this->load->language('extension/termopab/project/list');
+
+		if (!$this->user->hasPermission('modify', 'extension/termopab/project')) {
+			$this->session->data['error'] = $this->language->get('error_permission');
+		} else {
+			$project_id = (int)($this->request->get['project_id'] ?? 0);
+			if ($project_id) {
+				$this->load->model('extension/termopab/project');
+				$new_id = $this->model_extension_termopab_project->copyProject($project_id);
+				if ($new_id) {
+					$this->session->data['success'] = $this->language->get('text_copy_success');
+					$this->response->redirect($this->url->link('extension/termopab/project.form', 'user_token=' . $this->session->data['user_token'] . '&project_id=' . $new_id));
+					return;
+				}
+			}
+			$this->session->data['error'] = $this->language->get('error_copy');
 		}
 
 		$this->response->redirect($this->url->link('extension/termopab/project', 'user_token=' . $this->session->data['user_token']));

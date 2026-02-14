@@ -1,7 +1,7 @@
 <section class="posts">
     <div class="container">
     
-        {% if(filter) %}
+        {% if filter %}
             <ul class="posts__filter">
                 <li><a class="posts__filter-item active" href="#">УСЕ</a></li>
                 <li><a class="posts__filter-item" href="#">ЦКТ СТАНДАРТ</a></li>
@@ -13,81 +13,38 @@
         {% endif %}
 
         <div class="posts__inner">
-
+            {% if posts is defined and posts is not empty %}
+                {% for post in posts %}
+                <div>
+                    {% include '@components/post-card/_post-card.twig' with {
+                        image: post.image|default('/src/assets/images/brewery-reviews/1.webp'),
+                        title: post.title,
+                        description: post.description|default(''),
+                        href: post.href|default('#')
+                    } %}
+                </div>
+                {% endfor %}
+            {% elseif empty_message is defined and empty_message %}
+                <p class="posts__empty text-muted">{{ empty_message }}</p>
+            {% else %}
+                {% for i in 1..9 %}
                 <div>
                     {% include '@components/post-card/_post-card.twig' with {
                         image: '/src/assets/images/brewery-reviews/1.webp',
                         title: 'Броварня в Литві',
-                        description: 'Огляд литовської броварні 2024 року запуску'
+                        description: 'Огляд литовської броварні 2024 року запуску'
                     } %}
                 </div>
-
-                <div>
-                    {% include '@components/post-card/_post-card.twig' with {
-                        image: '/src/assets/images/brewery-reviews/1.webp',
-                        title: 'Броварня в Литві',
-                        description: 'Огляд литовської броварні 2024 року запуску'
-                    } %}
-                </div>
-
-                <div>
-                    {% include '@components/post-card/_post-card.twig' with {
-                        image: '/src/assets/images/brewery-reviews/1.webp',
-                        title: 'Броварня в Литві',
-                        description: 'Огляд литовської броварні 2024 року запуску'
-                    } %}
-                </div>
-
-                <div>
-                    {% include '@components/post-card/_post-card.twig' with {
-                        image: '/src/assets/images/brewery-reviews/1.webp',
-                        title: 'Броварня в Литві',
-                        description: 'Огляд литовської броварні 2024 року запуску'
-                    } %}
-                </div>
-
-                <div>
-                    {% include '@components/post-card/_post-card.twig' with {
-                        image: '/src/assets/images/brewery-reviews/1.webp',
-                        title: 'Броварня в Литві',
-                        description: 'Огляд литовської броварні 2024 року запуску'
-                    } %}
-                </div>
-
-                <div>
-                    {% include '@components/post-card/_post-card.twig' with {
-                        image: '/src/assets/images/brewery-reviews/1.webp',
-                        title: 'Броварня в Литві',
-                        description: 'Огляд литовської броварні 2024 року запуску'
-                    } %}
-                </div>
-
-                <div>
-                    {% include '@components/post-card/_post-card.twig' with {
-                        image: '/src/assets/images/brewery-reviews/1.webp',
-                        title: 'Броварня в Литві',
-                        description: 'Огляд литовської броварні 2024 року запуску'
-                    } %}
-                </div>
-
-                <div>
-                    {% include '@components/post-card/_post-card.twig' with {
-                        image: '/src/assets/images/brewery-reviews/1.webp',
-                        title: 'Броварня в Литві',
-                        description: 'Огляд литовської броварні 2024 року запуску'
-                    } %}
-                </div>
-
-                <div>
-                    {% include '@components/post-card/_post-card.twig' with {
-                        image: '/src/assets/images/brewery-reviews/1.webp',
-                        title: 'Броварня в Литві',
-                        description: 'Огляд литовської броварні 2024 року запуску'
-                    } %}
-                </div>
-
+                {% endfor %}
+            {% endif %}
         </div>
 
-    {% include "@components/pagination/_pagination.twig"%}
+        {% if pagination_data is defined and pagination_data %}
+            {% include "@components/pagination/_pagination.twig" with pagination_data %}
+        {% elseif pagination_html is defined and pagination_html %}
+            {{ pagination_html|raw }}
+        {% else %}
+            {% include "@components/pagination/_pagination.twig" %}
+        {% endif %}
     </div>
 </section>

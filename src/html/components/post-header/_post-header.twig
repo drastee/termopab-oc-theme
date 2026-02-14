@@ -1,7 +1,7 @@
 <div class="post-header">
-    <a class="post-header__link link" href="#">{{ linkText }} <svg class="link-arrow"><use href="#icon-short-arrow"></use></svg></a>
+    <a class="post-header__link link" href="{{ href|default('#') }}">{{ linkText }} <svg class="link-arrow"><use href="#icon-short-arrow"></use></svg></a>
     <h1 class="post-header__title">{{ title }}</h1>
     {% if subtitle %}
-        <h2 class="post-header__subtitle">{{ subtitle }}</h1>
+        <h2 class="post-header__subtitle">{{ subtitle }}</h2>
     {% endif %}
 </div>

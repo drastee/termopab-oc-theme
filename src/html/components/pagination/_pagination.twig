@@ -1,18 +1,37 @@
+{% if pages is defined %}
+  {% if pages is not empty %}
 <nav class="pagination" aria-label="Навігація по сторінках">
   <ul>
-    
-    <li><a href="#" class="pagination__prev" aria-label="Previous"><svg class="nav-arrow"><use href="#icon-short-arrow"></use></svg></a></li>
+      {% if prev_url is defined and prev_url %}
+        <li><a href="{{ prev_url }}" class="pagination__prev" aria-label="Previous"><svg class="nav-arrow"><use href="#icon-short-arrow"></use></svg></a></li>
+      {% endif %}
 
-    <li><a href="#" class="pagination__page active" aria-current="page">1</a></li>
+      {% for p in pages %}
+        {% if p.dots|default(false) %}
+          <li class="pagination__dots">...</li>
+        {% else %}
+          <li>
+            <a href="{{ p.url }}" class="pagination__page{% if p.active %} active{% endif %}"{% if p.active %} aria-current="page"{% endif %}>{{ p.num }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
 
-    <li><a href="#" class="pagination__page">2</a></li>
-    <li><a href="#" class="pagination__page">3</a></li>
-
-    <li class="pagination__dots">...</li>
-
-    <li><a href="#" class="pagination__page">10</a></li>
-
-    <li><a href="#" class="pagination__next" aria-label="Next"><svg class="nav-arrow"><use href="#icon-short-arrow"></use></svg></a></li>
-    
+      {% if next_url is defined and next_url %}
+        <li><a href="{{ next_url }}" class="pagination__next" aria-label="Next"><svg class="nav-arrow"><use href="#icon-short-arrow"></use></svg></a></li>
+      {% endif %}
   </ul>
 </nav>
+  {% endif %}
+{% else %}
+<nav class="pagination" aria-label="Навігація по сторінках">
+  <ul>
+    <li><a href="#" class="pagination__prev" aria-label="Previous"><svg class="nav-arrow"><use href="#icon-short-arrow"></use></svg></a></li>
+    <li><a href="#" class="pagination__page active" aria-current="page">1</a></li>
+    <li><a href="#" class="pagination__page">2</a></li>
+    <li><a href="#" class="pagination__page">3</a></li>
+    <li class="pagination__dots">...</li>
+    <li><a href="#" class="pagination__page">10</a></li>
+    <li><a href="#" class="pagination__next" aria-label="Next"><svg class="nav-arrow"><use href="#icon-short-arrow"></use></svg></a></li>
+  </ul>
+</nav>
+{% endif %}

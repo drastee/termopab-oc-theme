@@ -56,14 +56,12 @@ class Project extends \Opencart\System\Engine\Controller {
 			];
 		}
 
-		$data['pagination'] = $this->load->controller('common/pagination', [
-			'total' => $total,
-			'page'  => $page,
-			'limit' => $limit,
-			'url'   => $this->url->link('extension/termopab/project', 'language=' . $this->config->get('config_language') . '&page={page}')
-		]);
+		$pagination_url = $this->url->link('extension/termopab/project', 'language=' . $this->config->get('config_language') . '&page={page}');
+		$data['pagination_data'] = $this->buildPaginationData($total, $page, $limit, $pagination_url);
 
 		$data['header'] = $this->load->controller('common/header');
+		$data['content_top'] = $this->load->controller('common/content_top');
+		$data['content_bottom'] = $this->load->controller('common/content_bottom');
 		$data['footer'] = $this->load->controller('common/footer');
 
 		$this->response->setOutput($this->load->view('extension/termopab/project/list', $data));
@@ -153,8 +151,53 @@ class Project extends \Opencart\System\Engine\Controller {
 		}
 
 		$data['header'] = $this->load->controller('common/header');
+		$data['content_top'] = $this->load->controller('common/content_top');
+		$data['content_bottom'] = $this->load->controller('common/content_bottom');
 		$data['footer'] = $this->load->controller('common/footer');
 
 		$this->response->setOutput($this->load->view('extension/termopab/project/info', $data));
+	}
+
+	/**
+	 * Build pagination data for the theme pagination component (prev, pages with dots, next).
+	 */
+	private function buildPaginationData(int $total, int $page, int $limit, string $url_template): array {
+		$num_pages = $limit > 0 ? (int)ceil($total / $limit) : 1;
+		$page = max(1, min($page, $num_pages ?: 1));
+
+		$prev_url = $page > 1 ? str_replace('{page}', (string)($page - 1), $url_template) : '';
+		$next_url = $page < $num_pages ? str_replace('{page}', (string)($page + 1), $url_template) : '';
+
+		$pages = [];
+		if ($num_pages <= 1) {
+			// one page — show nothing or just current
+		} elseif ($num_pages <= 7) {
+			for ($i = 1; $i <= $num_pages; $i++) {
+				$pages[] = ['num' => $i, 'url' => str_replace('{page}', (string)$i, $url_template), 'active' => $i === $page];
+			}
+		} else {
+			// first, ..., current-1, current, current+1, ..., last
+			$pages[] = ['num' => 1, 'url' => str_replace('{page}', '1', $url_template), 'active' => $page === 1];
+			if ($page > 3) {
+				$pages[] = ['num' => null, 'url' => null, 'dots' => true];
+			}
+			$start = max(2, $page - 1);
+			$end = min($num_pages - 1, $page + 1);
+			for ($i = $start; $i <= $end; $i++) {
+				$pages[] = ['num' => $i, 'url' => str_replace('{page}', (string)$i, $url_template), 'active' => $i === $page];
+			}
+			if ($page < $num_pages - 2) {
+				$pages[] = ['num' => null, 'url' => null, 'dots' => true];
+			}
+			if ($num_pages > 1) {
+				$pages[] = ['num' => $num_pages, 'url' => str_replace('{page}', (string)$num_pages, $url_template), 'active' => $page === $num_pages];
+			}
+		}
+
+		return [
+			'prev_url' => $prev_url,
+			'next_url' => $next_url,
+			'pages'    => $pages,
+		];
 	}
 }

@@ -112,6 +112,43 @@ class Project extends \Opencart\System\Engine\Model {
 		}
 	}
 
+	/**
+	 * Clone project with all descriptions and gallery images.
+	 * Adds " (copy)" suffix to titles.
+	 */
+	public function copyProject(int $project_id): int {
+		$project = $this->getProject($project_id);
+		if (empty($project)) {
+			return 0;
+		}
+
+		$descriptions = $this->getProjectDescriptions($project_id);
+		$copySuffix = ' (copy)';
+		foreach ($descriptions as $lang_id => $desc) {
+			$descriptions[$lang_id]['title'] = ($desc['title'] ?? '') . $copySuffix;
+			$descriptions[$lang_id]['heading'] = ($desc['heading'] ?? '') . $copySuffix;
+			$descriptions[$lang_id]['meta_title'] = ($desc['meta_title'] ?? '') . $copySuffix;
+		}
+
+		$images = $this->getProjectImages($project_id);
+		$project_image = [];
+		foreach ($images as $idx => $img) {
+			$project_image[] = ['image' => $img['image'] ?? ''];
+		}
+
+		$data = [
+			'image'   => $project['image'] ?? '',
+			'logo'    => $project['logo'] ?? '',
+			'video'   => $project['video'] ?? '',
+			'sort_order' => (int)($project['sort_order'] ?? 0),
+			'status'  => (int)($project['status'] ?? 1),
+			'project_description' => $descriptions,
+			'project_image' => $project_image,
+		];
+
+		return $this->addProject($data);
+	}
+
 	public function deleteProject(int $project_id): void {
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "project_image` WHERE `project_id` = '" . (int)$project_id . "'");
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "project_description` WHERE `project_id` = '" . (int)$project_id . "'");

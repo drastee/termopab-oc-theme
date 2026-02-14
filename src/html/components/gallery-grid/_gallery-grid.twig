@@ -1,9 +1,9 @@
 <div class="gallery-grid">
     {% for image in images %}
-        <a href="{{ image }}" class="gallery-grid__item" data-fancybox="gallery">
-            {# Если нужно, можно использовать |replace для создания миниатюры, но пока используем одну и ту же #}
-           
-            <img src="{{ image }}" alt="Фото проєкту {{ loop.index }}" loading="lazy">
+        {% set href = image.href is defined ? image.href : image %}
+        {% set src = image.src is defined ? image.src : image %}
+        <a href="{{ href }}" class="gallery-grid__item" data-fancybox="gallery">
+            <img src="{{ src }}" alt="Фото проєкту {{ loop.index }}" loading="lazy">
             <span class="gallery-grid__overlay"></span>
         </a>
     {% endfor %}
