@@ -10,6 +10,8 @@ $_['text_success']   = 'Brewery review saved successfully.';
 // Entry
 $_['entry_heading']  = 'Heading';
 $_['entry_title']     = 'Review title';
+$_['entry_category'] = 'Category';
+$_['text_none']      = '— None —';
 $_['entry_description'] = 'Short description (in list)';
 $_['entry_article']  = 'Article (full text)';
 $_['entry_image']    = 'Image (preview)';

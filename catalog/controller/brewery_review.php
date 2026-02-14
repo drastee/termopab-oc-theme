@@ -28,7 +28,9 @@ class BreweryReview extends \Opencart\System\Engine\Controller {
 		$data['text_read_more'] = $this->language->get('text_read_more');
 		$data['text_back_list'] = $this->language->get('text_back_list');
 		$data['text_empty'] = $this->language->get('text_empty');
+		$data['text_filter_all'] = $this->language->get('text_filter_all');
 
+		$filter_category_id = (int)($this->request->get['category_id'] ?? 0);
 		$page = (int)($this->request->get['page'] ?? 1);
 		$limit = (int)($this->config->get('config_pagination') ?: 12);
 		$start = ($page - 1) * $limit;
@@ -36,8 +38,28 @@ class BreweryReview extends \Opencart\System\Engine\Controller {
 		$this->load->model('extension/termopab/brewery_review');
 		$this->load->model('tool/image');
 
-		$total = $this->model_extension_termopab_brewery_review->getTotalBreweryReviews();
-		$results = $this->model_extension_termopab_brewery_review->getBreweryReviews(['start' => $start, 'limit' => $limit]);
+		$filter_data = ['start' => $start, 'limit' => $limit];
+		if ($filter_category_id > 0) {
+			$filter_data['filter_brewery_review_category_id'] = $filter_category_id;
+		}
+
+		$total = $this->model_extension_termopab_brewery_review->getTotalBreweryReviews($filter_data);
+		$results = $this->model_extension_termopab_brewery_review->getBreweryReviews($filter_data);
+
+		$base_url = $this->url->link('extension/termopab/brewery_review', 'language=' . $this->config->get('config_language'));
+		$data['filter_categories'] = [];
+		$data['filter_categories'][] = [
+			'name'   => $this->language->get('text_filter_all'),
+			'href'   => $base_url,
+			'active' => $filter_category_id === 0,
+		];
+		foreach ($this->model_extension_termopab_brewery_review->getBreweryReviewCategories() as $cat) {
+			$data['filter_categories'][] = [
+				'name'   => $cat['title'] ?: ('ID ' . $cat['brewery_review_category_id']),
+				'href'   => $base_url . '&category_id=' . (int)$cat['brewery_review_category_id'],
+				'active' => $filter_category_id === (int)$cat['brewery_review_category_id'],
+			];
+		}
 
 		$data['projects'] = [];
 		$width = (int)$this->config->get('config_image_content_width') ?: 300;
@@ -56,7 +78,7 @@ class BreweryReview extends \Opencart\System\Engine\Controller {
 			];
 		}
 
-		$pagination_url = $this->url->link('extension/termopab/brewery_review', 'language=' . $this->config->get('config_language') . '&page={page}');
+		$pagination_url = $base_url . ($filter_category_id > 0 ? '&category_id=' . $filter_category_id : '') . '&page={page}';
 		$data['pagination_data'] = $this->buildPaginationData($total, $page, $limit, $pagination_url);
 
 		$data['header'] = $this->load->controller('common/header');

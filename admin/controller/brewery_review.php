@@ -62,6 +62,7 @@ class BreweryReview extends \Opencart\System\Engine\Controller {
 			$data['brewery_reviews'][] = [
 				'brewery_review_id' => $row['brewery_review_id'],
 				'title'             => $row['title'] ?: ('(ID ' . $row['brewery_review_id'] . ')'),
+				'category_title'    => $row['category_title'] ?? '',
 				'image'             => $img,
 				'sort_order'        => $row['sort_order'],
 				'status'            => $row['status'],
@@ -113,22 +114,25 @@ class BreweryReview extends \Opencart\System\Engine\Controller {
 		$data['user_token'] = $this->session->data['user_token'];
 
 		$this->load->model('extension/termopab/brewery_review');
+		$this->load->model('extension/termopab/brewery_review_category');
 		$this->load->model('localisation/language');
 		$this->load->model('tool/image');
 
 		$data['languages'] = $this->model_localisation_language->getLanguages();
 		$data['placeholder'] = $this->model_tool_image->resize('no_image.png', 100, 100);
+		$data['categories'] = $this->model_extension_termopab_brewery_review_category->getCategories();
 
 		if ($brewery_review_id) {
 			$brewery_review = $this->model_extension_termopab_brewery_review->getBreweryReview($brewery_review_id);
 			$descriptions = $this->model_extension_termopab_brewery_review->getBreweryReviewDescriptions($brewery_review_id);
 			$gallery = $this->model_extension_termopab_brewery_review->getBreweryReviewImages($brewery_review_id);
 		} else {
-			$brewery_review = ['image' => '', 'logo' => '', 'video' => '', 'sort_order' => 0, 'status' => 1];
+			$brewery_review = ['brewery_review_category_id' => 0, 'image' => '', 'logo' => '', 'video' => '', 'sort_order' => 0, 'status' => 1];
 			$descriptions = [];
 			$gallery = [];
 		}
 
+		$data['brewery_review_category_id'] = (int)($brewery_review['brewery_review_category_id'] ?? 0);
 		$data['image'] = $brewery_review['image'] ?? '';
 		$data['image_thumb'] = ($data['image'] && is_file(DIR_IMAGE . html_entity_decode($data['image'], ENT_QUOTES, 'UTF-8')))
 			? $this->model_tool_image->resize($data['image'], 100, 100) : $data['placeholder'];
@@ -208,6 +212,7 @@ class BreweryReview extends \Opencart\System\Engine\Controller {
 				}
 			}
 			$data = [
+				'brewery_review_category_id' => (int)($this->request->post['brewery_review_category_id'] ?? 0),
 				'image'                      => trim((string)($this->request->post['image'] ?? '')),
 				'logo'                       => trim((string)($this->request->post['logo'] ?? '')),
 				'video'                      => trim((string)($this->request->post['video'] ?? '')),
@@ -375,6 +380,7 @@ class BreweryReview extends \Opencart\System\Engine\Controller {
 		$sql = [
 			"CREATE TABLE IF NOT EXISTS `" . $prefix . "brewery_review` (
 				`brewery_review_id` int(11) NOT NULL AUTO_INCREMENT,
+				`brewery_review_category_id` int(11) NOT NULL DEFAULT 0,
 				`image` varchar(255) DEFAULT NULL,
 				`logo` varchar(255) DEFAULT NULL,
 				`video` varchar(512) DEFAULT NULL,
@@ -405,12 +411,36 @@ class BreweryReview extends \Opencart\System\Engine\Controller {
 				PRIMARY KEY (`brewery_review_image_id`),
 				KEY `brewery_review_id` (`brewery_review_id`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+			"CREATE TABLE IF NOT EXISTS `" . $prefix . "brewery_review_category` (
+				`brewery_review_category_id` int(11) NOT NULL AUTO_INCREMENT,
+				`sort_order` int(11) NOT NULL DEFAULT 0,
+				`status` tinyint(1) NOT NULL DEFAULT 1,
+				`date_added` datetime NOT NULL,
+				`date_modified` datetime NOT NULL,
+				PRIMARY KEY (`brewery_review_category_id`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+			"CREATE TABLE IF NOT EXISTS `" . $prefix . "brewery_review_category_description` (
+				`brewery_review_category_id` int(11) NOT NULL,
+				`language_id` int(11) NOT NULL,
+				`title` varchar(255) NOT NULL,
+				PRIMARY KEY (`brewery_review_category_id`,`language_id`),
+				KEY `language_id` (`language_id`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+		];
+		$alters = [
+			"ALTER TABLE `" . $prefix . "brewery_review` ADD COLUMN `brewery_review_category_id` int(11) NOT NULL DEFAULT 0 AFTER `brewery_review_id`",
 		];
 		try {
 			foreach ($sql as $q) {
 				$this->db->query($q);
 			}
-			$this->session->data['success'] = 'Таблиці оглядів пивоварень створено.';
+			foreach ($alters as $q) {
+				try {
+					$this->db->query($q);
+				} catch (\Throwable $e) {
+				}
+			}
+			$this->session->data['success'] = 'Таблиці оглядів пивоварень та категорій створено.';
 		} catch (\Throwable $e) {
 			$this->session->data['error'] = 'Помилка: ' . $e->getMessage();
 		}

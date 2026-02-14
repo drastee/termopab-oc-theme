@@ -8,8 +8,9 @@ class BreweryReview extends \Opencart\System\Engine\Model {
 	}
 
 	public function getBreweryReviews(array $data = []): array {
-		$sql = "SELECT b.*, bd.title FROM `" . DB_PREFIX . "brewery_review` b
+		$sql = "SELECT b.*, bd.title, cdd.title AS category_title FROM `" . DB_PREFIX . "brewery_review` b
 			LEFT JOIN `" . DB_PREFIX . "brewery_review_description` bd ON (b.brewery_review_id = bd.brewery_review_id AND bd.language_id = '" . (int)$this->config->get('config_language_id') . "')
+			LEFT JOIN `" . DB_PREFIX . "brewery_review_category_description` cdd ON (b.brewery_review_category_id = cdd.brewery_review_category_id AND cdd.language_id = '" . (int)$this->config->get('config_language_id') . "')
 			WHERE 1=1";
 
 		$allowed_sort = ['b.sort_order' => 1, 'bd.title' => 1, 'b.date_added' => 1, 'b.status' => 1];
@@ -43,6 +44,7 @@ class BreweryReview extends \Opencart\System\Engine\Model {
 
 	public function addBreweryReview(array $data): int {
 		$this->db->query("INSERT INTO `" . DB_PREFIX . "brewery_review` SET
+			`brewery_review_category_id` = '" . (int)($data['brewery_review_category_id'] ?? 0) . "',
 			`image` = '" . $this->db->escape($data['image'] ?? '') . "',
 			`logo` = '" . $this->db->escape($data['logo'] ?? '') . "',
 			`video` = '" . $this->db->escape($data['video'] ?? '') . "',
@@ -79,6 +81,7 @@ class BreweryReview extends \Opencart\System\Engine\Model {
 
 	public function editBreweryReview(int $brewery_review_id, array $data): void {
 		$this->db->query("UPDATE `" . DB_PREFIX . "brewery_review` SET
+			`brewery_review_category_id` = '" . (int)($data['brewery_review_category_id'] ?? 0) . "',
 			`image` = '" . $this->db->escape($data['image'] ?? '') . "',
 			`logo` = '" . $this->db->escape($data['logo'] ?? '') . "',
 			`video` = '" . $this->db->escape($data['video'] ?? '') . "',
@@ -133,6 +136,7 @@ class BreweryReview extends \Opencart\System\Engine\Model {
 		}
 
 		$data = [
+			'brewery_review_category_id' => (int)($brewery_review['brewery_review_category_id'] ?? 0),
 			'image'                      => $brewery_review['image'] ?? '',
 			'logo'                       => $brewery_review['logo'] ?? '',
 			'video'                      => $brewery_review['video'] ?? '',

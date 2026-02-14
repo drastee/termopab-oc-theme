@@ -3,9 +3,6 @@
   <div class="page-header">
     <div class="container-fluid">
       <div class="float-end">
-        {% if show_install %}
-          <a href="{{ install }}" class="btn btn-secondary"><i class="fa-solid fa-database"></i> {{ button_install }}</a>
-        {% endif %}
         <a href="{{ add }}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> {{ button_add }}</a>
       </div>
       <h1>{{ heading_title }}</h1>
@@ -30,45 +27,35 @@
     <div class="card">
       <div class="card-header"><i class="fa-solid fa-list"></i> {{ text_list }}</div>
       <div class="card-body">
-        {% if brewery_reviews is empty %}
+        {% if categories is empty %}
           <p class="text-muted mb-0">{{ text_no_results }}</p>
         {% else %}
           <div class="table-responsive">
             <table class="table table-bordered table-hover">
               <thead>
                 <tr>
-                  <td class="text-center" style="width: 50px;">{{ column_id }}</td>
-                  <td class="text-center">{{ column_image }}</td>
+                  <td class="text-center" style="width: 60px;">{{ column_id }}</td>
                   <td>{{ column_title }}</td>
-                  <td>{{ column_category }}</td>
                   <td class="text-center">{{ column_sort_order }}</td>
                   <td class="text-center">{{ column_status }}</td>
                   <td class="text-end">{{ column_action }}</td>
                 </tr>
               </thead>
               <tbody>
-                {% for review in brewery_reviews %}
+                {% for category in categories %}
                   <tr>
-                    <td class="text-center">{{ review.brewery_review_id }}</td>
-                    <td class="text-center"><img src="{{ review.image }}" alt="" class="img-thumbnail"/></td>
-                    <td>{{ review.title }}</td>
-                    <td>{{ review.category_title|default('—') }}</td>
-                    <td class="text-center">{{ review.sort_order }}</td>
-                    <td class="text-center">{% if review.status %}<span class="badge bg-success">ON</span>{% else %}<span class="badge bg-secondary">OFF</span>{% endif %}</td>
+                    <td class="text-center">{{ category.brewery_review_category_id }}</td>
+                    <td>{{ category.title }}</td>
+                    <td class="text-center">{{ category.sort_order }}</td>
+                    <td class="text-center">{% if category.status %}<span class="badge bg-success">ON</span>{% else %}<span class="badge bg-secondary">OFF</span>{% endif %}</td>
                     <td class="text-end">
-                      <a href="{{ review.view }}" class="btn btn-outline-secondary btn-sm" title="{{ button_view }}" target="_blank" rel="noopener"><i class="fa-solid fa-external-link"></i></a>
-                      <a href="{{ review.edit }}" class="btn btn-primary btn-sm" title="{{ button_edit }}"><i class="fa-solid fa-pencil"></i></a>
-                      <a href="{{ review.copy }}" class="btn btn-secondary btn-sm" title="{{ button_copy }}"><i class="fa-solid fa-copy"></i></a>
-                      <a href="{{ review.delete }}" class="btn btn-danger btn-sm" title="{{ button_delete }}" onclick="return confirm('{{ button_delete }}?');"><i class="fa-solid fa-trash"></i></a>
+                      <a href="{{ category.edit }}" class="btn btn-primary btn-sm" title="{{ button_edit }}"><i class="fa-solid fa-pencil"></i></a>
+                      <a href="{{ category.delete }}" class="btn btn-danger btn-sm" title="{{ button_delete }}" onclick="return confirm('{{ text_confirm_delete }}');"><i class="fa-solid fa-trash"></i></a>
                     </td>
                   </tr>
                 {% endfor %}
               </tbody>
             </table>
-          </div>
-          <div class="row">
-            <div class="col-sm-6 text-start"></div>
-            <div class="col-sm-6 text-end">{{ pagination }}</div>
           </div>
         {% endif %}
       </div>

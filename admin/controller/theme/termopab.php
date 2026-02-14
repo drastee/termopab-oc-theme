@@ -123,8 +123,8 @@ class Termopab extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
-	 * Add permission "extension/termopab/brewery_review" to current user's group and redirect to brewery review list.
-	 * Use when the user has no checkbox for this route in User Groups (e.g. after manual install).
+	 * Add permissions for "Огляди пивоварень" and "Категорії оглядів" to current user's group; redirect to brewery review list.
+	 * Use when the user has no checkbox for these routes in User Groups (e.g. after manual install).
 	 */
 	public function addBreweryReviewPermission(): void {
 		$this->load->language('extension/termopab/theme/termopab');
@@ -139,6 +139,8 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		$group_id = $this->user->getGroupId();
 		$this->model_user_user_group->addPermission($group_id, 'access', 'extension/termopab/brewery_review');
 		$this->model_user_user_group->addPermission($group_id, 'modify', 'extension/termopab/brewery_review');
+		$this->model_user_user_group->addPermission($group_id, 'access', 'extension/termopab/brewery_review_category');
+		$this->model_user_user_group->addPermission($group_id, 'modify', 'extension/termopab/brewery_review_category');
 
 		$this->session->data['success'] = $this->language->get('text_brewery_reviews_permission_added');
 		$this->response->redirect($this->url->link('extension/termopab/brewery_review', 'user_token=' . $this->session->data['user_token']));
@@ -244,7 +246,7 @@ class Termopab extends \Opencart\System\Engine\Controller {
 			// Add permissions for all user groups (whoever can manage themes gets termopab access)
 			$this->load->model('user/user_group');
 			$routes = [
-				'extension/termopab/theme/termopab', 'extension/termopab/project', 'extension/termopab/brewery_review',
+				'extension/termopab/theme/termopab', 'extension/termopab/project', 'extension/termopab/brewery_review', 'extension/termopab/brewery_review_category',
 				'extension/termopab/install',
 				'extension/termopab/module/projects_slider',
 				'extension/termopab/module/callback_form',

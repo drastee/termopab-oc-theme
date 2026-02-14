@@ -10,6 +10,8 @@ $_['text_success']   = 'Огляд успішно збережено.';
 // Entry
 $_['entry_heading']  = 'Заголовок';
 $_['entry_title']     = 'Назва огляду';
+$_['entry_category'] = 'Категорія';
+$_['text_none']      = '— Не обрано —';
 $_['entry_description'] = 'Короткий опис (у списку)';
 $_['entry_article']  = 'Стаття (повний текст)';
 $_['entry_image']    = 'Зображення (превʼю)';

@@ -14,7 +14,7 @@
   } %}
 
   {% include '@termopab/sections/shared/posts/_posts.twig' with {
-    filter: false,
+    filter: filter_categories|default([]),
     posts: projects,
     pagination_data: pagination_data|default(null),
     empty_message: projects is empty ? text_empty : null

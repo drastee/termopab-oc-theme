@@ -45,6 +45,7 @@ class Install extends \Opencart\System\Engine\Controller {
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
 			"CREATE TABLE IF NOT EXISTS `" . $prefix . "brewery_review` (
 				`brewery_review_id` int(11) NOT NULL AUTO_INCREMENT,
+				`brewery_review_category_id` int(11) NOT NULL DEFAULT 0,
 				`image` varchar(255) DEFAULT NULL,
 				`logo` varchar(255) DEFAULT NULL,
 				`video` varchar(512) DEFAULT NULL,
@@ -75,12 +76,28 @@ class Install extends \Opencart\System\Engine\Controller {
 				PRIMARY KEY (`brewery_review_image_id`),
 				KEY `brewery_review_id` (`brewery_review_id`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+			"CREATE TABLE IF NOT EXISTS `" . $prefix . "brewery_review_category` (
+				`brewery_review_category_id` int(11) NOT NULL AUTO_INCREMENT,
+				`sort_order` int(11) NOT NULL DEFAULT 0,
+				`status` tinyint(1) NOT NULL DEFAULT 1,
+				`date_added` datetime NOT NULL,
+				`date_modified` datetime NOT NULL,
+				PRIMARY KEY (`brewery_review_category_id`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+			"CREATE TABLE IF NOT EXISTS `" . $prefix . "brewery_review_category_description` (
+				`brewery_review_category_id` int(11) NOT NULL,
+				`language_id` int(11) NOT NULL,
+				`title` varchar(255) NOT NULL,
+				PRIMARY KEY (`brewery_review_category_id`,`language_id`),
+				KEY `language_id` (`language_id`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
 		];
 
 		$alters = [
 			"ALTER TABLE `" . $prefix . "project` ADD COLUMN `logo` varchar(255) DEFAULT NULL AFTER `image`",
 			"ALTER TABLE `" . $prefix . "project` ADD COLUMN `video` varchar(512) DEFAULT NULL AFTER `logo`",
 			"ALTER TABLE `" . $prefix . "project_description` ADD COLUMN `heading` varchar(255) DEFAULT NULL AFTER `language_id`",
+			"ALTER TABLE `" . $prefix . "brewery_review` ADD COLUMN `brewery_review_category_id` int(11) NOT NULL DEFAULT 0 AFTER `brewery_review_id`",
 		];
 
 		try {

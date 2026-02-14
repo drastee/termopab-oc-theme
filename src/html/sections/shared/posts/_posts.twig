@@ -1,7 +1,13 @@
 <section class="posts">
     <div class="container">
     
-        {% if filter %}
+        {% if filter is iterable and filter is not empty %}
+            <ul class="posts__filter">
+                {% for item in filter %}
+                    <li><a class="posts__filter-item{{ item.active ? ' active' : '' }}" href="{{ item.href }}">{{ item.name }}</a></li>
+                {% endfor %}
+            </ul>
+        {% elseif filter %}
             <ul class="posts__filter">
                 <li><a class="posts__filter-item active" href="#">УСЕ</a></li>
                 <li><a class="posts__filter-item" href="#">ЦКТ СТАНДАРТ</a></li>

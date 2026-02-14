@@ -120,6 +120,13 @@ class Menu extends \Opencart\System\Engine\Controller {
 						'href'     => $this->url->link('extension/termopab/brewery_review.form', 'user_token=' . $this->session->data['user_token']),
 						'children' => [],
 					],
+					[
+						'id'       => 'menu-termopab-brewery-reviews-categories',
+						'icon'     => '',
+						'name'     => $this->language->get('text_categories'),
+						'href'     => $this->url->link('extension/termopab/brewery_review_category', 'user_token=' . $this->session->data['user_token']),
+						'children' => [],
+					],
 				],
 			];
 		}

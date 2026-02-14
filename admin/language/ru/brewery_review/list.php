@@ -10,6 +10,7 @@ $_['text_copy_success']    = 'Обзор успешно скопирован.';
 $_['column_id']       = 'ID';
 $_['column_image']    = 'Изображение';
 $_['column_title']    = 'Название';
+$_['column_category'] = 'Категория';
 $_['column_sort_order'] = 'Порядок';
 $_['column_status']   = 'Статус';
 $_['column_action']   = 'Действие';

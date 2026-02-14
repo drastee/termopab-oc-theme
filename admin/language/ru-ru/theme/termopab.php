@@ -53,8 +53,8 @@ $_['text_projects']    = 'Проекты';
 $_['text_projects_add'] = 'Создать проект';
 $_['text_brewery_reviews'] = 'Обзоры пивоварень';
 $_['text_brewery_reviews_add'] = 'Добавить обзор';
-$_['text_brewery_reviews_add_permission'] = 'Добавить права на «Обзоры пивоварень»';
-$_['text_brewery_reviews_permission_added'] = 'Права на раздел «Обзоры пивоварень» добавлены. Можете создать таблицы, если нужно.';
+$_['text_brewery_reviews_add_permission'] = 'Добавить права на обзоры и категории';
+$_['text_brewery_reviews_permission_added'] = 'Права на «Обзоры пивоварень» и «Категории обзоров» добавлены. Можете создать таблицы, если нужно.';
 $_['text_quick_links'] = 'Быстрые действия';
 
 // Text

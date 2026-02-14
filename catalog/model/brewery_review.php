@@ -18,12 +18,28 @@ class BreweryReview extends \Opencart\System\Engine\Model {
 		return $query->rows;
 	}
 
+	public function getBreweryReviewCategories(int $language_id = 0): array {
+		if (!$language_id) {
+			$language_id = (int)$this->config->get('config_language_id');
+		}
+		$query = $this->db->query("SELECT c.brewery_review_category_id, cd.title
+			FROM `" . DB_PREFIX . "brewery_review_category` c
+			LEFT JOIN `" . DB_PREFIX . "brewery_review_category_description` cd ON (c.brewery_review_category_id = cd.brewery_review_category_id AND cd.language_id = '" . (int)$language_id . "')
+			WHERE c.status = '1'
+			ORDER BY c.sort_order ASC, cd.title ASC");
+		return $query->rows;
+	}
+
 	public function getBreweryReviews(array $data = []): array {
 		$language_id = (int)($data['language_id'] ?? $this->config->get('config_language_id'));
 		$sql = "SELECT b.*, bd.title, bd.description
 			FROM `" . DB_PREFIX . "brewery_review` b
 			LEFT JOIN `" . DB_PREFIX . "brewery_review_description` bd ON (b.brewery_review_id = bd.brewery_review_id AND bd.language_id = '" . $language_id . "')
 			WHERE b.status = '1'";
+
+		if (isset($data['filter_brewery_review_category_id']) && (int)$data['filter_brewery_review_category_id'] > 0) {
+			$sql .= " AND b.brewery_review_category_id = '" . (int)$data['filter_brewery_review_category_id'] . "'";
+		}
 
 		$sort = $data['sort'] ?? 'b.sort_order';
 		$allowed_sort = ['b.sort_order' => 1, 'bd.title' => 1, 'b.date_added' => 1];
@@ -43,8 +59,12 @@ class BreweryReview extends \Opencart\System\Engine\Model {
 		return $query->rows;
 	}
 
-	public function getTotalBreweryReviews(): int {
-		$query = $this->db->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "brewery_review` WHERE status = '1'");
+	public function getTotalBreweryReviews(array $data = []): int {
+		$sql = "SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "brewery_review` WHERE status = '1'";
+		if (isset($data['filter_brewery_review_category_id']) && (int)$data['filter_brewery_review_category_id'] > 0) {
+			$sql .= " AND brewery_review_category_id = '" . (int)$data['filter_brewery_review_category_id'] . "'";
+		}
+		$query = $this->db->query($sql);
 		return (int)$query->row['total'];
 	}
 }
