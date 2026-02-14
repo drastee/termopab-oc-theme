@@ -47,4 +47,40 @@ class Project extends \Opencart\System\Engine\Model {
 		$query = $this->db->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "project` WHERE status = '1'");
 		return (int)$query->row['total'];
 	}
+
+	/**
+	 * Get projects by IDs (only active), preserving order of IDs.
+	 *
+	 * @param int[] $project_ids
+	 * @param int $language_id
+	 * @return array
+	 */
+	public function getProjectsByIds(array $project_ids, int $language_id = 0): array {
+		if (!$project_ids) {
+			return [];
+		}
+		if (!$language_id) {
+			$language_id = (int)$this->config->get('config_language_id');
+		}
+		$ids = array_map('intval', array_filter($project_ids));
+		if (!$ids) {
+			return [];
+		}
+		$sql = "SELECT p.*, pd.title
+			FROM `" . DB_PREFIX . "project` p
+			LEFT JOIN `" . DB_PREFIX . "project_description` pd ON (p.project_id = pd.project_id AND pd.language_id = '" . (int)$language_id . "')
+			WHERE p.status = '1' AND p.project_id IN (" . implode(',', $ids) . ")";
+		$query = $this->db->query($sql);
+		$by_id = [];
+		foreach ($query->rows as $row) {
+			$by_id[(int)$row['project_id']] = $row;
+		}
+		$ordered = [];
+		foreach ($ids as $id) {
+			if (isset($by_id[$id])) {
+				$ordered[] = $by_id[$id];
+			}
+		}
+		return $ordered;
+	}
 }

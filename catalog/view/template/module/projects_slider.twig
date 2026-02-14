@@ -1,0 +1,8 @@
+{% include '@termopab/sections/shared/cases/_cases-projects.twig' with {
+    projects: projects,
+    slider_nav: slider_nav|default(true),
+    title: title|default(''),
+    link_text: link_text|default(''),
+    link_href: link_href|default(''),
+    type: type|default('')
+} %}

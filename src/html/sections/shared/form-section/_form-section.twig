@@ -1,0 +1,47 @@
+{#
+  CTA Hop 2 (Termopab): questions-style layout with same content as CTA Hop (title lines, optional social block, form).
+  Pass: image_src, video_src, title_first, title_rest, social_block_enabled, intro_text, social_links, form_* vars.
+#}
+<section class="questions">
+    <div class="container">
+        <div class="questions__image-wrapper">
+            {% if image_src %}
+            <img src="{{ image_src }}" alt="">
+            {% endif %}
+            {% if video_src %}
+            <video class="explosion" autoplay muted loop playsinline>
+                <source src="{{ video_src }}" type="video/webm">
+            </video>
+            {% endif %}
+        </div>
+        <div class="questions__content-wrapper">
+            <h2 class="questions__title section-title">
+                {{ title_first }}{% if title_rest|default([])|length > 0 %}<br>{% for line in title_rest %}<span>{{ line }}</span>{% endfor %}{% endif %}
+            </h2>
+
+            <div class="questions__contact-form">
+                {% if social_block_enabled|default(0) and (intro_text|default('') or (social_links|default([])|length > 0)) %}
+                {% if intro_text %}<p>{{ intro_text }}</p>{% endif %}
+                {% if social_links|default([])|length > 0 %}
+                <ul class="social-buttons">
+                    {% for key, url in social_links %}
+                    <li><a href="{{ url }}" target="_blank" rel="noopener noreferrer" class="icon social social-{{ key }}"></a></li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% endif %}
+
+                {% include '@components/callback-form/_callback-form.twig' with {
+                    form_id: form_id|default('cta2-form'),
+                    form_class: form_class|default(''),
+                    form_label_name: form_label_name,
+                    form_placeholder_name: form_placeholder_name,
+                    form_label_phone: form_label_phone,
+                    form_placeholder_phone: form_placeholder_phone,
+                    form_button_text: form_button_text,
+                    form_agreement: form_agreement|default('')
+                } %}
+            </div>
+        </div>
+    </div>
+</section>

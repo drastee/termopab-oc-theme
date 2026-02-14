@@ -221,6 +221,8 @@ class Termopab extends \Opencart\System\Engine\Controller {
 			$routes = [
 				'extension/termopab/theme/termopab', 'extension/termopab/project',
 				'extension/termopab/install',
+				'extension/termopab/module/projects_slider',
+				'extension/termopab/module/callback_form',
 			];
 			$groups = $this->db->query("SELECT user_group_id, name, permission FROM `" . DB_PREFIX . "user_group`")->rows;
 			foreach ($groups as $row) {

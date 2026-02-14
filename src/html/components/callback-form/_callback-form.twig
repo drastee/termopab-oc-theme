@@ -1,16 +1,21 @@
-<form class="callback-form {{type ?? ''}}" action="" id="">
+{#
+  Reusable callback form (name + phone + submit).
+  Pass form_id, form_label_name, form_placeholder_name, form_label_phone, form_placeholder_phone, form_button_text, form_agreement (optional).
+  Used by CTA Hop and Form section (questions) modules.
+#}
+<form class="callback-form {{ form_class|default('') }}" action="" id="{{ form_id|default('callback-form') }}" method="post">
+    <label class="label" for="{{ form_id|default('callback-form') }}-name">{{ form_label_name|default('Ваше імʼя') }}</label>
+    <input id="{{ form_id|default('callback-form') }}-name" name="name" type="text" placeholder="{{ form_placeholder_name|default('Імʼя') }}">
 
-    <label class="label" for="telephone">Ваше імʼя</label>
-    <input id="name" name="name" type="text" placeholder="Імʼя">
+    <label class="label" for="{{ form_id|default('callback-form') }}-phone">{{ form_label_phone|default('Ваш телефон') }}</label>
+    <input id="{{ form_id|default('callback-form') }}-phone" name="phone" type="text" placeholder="{{ form_placeholder_phone|default('+_ (___) ___-__-__') }}">
 
-    <label class="label" for="phone">Ваш телефон</label>
-    <input id="phone" name="phone" type="text" placeholder="+_ (___) ___-__-__">
-    
     <button type="submit" class="btn btn-primary">
-        Отримати консультацію
+        {{ form_button_text|default('Отримати консультацію') }}
         <svg class="icon-arrow"><use href="#icon-short-arrow"></use></svg>
     </button>
 
-    <p class="agreement">Натискаючи на кнопку, ви даєте згоду на обробку своїх персональних даних і погоджуєтеся з <a href="#">Політикою конфіденційності</a></p>
-
+    {% if form_agreement is defined and form_agreement is not empty %}
+    <p class="agreement">{{ form_agreement|raw }}</p>
+    {% endif %}
 </form>

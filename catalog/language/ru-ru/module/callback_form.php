@@ -1,0 +1,10 @@
+<?php
+$_['form_label_name']         = 'Ваше имя';
+$_['form_placeholder_name']   = 'Имя';
+$_['form_label_phone']        = 'Ваш телефон';
+$_['form_placeholder_phone']  = '+_ (___) ___-__-__';
+$_['form_button_text']        = 'Получить консультацию';
+$_['form_agreement']          = 'Нажимая кнопку, вы даёте согласие на обработку персональных данных и соглашаетесь с <a href="#">Политикой конфиденциальности</a>';
+$_['default_title']           = 'Появились <span>вопросы?</span>';
+$_['default_title_first']    = 'Появились';
+$_['default_title_rest']     = 'вопросы?';

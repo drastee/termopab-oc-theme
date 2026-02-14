@@ -36,6 +36,10 @@ export default {
           dest: 'image',
         },
         {
+          src: 'src/assets/images/welder-with-tank.webp',
+          dest: 'image',
+        },
+        {
           src: 'src/assets/images/bottle.webp',
           dest: 'image',
         },

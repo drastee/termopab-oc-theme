@@ -1,0 +1,23 @@
+<?php
+$_['heading_title']    = 'CTA Hop 2 (Termopab)';
+$_['text_extension']   = 'Розширення';
+$_['text_success']     = 'Успіх: Модуль CTA Hop 2 (Termopab) змінено!';
+$_['text_edit']        = 'Редагувати модуль CTA Hop 2 (Termopab)';
+$_['entry_name']       = 'Назва модуля';
+$_['entry_title_lines'] = 'Заголовок (рядки)';
+$_['entry_social_block'] = 'Блок соцмереж';
+$_['entry_social_block_show'] = 'Показувати блок соцмереж';
+$_['entry_intro_text'] = 'Текст перед соцмережами';
+$_['entry_socials']    = 'Соцмережі';
+$_['entry_social_instagram'] = 'Instagram';
+$_['entry_social_whatsapp']  = 'WhatsApp';
+$_['entry_social_telegram']  = 'Telegram';
+$_['entry_social_facebook']  = 'Facebook';
+$_['entry_social_youtube']   = 'YouTube';
+$_['entry_status']     = 'Статус';
+$_['default_intro_text'] = 'Можете скористатися мессенджерами для вашої зручності, або залишити свої контакти';
+$_['help_socials']     = 'Оберіть, які соцмережі показувати в блоці. Посилання задаються в налаштуваннях теми (Design → Theme Termopab).';
+$_['button_save']      = 'Зберегти';
+$_['button_back']      = 'Назад';
+$_['error_permission'] = 'Увага: Немає прав для зміни цього модуля!';
+$_['error_name']       = 'Назва модуля повинна бути від 3 до 64 символів!';

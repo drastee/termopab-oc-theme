@@ -28,20 +28,15 @@
                 {% endif %}
                 {% endif %}
 
-                <form class="callback-form" action="" id="cta-hop-form">
-                    <label class="label" for="cta-hop-name">{{ form_label_name }}</label>
-                    <input id="cta-hop-name" name="name" type="text" placeholder="{{ form_placeholder_name }}">
-
-                    <label class="label" for="cta-hop-phone">{{ form_label_phone }}</label>
-                    <input id="cta-hop-phone" name="phone" type="text" placeholder="{{ form_placeholder_phone }}">
-
-                    <button type="submit" class="btn btn-primary">
-                        {{ form_button_text }}
-                        <svg class="icon-arrow"><use href="#icon-short-arrow"></use></svg>
-                    </button>
-
-                    {% if form_agreement %}<p class="agreement">{{ form_agreement|raw }}</p>{% endif %}
-                </form>
+                {% include '@components/callback-form/_callback-form.twig' with {
+                    form_id: 'cta-hop-form',
+                    form_label_name: form_label_name,
+                    form_placeholder_name: form_placeholder_name,
+                    form_label_phone: form_label_phone,
+                    form_placeholder_phone: form_placeholder_phone,
+                    form_button_text: form_button_text,
+                    form_agreement: form_agreement|default('')
+                } %}
             </div>
         </div>
     </div>

@@ -1,0 +1,99 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="float-end">
+        <button type="submit" form="form-module" data-bs-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa-solid fa-save"></i></button>
+        <a href="{{ back }}" data-bs-toggle="tooltip" title="{{ button_back }}" class="btn btn-light"><i class="fa-solid fa-reply"></i></a>
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ol class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+          <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-header"><i class="fa-solid fa-pencil"></i> {{ text_edit }}</div>
+      <div class="card-body">
+        <form id="form-module" action="{{ save }}" method="post" data-oc-toggle="ajax">
+          <input type="hidden" name="module_id" value="{{ module_id }}"/>
+          <div class="row mb-3">
+            <label for="input-name" class="col-sm-2 col-form-label">{{ entry_name }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control"/>
+              <div id="error-name" class="invalid-feedback"></div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_title }}</label>
+            <div class="col-sm-10">
+              <ul class="nav nav-tabs" role="tablist">
+                {% for language in languages %}
+                  <li class="nav-item">
+                    <a class="nav-link{% if loop.first %} active{% endif %}" data-bs-toggle="tab" href="#tab-title-{{ language.language_id }}">{% if language.image %}<img src="{{ language.image }}" alt="{{ language.name }}" class="me-1"/>{% endif %}{{ language.name }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+              <div class="tab-content mt-2">
+                {% for language in languages %}
+                  <div id="tab-title-{{ language.language_id }}" class="tab-pane{% if loop.first %} active{% endif %}">
+                    <input type="text" name="title[{{ language.language_id }}]" value="{{ (title[language.language_id] ?? '') }}" class="form-control" placeholder="{{ entry_title }}"/>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_link_text }}</label>
+            <div class="col-sm-10">
+              <ul class="nav nav-tabs" role="tablist">
+                {% for language in languages %}
+                  <li class="nav-item">
+                    <a class="nav-link{% if loop.first %} active{% endif %}" data-bs-toggle="tab" href="#tab-link-text-{{ language.language_id }}">{% if language.image %}<img src="{{ language.image }}" alt="{{ language.name }}" class="me-1"/>{% endif %}{{ language.name }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+              <div class="tab-content mt-2">
+                {% for language in languages %}
+                  <div id="tab-link-text-{{ language.language_id }}" class="tab-pane{% if loop.first %} active{% endif %}">
+                    <input type="text" name="link_text[{{ language.language_id }}]" value="{{ (link_text[language.language_id] ?? '') }}" class="form-control" placeholder="{{ entry_link_text }}"/>
+                  </div>
+                {% endfor %}
+              </div>
+              <div class="form-text">{{ help_link_text }}</div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_projects }}</label>
+            <div class="col-sm-10">
+              <div class="border rounded p-3 bg-light" style="max-height: 320px; overflow-y: auto;">
+                {% for project in projects %}
+                  <div class="form-check">
+                    <input type="checkbox" name="project_id[]" value="{{ project.project_id }}" id="project-{{ project.project_id }}" class="form-check-input"{% if project.selected %} checked{% endif %}/>
+                    <label class="form-check-label" for="project-{{ project.project_id }}">{{ project.title }}</label>
+                  </div>
+                {% else %}
+                  <p class="text-muted mb-0">{{ text_no_projects }}</p>
+                {% endfor %}
+              </div>
+              <div class="form-text">{{ help_projects }}</div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label for="input-status" class="col-sm-2 col-form-label">{{ entry_status }}</label>
+            <div class="col-sm-10">
+              <select name="status" id="input-status" class="form-select">
+                <option value="1"{% if status %} selected{% endif %}>{{ text_enabled }}</option>
+                <option value="0"{% if not status %} selected{% endif %}>{{ text_disabled }}</option>
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{{ footer }}

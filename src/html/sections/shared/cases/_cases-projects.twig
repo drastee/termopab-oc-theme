@@ -1,0 +1,28 @@
+<section class="cases {{ type|default('') }}">
+    <div class="container">
+
+        {% if title or link_text %}
+        <div class="cases__head">
+            {% if title %}<h2 class="cases__title">{{ title }}</h2>{% endif %}
+            {% if link_text %}<a class="cases__all-cases link" href="{{ link_href|default('#') }}">{{ link_text }} <svg class="link-arrow"><use href="#icon-short-arrow"></use></svg></a>{% endif %}
+        </div>
+        {% endif %}
+
+        <div class="cases__slider swiper">
+            <div class="swiper-wrapper">
+                {% for project in projects %}
+                <div class="swiper-slide cases__slide">
+                    <a href="{{ project.href }}" class="cases__logo">
+                        <img src="{{ project.logo }}" alt="{{ project.title|e('html_attr') }}">
+                    </a>
+                    <p class="cases__slider-title">{{ project.title }}</p>
+                </div>
+                {% endfor %}
+            </div>
+            {% if slider_nav|default(true) %}
+                {% include '@components/swiper-controls-oval/_swiper-controls-oval.twig' %}
+            {% endif %}
+        </div>
+
+    </div>
+</section>
