@@ -1,0 +1,21 @@
+{#
+  CTA Barrel (without form) – module version. Pass: title, subtitle, image_src, social_links.
+#}
+<section class="cta-thin-barrel">
+    <div class="container">
+        <div class="cta-thin-barrel__inner">
+            <div class="cta-thin-barrel__image-block">
+                <div class="cta-thin-barrel__image-wrap">
+                    {% if image_src %}<img src="{{ image_src }}" alt="">{% endif %}
+                </div>
+            </div>
+            <div class="cta-thin-barrel__text-block">
+                {% if title %}<h2 class="section-title section-title--secondary">{{ title }}</h2>{% endif %}
+                {% if subtitle %}<p>{{ subtitle|raw }}</p>{% endif %}
+                {% if social_links|default({})|length > 0 %}
+                {% include '@components/social-buttons/_social-buttons.twig' with { social_links: social_links } %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
