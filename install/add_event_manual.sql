@@ -5,7 +5,7 @@
 
 -- 0. Якщо "немає прав для доступу" — перевстановіть тему (Uninstall + Install).
 --    Або вручну додайте права: System → Users → User Groups → Edit →
---    Access + Modify: extension/termopab/project, extension/termopab/theme/termopab, extension/termopab/install
+--    Access + Modify: extension/termopab/project, extension/termopab/brewery_review, extension/termopab/theme/termopab, extension/termopab/install
 
 -- 1. Якщо меню не з'являється — termopab має бути в extension_install (автозавантаження).
 --    Виконайте (замініть tp_ на ваш префікс), якщо код termopab ще немає:
@@ -20,7 +20,7 @@ INSERT INTO `tp_event` (`code`, `description`, `trigger`, `action`, `status`, `s
 VALUES
 (
   'termopab_admin_menu',
-  'Termopab: меню «Тема Termopab» і «Проекти» в розділі Дизайн',
+  'Termopab: меню «Тема Termopab», «Проекти», «Огляди пивоварень» в розділі Дизайн',
   'admin/view/common/column_left/before',
   'extension/termopab/event/menu.onColumnLeft',
   1,

@@ -1,0 +1,65 @@
+{{ header }}
+<main id="content">
+  {{ content_top }}
+  {% set bc_home = breadcrumbs|first %}
+  {% set bc_rest = breadcrumbs|slice(1) %}
+  {% set bc_items = [] %}
+  {% for b in bc_rest %}
+    {% set bc_items = bc_items|merge([{ name: b.text, url: b.href }]) %}
+  {% endfor %}
+
+  {% include '@termopab/components/breadcrumbs/_breadcrumbs.twig' with {
+    home: { url: bc_home.href, name: bc_home.text },
+    breadcrumbs: bc_items,
+    background: "black"
+  } %}
+
+  <section class="project-single">
+    <div class="container">
+
+      {% include '@termopab/components/post-header/_post-header.twig' with {
+        title: heading|default(title),
+        subtitle: (heading and title and heading != title) ? title : null,
+        linkText: text_back_list,
+        href: back_list
+      } %}
+
+      {% if video_url %}
+        {% include '@termopab/components/video-md/_video-md.twig' with {
+          video_src: video_url,
+          poster_src: image|default(project_images[0].thumb|default(''))
+        } %}
+      {% endif %}
+
+      {% if project_images is not empty %}
+        {% set gallery_images = [] %}
+        {% for img in project_images %}
+          {% set gallery_images = gallery_images|merge([{ href: img.image, src: img.thumb }]) %}
+        {% endfor %}
+        {% include '@termopab/components/gallery-grid/_gallery-grid.twig' with {
+          images: gallery_images
+        } %}
+      {% endif %}
+
+      {% if logo and not video_url %}
+        <figure class="mb-4">
+          <img src="{{ logo }}" alt="{{ title }}" class="project-logo img-fluid"/>
+        </figure>
+      {% endif %}
+      {% if image and not video_url and project_images is empty %}
+        <figure class="mb-4">
+          <img src="{{ image }}" alt="{{ title }}" class="img-fluid rounded"/>
+        </figure>
+      {% endif %}
+      {% if description %}
+        <p class="lead text-muted">{{ description }}</p>
+      {% endif %}
+      {% if article %}
+        <div class="project-article">{{ article }}</div>
+      {% endif %}
+
+    </div>
+  </section>
+  {{ content_bottom }}
+</main>
+{{ footer }}

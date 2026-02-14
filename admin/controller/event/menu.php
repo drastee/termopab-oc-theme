@@ -90,6 +90,40 @@ class Menu extends \Opencart\System\Engine\Controller {
 			];
 		}
 
+		$brewery_review_file = $termopab_dir . '/controller/brewery_review.php';
+		if (is_file($brewery_review_file)) {
+			if (!isset($this->template) || !$this->template->getPath('extension/termopab')) {
+				$this->template->addPath('extension/termopab', $termopab_dir . '/view/template/');
+			}
+			if (method_exists($this->language, 'addPath')) {
+				$this->language->addPath('extension/termopab', $termopab_dir . '/language/');
+			}
+			$this->load->language('extension/termopab/brewery_review/list');
+
+			$items[] = [
+				'id'       => 'menu-termopab-brewery-reviews',
+				'icon'     => 'fa-solid fa-beer-mug-empty',
+				'name'     => $this->language->get('heading_title'),
+				'href'     => '',
+				'children' => [
+					[
+						'id'       => 'menu-termopab-brewery-reviews-list',
+						'icon'     => '',
+						'name'     => $this->language->get('text_menu_catalog') ?: $this->language->get('text_list'),
+						'href'     => $this->url->link('extension/termopab/brewery_review', 'user_token=' . $this->session->data['user_token']),
+						'children' => [],
+					],
+					[
+						'id'       => 'menu-termopab-brewery-reviews-add',
+						'icon'     => '',
+						'name'     => $this->language->get('button_add'),
+						'href'     => $this->url->link('extension/termopab/brewery_review.form', 'user_token=' . $this->session->data['user_token']),
+						'children' => [],
+					],
+				],
+			];
+		}
+
 		return $items;
 	}
 }

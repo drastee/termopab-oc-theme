@@ -126,6 +126,12 @@ class Termopab extends \Opencart\System\Engine\Controller {
 			'name' => $this->language->get('heading_title'),
 			'href' => $this->url->link('extension/termopab/project', 'language=' . $this->config->get('config_language')),
 		];
+		// Append Brewery reviews link (extension/termopab/brewery_review)
+		$this->load->language('extension/termopab/brewery_review/list');
+		$data['footer_menu'][] = [
+			'name' => $this->language->get('heading_title'),
+			'href' => $this->url->link('extension/termopab/brewery_review', 'language=' . $this->config->get('config_language')),
+		];
 	}
 
 	/**

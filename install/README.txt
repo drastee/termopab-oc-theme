@@ -13,5 +13,5 @@ OCMOD не используется.
 
 При удалении — событие снимается.
 
-Таблицы проектов (project, project_description, project_image):
-- Создаются при первом посещении extension/termopab/install или по кнопке «Створити таблиці» на странице списка проектов.
+Таблицы проектов (project, project_description, project_image) и оглядів пивоварень (brewery_review, brewery_review_description, brewery_review_image):
+- Создаются при первом посещении extension/termopab/install или по кнопке «Створити таблиці» на странице списка оглядів пивоварень.

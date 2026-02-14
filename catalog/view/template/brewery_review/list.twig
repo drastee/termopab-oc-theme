@@ -1,0 +1,24 @@
+{{ header }}
+<main id="content">
+  {{ content_top }}
+  {% set bc_home = breadcrumbs|first %}
+  {% set bc_rest = breadcrumbs|slice(1) %}
+  {% set bc_items = [] %}
+  {% for b in bc_rest %}
+    {% set bc_items = bc_items|merge([{ name: b.text, url: b.href }]) %}
+  {% endfor %}
+
+  {% include '@termopab/components/breadcrumbs/_breadcrumbs.twig' with {
+    home: { url: bc_home.href, name: bc_home.text },
+    breadcrumbs: bc_items
+  } %}
+
+  {% include '@termopab/sections/shared/posts/_posts.twig' with {
+    filter: false,
+    posts: projects,
+    pagination_data: pagination_data|default(null),
+    empty_message: projects is empty ? text_empty : null
+  } %}
+  {{ content_bottom }}
+</main>
+{{ footer }}

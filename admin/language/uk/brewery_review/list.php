@@ -1,0 +1,23 @@
+<?php
+$_['heading_title']   = 'Огляди пивоварень';
+$_['text_success']    = 'Успіх: Огляд змінено!';
+$_['text_list']       = 'Список оглядів';
+$_['text_menu_catalog'] = 'Каталог оглядів';
+$_['text_no_results'] = 'Оглядів поки немає.';
+$_['text_install_success'] = 'Таблиці оглядів успішно створено.';
+$_['text_install_error']   = 'Помилка встановлення:';
+$_['text_copy_success']    = 'Огляд успішно скопійовано.';
+$_['column_id']       = 'ID';
+$_['column_image']    = 'Зображення';
+$_['column_title']    = 'Назва';
+$_['column_sort_order'] = 'Порядок';
+$_['column_status']   = 'Статус';
+$_['column_action']   = 'Дія';
+$_['button_add']      = 'Додати огляд';
+$_['button_view']     = 'Переглянути на сайті';
+$_['button_edit']     = 'Змінити';
+$_['button_copy']     = 'Дублювати';
+$_['button_delete']   = 'Видалити';
+$_['button_install']  = 'Створити таблиці';
+$_['error_permission'] = 'Увага: Немає прав для зміни оглядів!';
+$_['error_copy']       = 'Не вдалося скопіювати огляд.';
