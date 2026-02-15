@@ -67,4 +67,36 @@ class BreweryReview extends \Opencart\System\Engine\Model {
 		$query = $this->db->query($sql);
 		return (int)$query->row['total'];
 	}
+
+	/**
+	 * Get brewery reviews by IDs (only active), preserving order of IDs.
+	 */
+	public function getBreweryReviewsByIds(array $brewery_review_ids, int $language_id = 0): array {
+		if (!$brewery_review_ids) {
+			return [];
+		}
+		if (!$language_id) {
+			$language_id = (int)$this->config->get('config_language_id');
+		}
+		$ids = array_map('intval', array_filter($brewery_review_ids));
+		if (!$ids) {
+			return [];
+		}
+		$sql = "SELECT b.*, bd.title, bd.description
+			FROM `" . DB_PREFIX . "brewery_review` b
+			LEFT JOIN `" . DB_PREFIX . "brewery_review_description` bd ON (b.brewery_review_id = bd.brewery_review_id AND bd.language_id = '" . (int)$language_id . "')
+			WHERE b.status = '1' AND b.brewery_review_id IN (" . implode(',', $ids) . ")";
+		$query = $this->db->query($sql);
+		$by_id = [];
+		foreach ($query->rows as $row) {
+			$by_id[(int)$row['brewery_review_id']] = $row;
+		}
+		$ordered = [];
+		foreach ($ids as $id) {
+			if (isset($by_id[$id])) {
+				$ordered[] = $by_id[$id];
+			}
+		}
+		return $ordered;
+	}
 }

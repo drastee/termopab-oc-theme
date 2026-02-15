@@ -249,6 +249,7 @@ class Termopab extends \Opencart\System\Engine\Controller {
 				'extension/termopab/theme/termopab', 'extension/termopab/project', 'extension/termopab/brewery_review', 'extension/termopab/brewery_review_category',
 				'extension/termopab/install',
 				'extension/termopab/module/projects_slider',
+				'extension/termopab/module/brewery_reviews_slider',
 				'extension/termopab/module/callback_form',
 				'extension/termopab/module/cta_barrel',
 			];

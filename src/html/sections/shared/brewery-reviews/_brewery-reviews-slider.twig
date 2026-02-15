@@ -1,0 +1,25 @@
+<section class="brewery-reviews">
+    <div class="container brewery-reviews__head">
+        {% if title %}<h2 class="brewery-reviews__title">{{ title }}</h2>{% endif %}
+        {% if link_text %}<a class="brewery-reviews__all link" href="{{ link_href|default('#') }}">{{ link_text }} <svg class="link-arrow"><use href="#icon-short-arrow"></use></svg></a>{% endif %}
+    </div>
+    <div class="container-wide">
+        <div class="brewery-reviews__slider swiper">
+            <div class="swiper-wrapper">
+                {% for review in reviews %}
+                <div class="swiper-slide">
+                    {% include '@components/post-card/_post-card.twig' with {
+                        image: review.image,
+                        title: review.title,
+                        description: review.description,
+                        href: review.href
+                    } %}
+                </div>
+                {% endfor %}
+            </div>
+            {% if slider_nav|default(true) %}
+                {% include '@components/swiper-controls-oval/_swiper-controls-oval.twig' %}
+            {% endif %}
+        </div>
+    </div>
+</section>
