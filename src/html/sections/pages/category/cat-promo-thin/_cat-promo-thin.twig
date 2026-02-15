@@ -2,7 +2,8 @@
     <div class="container">
         <div class="cat-promo-thin__inner">
             <div class="cat-promo-thin__first">
-                <img src="/src/assets/images/cat-promo-thin.webp" alt="">
+                <img src="{{ image|default('/src/assets/images/cat-promo-thin.webp') }}" class="img-base" alt="">
+                <img src="{{ image_hover|default(image|default('/src/assets/images/cat-promo-thin.webp')) }}" class="img-hover" alt="">
             </div>
             <div class="cat-promo-thin__last">
                 <h2 class="cat-promo-thin__title">Мікро-пивоварні на 100 літрів</h2>

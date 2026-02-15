@@ -49,6 +49,7 @@ $_['button_down']      = 'Вниз';
 $_['button_remove']    = 'Удалить';
 
 $_['text_install_project_tables'] = 'Создать таблицы проектов';
+$_['text_install_full_tables']    = 'Создать все таблицы (проекты, обзоры, category)';
 $_['text_projects']    = 'Проекты';
 $_['text_projects_add'] = 'Создать проект';
 $_['text_brewery_reviews'] = 'Обзоры пивоварень';

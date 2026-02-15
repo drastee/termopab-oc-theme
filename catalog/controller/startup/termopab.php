@@ -5,6 +5,7 @@ class Termopab extends \Opencart\System\Engine\Controller {
 	public function index(): void {
 		if ($this->config->get('theme_termopab_status')) {
 			$this->addDesignPath();
+			$this->template->addPath('extension/termopab', DIR_EXTENSION . 'termopab/catalog/view/template/');
 			$this->event->register('view/*/before', new \Opencart\System\Engine\Action('extension/termopab/startup/termopab.event'));
 		}
 	}

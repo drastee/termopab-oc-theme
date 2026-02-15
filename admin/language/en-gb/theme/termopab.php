@@ -44,6 +44,7 @@ $_['entry_menu_item_url'] = 'URL';
 
 // Button
 $_['text_install_project_tables'] = 'Create project tables';
+$_['text_install_full_tables']    = 'Create all tables (projects, brewery reviews, category)';
 $_['text_projects']    = 'Projects';
 $_['text_projects_add'] = 'Add project';
 $_['text_brewery_reviews'] = 'Brewery reviews';

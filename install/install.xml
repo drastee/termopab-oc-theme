@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+  <name>Termopab: Category Layout Custom Fields UI</name>
+  <version>1.0</version>
+  <author>Termopab</author>
+  <link></link>
+  <file path="admin/view/template/catalog/category_form.twig">
+    <operation>
+      <search><![CDATA[                </table>
+              </div>
+            </div>
+          </div>
+          <input type="hidden" name="category_id"]]></search>
+      <add position="replace"><![CDATA[                </table>
+              </div>
+              <div id="custom-fields-landing" class="mt-3" style="display:none;">
+                <div class="row mb-3">
+                  <label class="col-sm-2 col-form-label">Landing Video Title</label>
+                  <div class="col-sm-10">
+                    <input type="text" name="landing_video_title" value="{{ landing_video_title|default('') }}" class="form-control"/>
+                  </div>
+                </div>
+              </div>
+              <div id="custom-fields-tech" class="mt-3" style="display:none;">
+                <div class="row mb-3">
+                  <label class="col-sm-2 col-form-label">Tech Spec Link</label>
+                  <div class="col-sm-10">
+                    <input type="text" name="tech_spec_link" value="{{ tech_spec_link|default('') }}" class="form-control"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <input type="hidden" name="category_id"]]></add>
+    </operation>
+    <operation>
+      <search><![CDATA[$('#category-filter').on('click', '.btn', function() {
+    $(this).parent().parent().remove();
+});
+//--></script>]]></search>
+      <add position="before"><![CDATA[
+(function() {
+  function toggleCustomFields() {
+    var layoutSelect = document.querySelector('select[name="category_layout[0]"]');
+    var landingEl = document.getElementById('custom-fields-landing');
+    var techEl = document.getElementById('custom-fields-tech');
+    if (!layoutSelect || !landingEl || !techEl) return;
+    var layoutId = parseInt(layoutSelect.value, 10) || 0;
+    landingEl.style.display = layoutId === 15 ? '' : 'none';
+    techEl.style.display = layoutId === 16 ? '' : 'none';
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', toggleCustomFields);
+  } else {
+    toggleCustomFields();
+  }
+  $(document).on('change', 'select[name="category_layout[0]"]', toggleCustomFields);
+})();
+]]></add>
+    </operation>
+  </file>
+</modification>

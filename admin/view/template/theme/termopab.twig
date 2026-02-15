@@ -22,6 +22,8 @@
         <a href="{{ projects_list }}" class="btn btn-outline-primary me-2"><i class="fa-solid fa-folder-open"></i> {{ text_projects }}</a>
         <a href="{{ projects_add }}" class="btn btn-outline-success me-2"><i class="fa-solid fa-plus"></i> {{ text_projects_add }}</a>
         <a href="{{ install_project_tables }}" class="btn btn-outline-secondary me-2" title="{{ text_install_project_tables }}"><i class="fa-solid fa-database"></i> {{ text_install_project_tables }}</a>
+        <a href="{{ install_full_tables }}" class="btn btn-outline-secondary me-2" title="{{ text_install_full_tables }}"><i class="fa-solid fa-database"></i> {{ text_install_full_tables }}</a>
+        <a href="{{ sync_events }}" class="btn btn-outline-info me-2" title="Синхронізувати події"><i class="fa-solid fa-sync"></i> Синхронізувати події</a>
         <hr class="my-3"/>
         <a href="{{ brewery_reviews_list }}" class="btn btn-outline-primary me-2"><i class="fa-solid fa-beer-mug-empty"></i> {{ text_brewery_reviews }}</a>
         <a href="{{ brewery_reviews_add }}" class="btn btn-outline-success me-2"><i class="fa-solid fa-plus"></i> {{ text_brewery_reviews_add }}</a>
@@ -67,6 +69,32 @@
                   <label for="input-email" class="col-sm-2 col-form-label">{{ entry_email }}</label>
                   <div class="col-sm-10">
                     <input type="text" name="theme_termopab_email" value="{{ theme_termopab_email }}" placeholder="{{ entry_email }}" id="input-email" class="form-control"/>
+                  </div>
+                </div>
+                <hr class="my-4">
+                <h6 class="mb-3">{{ entry_category_layout_parent|default('Layout Parent (category)') }}</h6>
+                <div class="row mb-3">
+                  <label for="input-layout-parent" class="col-sm-2 col-form-label">{{ entry_layout_parent|default('Parent layout') }}</label>
+                  <div class="col-sm-10">
+                    <select name="theme_termopab_layout_parent_id" id="input-layout-parent" class="form-select">
+                      <option value="">{{ text_none|default('— None —') }}</option>
+                      {% for layout in layouts %}
+                        <option value="{{ layout.layout_id }}"{% if layout.layout_id == theme_termopab_layout_parent_id %} selected{% endif %}>{{ layout.name }}</option>
+                      {% endfor %}
+                    </select>
+                    <div class="form-text">{{ help_layout_parent|default('Categories with this layout use the Parent template and slot builder.') }}</div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="input-layout-child" class="col-sm-2 col-form-label">{{ entry_layout_child|default('Child layout') }}</label>
+                  <div class="col-sm-10">
+                    <select name="theme_termopab_layout_child_id" id="input-layout-child" class="form-select">
+                      <option value="">{{ text_none|default('— None —') }}</option>
+                      {% for layout in layouts %}
+                        <option value="{{ layout.layout_id }}"{% if layout.layout_id == theme_termopab_layout_child_id %} selected{% endif %}>{{ layout.name }}</option>
+                      {% endfor %}
+                    </select>
+                    <div class="form-text">{{ help_layout_child|default('Categories with this layout use the Child template and slot builder.') }}</div>
                   </div>
                 </div>
                 <hr class="my-4">

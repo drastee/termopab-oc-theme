@@ -1,26 +1,23 @@
-<section class="cat-promo {{type}}">
+<section class="cat-promo {{ type|default('') }}">
     <div class="container">
         <h2 class="title-secondary">{{title}}</h2>
         <div class="cat-promo__grid">
             <div class="cat-promo__buttons">
-                <a class="link" href="#">Детальніше <svg class="link-arrow"><use href="#icon-short-arrow"></use></svg></a>
+                <a class="link" href="{{ link|default('#') }}">{{ link_text|default('Детальніше') }} <svg class="link-arrow"><use href="#icon-short-arrow"></use></svg></a>
             </div>
             <div class="cat-promo__content">
-                <div class="cat-promo__description">
-                    <p>
-                        {{description}}
-                    </p>
-                    <p><b>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</b></p>
-                    <ul class="marked">
-                        <li>объем инвестиций</li>
-                        <li>выручку</li>
-                        <li>расходы</li>
-                    </ul>
+                <div class="cat-promo__description typography">
+                    {% if description is defined and description is not empty %}
+                        {{ description|raw }}
+                    {% else %}
+                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                    {% endif %}
                 </div>
 
             </div>
             <div class="cat-promo__image">
-                <img src="{{image}}" alt="Пивоварня">
+                <img src="{{ image }}" class="img-base" alt="Пивоварня">
+                <img src="{{ image_hover|default(image) }}" class="img-hover" alt="Пивоварня">
             </div>
         </div>
     </div>

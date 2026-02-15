@@ -91,6 +91,17 @@ class Install extends \Opencart\System\Engine\Controller {
 				PRIMARY KEY (`brewery_review_category_id`,`language_id`),
 				KEY `language_id` (`language_id`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+			"CREATE TABLE IF NOT EXISTS `" . $prefix . "category_content` (
+				`category_content_id` int(11) NOT NULL AUTO_INCREMENT,
+				`category_id` int(11) NOT NULL,
+				`store_id` int(11) NOT NULL DEFAULT 0,
+				`layout_type` varchar(32) NOT NULL,
+				`position` varchar(32) NOT NULL,
+				`code` varchar(64) NOT NULL,
+				`sort_order` int(11) NOT NULL DEFAULT 0,
+				PRIMARY KEY (`category_content_id`),
+				KEY `category_store_layout` (`category_id`,`store_id`,`layout_type`,`position`,`sort_order`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
 		];
 
 		$alters = [
@@ -98,6 +109,8 @@ class Install extends \Opencart\System\Engine\Controller {
 			"ALTER TABLE `" . $prefix . "project` ADD COLUMN `video` varchar(512) DEFAULT NULL AFTER `logo`",
 			"ALTER TABLE `" . $prefix . "project_description` ADD COLUMN `heading` varchar(255) DEFAULT NULL AFTER `language_id`",
 			"ALTER TABLE `" . $prefix . "brewery_review` ADD COLUMN `brewery_review_category_id` int(11) NOT NULL DEFAULT 0 AFTER `brewery_review_id`",
+			"ALTER TABLE `" . $prefix . "category` ADD COLUMN `landing_video_title` varchar(255) DEFAULT NULL",
+			"ALTER TABLE `" . $prefix . "category` ADD COLUMN `tech_spec_link` varchar(255) DEFAULT NULL",
 		];
 
 		try {

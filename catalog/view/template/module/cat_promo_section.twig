@@ -1,0 +1,19 @@
+<section class="cat-promo {{ type }}">
+    <div class="container">
+        <h2 class="title-secondary">{{ title }}</h2>
+        <div class="cat-promo__grid">
+            <div class="cat-promo__buttons">
+                <a class="link" href="{{ link_url }}">{{ link_text }} <svg class="link-arrow"><use href="#icon-short-arrow"></use></svg></a>
+            </div>
+            <div class="cat-promo__content">
+                <div class="cat-promo__description typography">
+                    {{ description|raw }}
+                </div>
+            </div>
+            <div class="cat-promo__image">
+                <img src="{{ image }}" class="img-base" alt="">
+                <img src="{{ image_hover }}" class="img-hover" alt="">
+            </div>
+        </div>
+    </div>
+</section>

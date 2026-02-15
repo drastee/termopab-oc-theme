@@ -44,6 +44,7 @@ $_['entry_menu_item_url'] = 'URL';
 
 // Button
 $_['text_install_project_tables'] = 'Створити таблиці проєктів';
+$_['text_install_full_tables']    = 'Створити всі таблиці (проєкти, огляди, category)';
 $_['text_projects']    = 'Проєкти';
 $_['text_projects_add'] = 'Створити проєкт';
 $_['text_brewery_reviews'] = 'Огляди пивоварень';

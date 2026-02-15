@@ -48,6 +48,10 @@ export default {
           dest: 'image',
         },
         {
+          src: 'src/assets/images/cap.webp',
+          dest: 'image',
+        },
+        {
           src: 'src/assets/images/subcategory/barrel.webp',
           dest: 'image',
         },
