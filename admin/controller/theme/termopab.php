@@ -304,6 +304,18 @@ class Termopab extends \Opencart\System\Engine\Controller {
 			} catch (\Throwable $e) {
 			}
 
+			$category_alters = [
+				"ALTER TABLE `" . $prefix . "category` ADD COLUMN `hero_image` varchar(255) DEFAULT NULL",
+				"ALTER TABLE `" . $prefix . "category` ADD COLUMN `hero_image_mobile` varchar(255) DEFAULT NULL",
+				"ALTER TABLE `" . $prefix . "category` ADD COLUMN `breadcrumb_background` varchar(32) DEFAULT 'black'",
+			];
+			foreach ($category_alters as $query) {
+				try {
+					$this->db->query($query);
+				} catch (\Throwable $e) {
+				}
+			}
+
 			// Ensure termopab is in extension_install so autoloader registers paths (required for event menu)
 			$this->load->model('setting/extension');
 			if (!$this->model_setting_extension->getInstallByCode('termopab')) {
@@ -362,7 +374,7 @@ class Termopab extends \Opencart\System\Engine\Controller {
 				'sort_order'  => 0,
 			]);
 
-			// Events: category form custom fields (landing_video_title, tech_spec_link)
+			// Events: category form custom fields (hero_image, breadcrumb_background)
 			$this->model_setting_event->deleteEventByCode('termopab_admin_category');
 			$this->model_setting_event->addEvent([
 				'code'        => 'termopab_admin_category',

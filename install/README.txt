@@ -16,9 +16,9 @@ OCMOD не используется.
 Таблицы проектов (project, project_description, project_image) и оглядів пивоварень (brewery_review, brewery_review_description, brewery_review_image):
 - Создаются при первом посещении extension/termopab/install или по кнопке «Створити таблиці» на странице списка оглядів пивоварень.
 
-Conditional Category Layout (Layout 15 = landing, Layout 16 = tech):
-- Колонки landing_video_title, tech_spec_link добавляются в таблицу category при запуске extension/termopab/install
-  (кнопка «Створити всі таблиці» в налаштуваннях теми).
+Conditional Category Layout (hero_image, breadcrumb_background):
+- Колонки hero_image, breadcrumb_background добавляются в таблицу category при установке темы или при запуске extension/termopab/install
+  (кнопка «Створити таблиці проєктів» в налаштуваннях теми).
 - События загружают/сохраняют поля в админке. OCMOD устанавливается ТОЛЬКО через Extensions → Installer:
 
   Как упаковать и установить OCMOD (OpenCart 4):
@@ -32,4 +32,4 @@ Conditional Category Layout (Layout 15 = landing, Layout 16 = tech):
 
   Примечание: Extensions → Modifications не принимает загрузку XML напрямую — только .ocmod.zip через Installer.
 
-- Создайте Layout 15 и Layout 16 в Design → Layouts, route product/category. В категории выберите Layout 15 или 16 в Design.
+- У налаштуваннях теми (вкладка Статус) вкажіть макет для батьківської/лендинг категорії. У формі категорії при виборі цього макету з’являться поля «Фонове зображення шапки» та «Хлібні крихти».

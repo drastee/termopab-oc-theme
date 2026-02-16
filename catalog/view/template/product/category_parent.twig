@@ -1,5 +1,24 @@
 {{ header }}
 <main>
+{% if hero_image|default('') or hero_image_mobile|default('') %}
+{% include '@termopab/sections/shared/hero-secondary/_hero-secondary.twig' with {
+  background_image_desktop: hero_image|default(hero_image_mobile)|default(''),
+  background_image_mobile: hero_image_mobile|default(hero_image)|default(''),
+  title: heading_title|default(''),
+  class: ''
+} %}
+{% endif %}
+{% set bc_rest = breadcrumbs|slice(1) %}
+{% set bc_items = [] %}
+{% for b in bc_rest %}
+  {% set bc_items = bc_items|merge([{ name: b.text, url: b.href }]) %}
+{% endfor %}
+{% include '@termopab/components/breadcrumbs/_breadcrumbs.twig' with {
+  home: { url: home_url|default('/'), name: text_home|default('Головна') },
+  breadcrumbs: bc_items,
+  background: breadcrumb_background|default('black')
+} %}
+
 {{ content_top }}
 {{ parent_top|default('') }}
 {# <div id="product-category" class="container" data-layout="parent">
@@ -11,8 +30,8 @@
   <div class="row">{{ column_left }}
     <div id="content" class="col">{{ content_top }}
       {{ parent_top|default('') }}
-      {% if landing_video_title|default('') %}
-        <div class="category-landing-video-title mb-3">{{ landing_video_title }}</div>
+      {% if hero_image|default('') %}
+        <div class="category-hero-image mb-3" style="background-image:url('{{ hero_image }}'); background-size:cover; min-height:200px;"></div>
       {% endif %}
       <h1>{{ heading_title }}</h1>
       {% if image or description %}

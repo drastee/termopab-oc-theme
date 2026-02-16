@@ -7,11 +7,6 @@
   </ul>
   <div class="row">{{ column_left }}
     <div id="content" class="col">{{ content_top }}
-      {% if tech_spec_link|default('') %}
-        <div class="category-tech-spec-link mb-3">
-          <a href="{{ tech_spec_link }}" class="btn btn-outline-primary">{{ text_tech_spec|default('Технічні характеристики') }}</a>
-        </div>
-      {% endif %}
       <h1>{{ heading_title }}</h1>
       {% if image or description %}
         <div class="row">

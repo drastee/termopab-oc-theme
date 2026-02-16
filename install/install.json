@@ -1,8 +1,8 @@
 {
   "extension_id": 0,
   "extension_download_id": 0,
-  "name": "Termopab: Category Layout Custom Fields UI",
-  "description": "Adds landing_video_title and tech_spec_link fields to category form Design tab, shown when Layout 15 or 16 is selected.",
+  "name": "Termopab: Category hero image and breadcrumb",
+  "description": "Adds hero_image and breadcrumb_background to category form Design tab, shown when layout matches theme parent layout.",
   "code": "category_layout_mod",
   "version": "1.0",
   "author": "Termopab",

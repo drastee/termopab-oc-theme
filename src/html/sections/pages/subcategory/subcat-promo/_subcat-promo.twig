@@ -14,7 +14,8 @@
                 </div>
             </dib>
             <div class="subcat-promo__image">
-                <img src="/src/assets/images/category/product.webp" alt="">
+                <img src="{{ image|default('/src/assets/images/category/product.webp') }}" class="img-base" alt="">
+                <img src="{{ image_hover|default('/src/assets/images/category/product-hover.webp') }}" class="img-hover" alt="">
             </div>
         </div>
     </div>

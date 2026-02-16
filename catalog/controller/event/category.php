@@ -23,18 +23,34 @@ class Category extends \Opencart\System\Engine\Controller {
 		$layout_child_id = (int)$this->config->get('theme_termopab_layout_child_id') ?: 20;
 		$store_id = (int)$this->config->get('config_store_id');
 
+		$has_mobile = $this->db->query("SHOW COLUMNS FROM `" . DB_PREFIX . "category` LIKE 'hero_image_mobile'")->num_rows > 0;
+		$sel = $has_mobile ? "`hero_image`, `hero_image_mobile`, `breadcrumb_background`" : "`hero_image`, `breadcrumb_background`";
+		$row = $this->db->query("SELECT " . $sel . " FROM `" . DB_PREFIX . "category` WHERE `category_id` = '" . (int)$category_id . "'");
+		if ($row->num_rows) {
+			$hero_path = trim((string)($row->row['hero_image'] ?? ''));
+			$data['hero_image'] = $hero_path ? rtrim((string)$this->config->get('config_url'), '/') . '/image/' . $hero_path : '';
+			$hero_mobile_path = $has_mobile ? trim((string)($row->row['hero_image_mobile'] ?? '')) : '';
+			$data['hero_image_mobile'] = $hero_mobile_path ? rtrim((string)$this->config->get('config_url'), '/') . '/image/' . $hero_mobile_path : '';
+			$bc = $row->row['breadcrumb_background'] ?? 'black';
+			$data['breadcrumb_background'] = in_array($bc, ['black', 'white'], true) ? $bc : 'black';
+		} else {
+			$data['hero_image'] = '';
+			$data['hero_image_mobile'] = '';
+			$data['breadcrumb_background'] = 'black';
+		}
+
 		if ($layout_id === $layout_parent_id) {
 			$route = 'extension/termopab/product/category_parent';
-			$row = $this->db->query("SELECT `landing_video_title` FROM `" . DB_PREFIX . "category` WHERE `category_id` = '" . (int)$category_id . "'");
-			$data['landing_video_title'] = $row->num_rows ? ($row->row['landing_video_title'] ?? '') : '';
 			$this->load->language('extension/termopab/theme/termopab');
+			$this->load->language('default');
+			$home_raw = $this->language->get('text_home');
+			$data['text_home'] = trim(strip_tags($home_raw ?? '')) ?: 'Головна';
+			$data['home_url'] = $this->url->link('common/home', 'language=' . $this->config->get('config_language'));
 			$data['text_content_expand'] = $this->language->get('text_content_expand');
 			$data['text_content_collapse'] = $this->language->get('text_content_collapse');
 			$this->injectSlotModules($data, $category_id, $store_id, 'parent');
 		} elseif ($layout_id === $layout_child_id) {
 			$route = 'extension/termopab/product/category_child';
-			$row = $this->db->query("SELECT `tech_spec_link` FROM `" . DB_PREFIX . "category` WHERE `category_id` = '" . (int)$category_id . "'");
-			$data['tech_spec_link'] = $row->num_rows ? ($row->row['tech_spec_link'] ?? '') : '';
 			$this->injectSlotModules($data, $category_id, $store_id, 'child');
 		}
 	}

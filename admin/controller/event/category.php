@@ -2,51 +2,64 @@
 namespace Opencart\Admin\Controller\Extension\Termopab\Event;
 
 /**
- * Event controller: Conditional Category Layout — load/save custom fields
- * (landing_video_title, tech_spec_link) for category layouts 15 and 16.
+ * Event controller: load/save category custom fields
+ * (hero_image, breadcrumb_background) for category form.
  */
 class Category extends \Opencart\System\Engine\Controller {
 
 	/**
 	 * Hook: admin/view/catalog/category_form/before
-	 * Load landing_video_title and tech_spec_link into $data for Twig.
 	 */
 	public function onCategoryFormBefore(string &$route, array &$data, string &$code = '', string &$output = ''): void {
 		$data['termopab_layout_parent_id'] = (int)$this->config->get('theme_termopab_layout_parent_id') ?: 19;
 		$data['termopab_layout_child_id'] = (int)$this->config->get('theme_termopab_layout_child_id') ?: 20;
 		$category_id = (int)($data['category_id'] ?? 0);
-		if ($category_id <= 0) {
-			$data['landing_video_title'] = '';
-			$data['tech_spec_link'] = '';
-			return;
+
+		$data['hero_image'] = '';
+		$data['hero_image_mobile'] = '';
+		$data['breadcrumb_background'] = 'black';
+
+		if ($category_id > 0) {
+			$cols = $this->db->query("SHOW COLUMNS FROM `" . DB_PREFIX . "category` LIKE 'hero_image'");
+			if ($cols->num_rows > 0) {
+				$cols_mobile = $this->db->query("SHOW COLUMNS FROM `" . DB_PREFIX . "category` LIKE 'hero_image_mobile'");
+				$sel = $cols_mobile->num_rows > 0 ? "`hero_image`, `hero_image_mobile`, `breadcrumb_background`" : "`hero_image`, `breadcrumb_background`";
+				$query = $this->db->query("SELECT " . $sel . " FROM `" . DB_PREFIX . "category` WHERE `category_id` = '" . (int)$category_id . "'");
+				if ($query->num_rows) {
+					$data['hero_image'] = $query->row['hero_image'] ?? '';
+					$data['hero_image_mobile'] = $cols_mobile->num_rows > 0 ? ($query->row['hero_image_mobile'] ?? '') : '';
+					$bc = $query->row['breadcrumb_background'] ?? 'black';
+					$data['breadcrumb_background'] = in_array($bc, ['black', 'white'], true) ? $bc : 'black';
+				}
+			}
 		}
 
-		$query = $this->db->query("SELECT `landing_video_title`, `tech_spec_link` FROM `" . DB_PREFIX . "category` WHERE `category_id` = '" . (int)$category_id . "'");
-		if ($query->num_rows) {
-			$data['landing_video_title'] = $query->row['landing_video_title'] ?? '';
-			$data['tech_spec_link'] = $query->row['tech_spec_link'] ?? '';
+		$this->load->model('tool/image');
+		$data['hero_placeholder'] = $this->model_tool_image->resize('no_image.png', (int)$this->config->get('config_image_default_width'), (int)$this->config->get('config_image_default_height'));
+		if (!empty($data['hero_image']) && is_file(DIR_IMAGE . html_entity_decode($data['hero_image'], ENT_QUOTES, 'UTF-8'))) {
+			$data['hero_thumb'] = $this->model_tool_image->resize($data['hero_image'], (int)$this->config->get('config_image_default_width'), (int)$this->config->get('config_image_default_height'));
 		} else {
-			$data['landing_video_title'] = '';
-			$data['tech_spec_link'] = '';
+			$data['hero_thumb'] = $data['hero_placeholder'];
+		}
+		if (!empty($data['hero_image_mobile']) && is_file(DIR_IMAGE . html_entity_decode($data['hero_image_mobile'], ENT_QUOTES, 'UTF-8'))) {
+			$data['hero_thumb_mobile'] = $this->model_tool_image->resize($data['hero_image_mobile'], (int)$this->config->get('config_image_default_width'), (int)$this->config->get('config_image_default_height'));
+		} else {
+			$data['hero_thumb_mobile'] = $data['hero_placeholder'];
 		}
 	}
 
 	/**
 	 * Hook: admin/model/catalog/category.addCategory/after
-	 * Save custom fields. $args = [$data], $output = new category_id.
 	 */
 	public function onAddCategoryAfter(string &$route, array &$args, &$output): void {
 		if (!is_numeric($output) || (int)$output <= 0) {
 			return;
 		}
-		$category_id = (int)$output;
-		$data = $args[0] ?? [];
-		$this->saveCustomFields($category_id, $data);
+		$this->saveCustomFields((int)$output, $args[0] ?? []);
 	}
 
 	/**
 	 * Hook: admin/model/catalog/category.editCategory/after
-	 * Save custom fields. $args = [$category_id, $data], $output = null.
 	 */
 	public function onEditCategoryAfter(string &$route, array &$args, &$output): void {
 		if (count($args) < 2) {
@@ -61,18 +74,22 @@ class Category extends \Opencart\System\Engine\Controller {
 	}
 
 	private function saveCustomFields(int $category_id, array $data): void {
-		$landing_video_title = isset($data['landing_video_title']) ? $this->db->escape((string)$data['landing_video_title']) : '';
-		$tech_spec_link = isset($data['tech_spec_link']) ? $this->db->escape((string)$data['tech_spec_link']) : '';
-
-		// Check if columns exist (they may not if install not run yet)
-		$cols = $this->db->query("SHOW COLUMNS FROM `" . DB_PREFIX . "category` LIKE 'landing_video_title'");
+		$cols = $this->db->query("SHOW COLUMNS FROM `" . DB_PREFIX . "category` LIKE 'hero_image'");
 		if ($cols->num_rows === 0) {
 			return;
 		}
 
+		$hero_image = isset($data['hero_image']) ? $this->db->escape(trim((string)$data['hero_image'])) : '';
+		$hero_image_mobile = isset($data['hero_image_mobile']) ? $this->db->escape(trim((string)$data['hero_image_mobile'])) : '';
+		$bc = isset($data['breadcrumb_background']) ? (string)$data['breadcrumb_background'] : 'black';
+		$breadcrumb_background = in_array($bc, ['black', 'white'], true) ? "'" . $this->db->escape($bc) . "'" : "'black'";
+
+		$cols_mobile = $this->db->query("SHOW COLUMNS FROM `" . DB_PREFIX . "category` LIKE 'hero_image_mobile'");
+		$set_mobile = $cols_mobile->num_rows > 0 ? "`hero_image_mobile` = '" . $hero_image_mobile . "', " : '';
+
 		$this->db->query("UPDATE `" . DB_PREFIX . "category` SET
-			`landing_video_title` = '" . $landing_video_title . "',
-			`tech_spec_link` = '" . $tech_spec_link . "'
+			`hero_image` = '" . $hero_image . "',
+			" . $set_mobile . "`breadcrumb_background` = " . $breadcrumb_background . "
 			WHERE `category_id` = '" . (int)$category_id . "'");
 	}
 }
