@@ -336,6 +336,8 @@ class Termopab extends \Opencart\System\Engine\Controller {
 				'extension/termopab/module/brewery_reviews_slider',
 				'extension/termopab/module/callback_form',
 				'extension/termopab/module/cta_barrel',
+				'extension/termopab/module/cta_spikelet',
+				'extension/termopab/module/cat_promo_thin',
 			];
 			$groups = $this->db->query("SELECT user_group_id, name, permission FROM `" . DB_PREFIX . "user_group`")->rows;
 			foreach ($groups as $row) {

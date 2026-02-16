@@ -40,6 +40,14 @@ export default {
           dest: 'image',
         },
         {
+          src: 'src/assets/images/cta/welder-spikelet.webp',
+          dest: 'image',
+        },
+        {
+          src: 'src/assets/images/cta/welder-spikelet-mob.webp',
+          dest: 'image',
+        },
+        {
           src: 'src/assets/images/bottle.webp',
           dest: 'image',
         },

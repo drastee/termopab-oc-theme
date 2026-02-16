@@ -6,17 +6,25 @@
                 <img src="{{ image_hover|default(image|default('/src/assets/images/cat-promo-thin.webp')) }}" class="img-hover" alt="">
             </div>
             <div class="cat-promo-thin__last">
+                {% if title is defined and title is not same as('') %}
+                <h2 class="cat-promo-thin__title">{{ title }}</h2>
+                {% else %}
                 <h2 class="cat-promo-thin__title">Мікро-пивоварні на 100 літрів</h2>
+                {% endif %}
                 <div class="cat-promo-thin__description">
+                    {% if description is defined and description is not same as('') %}
+                    <div class="typography">{{ description|raw }}</div>
+                    {% else %}
                     <p>
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem 
-                        Ipsum has been Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                        Lorem Ipsum Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                        Lorem Ipsum has been   Lorem Ipsum is simply dummy text of the printing and typesetting
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+                        Ipsum has been Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                        Lorem Ipsum Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                        Lorem Ipsum has been   Lorem Ipsum is simply dummy text of the printing and typesetting
                     </p>
+                    {% endif %}
                 </div>
                 <div class="cat-promo-thin__buttons">
-                    <a class="link" href="#">Детальніше <svg class="link-arrow"><use href="#icon-short-arrow"></use></svg></a>
+                    <a class="link" href="{{ link_url|default('#') }}">{{ link_text|default('Детальніше') }} <svg class="link-arrow"><use href="#icon-short-arrow"></use></svg></a>
                 </div>
             </div>
         </div>
