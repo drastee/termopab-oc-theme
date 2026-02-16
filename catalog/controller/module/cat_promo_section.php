@@ -24,10 +24,11 @@ class CatPromoSection extends \Opencart\System\Engine\Controller {
 			$data['link_text'] = 'Детальніше';
 		}
 
-		$data['description'] = $setting['description'][$language_id] ?? '';
-		if ($data['description'] === '' && !empty($setting['description'])) {
-			$data['description'] = (string)reset($setting['description']);
+		$desc = $setting['description'][$language_id] ?? '';
+		if ($desc === '' && !empty($setting['description'])) {
+			$desc = (string)reset($setting['description']);
 		}
+		$data['description'] = html_entity_decode($desc, ENT_QUOTES, 'UTF-8');
 
 		$data['type'] = !empty($setting['layout_type']) && $setting['layout_type'] === 'cat-promo--reverse'
 			? 'cat-promo--reverse'

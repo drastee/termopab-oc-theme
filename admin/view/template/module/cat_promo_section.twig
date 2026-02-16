@@ -117,7 +117,7 @@
               <div class="tab-content mt-2">
                 {% for language in languages %}
                   <div id="tab-description-{{ language.language_id }}" class="tab-pane{% if loop.first %} active{% endif %}">
-                    <textarea name="description[{{ language.language_id }}]" class="form-control cat-promo-description" rows="6" data-oc-toggle="ckeditor" data-lang="{{ ckeditor }}">{{ (description[language.language_id] ?? '') }}</textarea>
+                    <textarea name="description[{{ language.language_id }}]" class="form-control cat-promo-description" rows="6" data-oc-toggle="ckeditor" data-lang="{{ ckeditor }}">{{ (description[language.language_id] ?? '')|raw }}</textarea>
                   </div>
                 {% endfor %}
               </div>
