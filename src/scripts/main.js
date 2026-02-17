@@ -13,6 +13,7 @@ import '../html/sections/shared/brewery-reviews/_brewery-reviews.js';
 import '../html/sections/shared/hero/_hero.js';
 import '../html/sections/shared/text-content/_text-content.js';
 import '../html/sections/shared/gallery/_gallery.js';
+import '../html/sections/pages/product/main-media/_main-media.js';
 import '../html/sections/pages/product/video-block/_video-block.js';
 import '../html/sections/pages/product/characteristics/_characteristics.js';
 import '../html/sections/pages/about/history/_history.js';

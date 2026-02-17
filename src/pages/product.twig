@@ -5,7 +5,10 @@
 <main>
 
 
-    {% include "html/sections/pages/product/main-media/_main-media.twig" %}
+    {# Зображення (за замовчуванням): #}
+    {#{% include "html/sections/pages/product/main-media/_main-media.twig" %} #}
+    {# Або 3D GLB (розкоментуйте і закоментуйте рядок вище): #}
+    {% include "html/sections/pages/product/main-media/_main-media.twig" with { mediaType: 'glb', mediaSrc: 'https://modelviewer.dev/shared-assets/models/NeilArmstrong.glb' } %}
 
     {% include "html/sections/shared/gallery/_gallery.twig" with {
             images: [

@@ -37,6 +37,7 @@ class Termopab extends \Opencart\System\Engine\Controller {
 			'common/home',
 			'common/currency',
 			'common/language',
+			'product/product',
 		];
 		if (in_array($route, $override)) {
 			$route = 'extension/termopab/' . $route;

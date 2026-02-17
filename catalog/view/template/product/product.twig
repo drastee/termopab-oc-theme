@@ -1,0 +1,23 @@
+{{ header }}
+<main>
+    {% if heading_title is defined and product_id is defined %}
+        {% if view_360_url|default('') %}
+            {% include "@termopab/sections/pages/product/main-media/_main-media.twig" with {
+                mediaType: 'glb',
+                mediaSrc: view_360_url,
+                title: heading_title,
+                price: special ? special : price,
+                button_cart: button_cart|default('Купити')
+            } %}
+        {% else %}
+            {% include "@termopab/sections/pages/product/main-media/_main-media.twig" with {
+                mediaType: 'image',
+                mediaSrc: thumb|default(popup)|default(''),
+                title: heading_title,
+                price: special ? special : price,
+                button_cart: button_cart|default('Купити')
+            } %}
+        {% endif %}
+    {% endif %}
+</main>
+{{ footer }}

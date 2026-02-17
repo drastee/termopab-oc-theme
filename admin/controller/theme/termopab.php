@@ -177,6 +177,14 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		$this->model_setting_event->addEvent(['code' => 'termopab_admin_category_builder', 'description' => 'Termopab: category builder save (edit)', 'trigger' => 'admin/model/catalog/category.editCategory/after', 'action' => 'extension/termopab/event/category_builder.onEditCategoryAfter', 'status' => 1, 'sort_order' => 0]);
 		$this->model_setting_event->deleteEventByCode('termopab_catalog_category');
 		$this->model_setting_event->addEvent(['code' => 'termopab_catalog_category', 'description' => 'Termopab: category layout parent/child', 'trigger' => 'catalog/view/product/category/before', 'action' => 'extension/termopab/event/category.onCategoryViewBefore', 'status' => 1, 'sort_order' => 50]);
+		$this->model_setting_event->deleteEventByCode('termopab_admin_product');
+		$this->model_setting_event->addEvent(['code' => 'termopab_admin_product', 'description' => 'Termopab: override admin catalog/product controller', 'trigger' => 'admin/controller/catalog/product*/before', 'action' => 'extension/termopab/event/product.onAdminProductBefore', 'status' => 1, 'sort_order' => -100]);
+		$this->model_setting_event->addEvent(['code' => 'termopab_admin_product', 'description' => 'Termopab: product_form view override (360-view tab)', 'trigger' => 'admin/view/catalog/product_form/before', 'action' => 'extension/termopab/event/product.onProductFormViewBefore', 'status' => 1, 'sort_order' => -100]);
+		$this->model_setting_event->addEvent(['code' => 'termopab_admin_product', 'description' => 'Termopab: save view_360 (addProduct)', 'trigger' => 'admin/model/catalog/product.addProduct/after', 'action' => 'extension/termopab/event/product.onAddProductAfter', 'status' => 1, 'sort_order' => 0]);
+		$this->model_setting_event->addEvent(['code' => 'termopab_admin_product', 'description' => 'Termopab: save view_360 (editProduct)', 'trigger' => 'admin/model/catalog/product.editProduct/after', 'action' => 'extension/termopab/event/product.onEditProductAfter', 'status' => 1, 'sort_order' => 0]);
+		$this->model_setting_event->deleteEventByCode('termopab_catalog_product');
+		$this->model_setting_event->addEvent(['code' => 'termopab_catalog_product', 'description' => 'Termopab: product view view_360 + button_cart', 'trigger' => 'catalog/view/product/product/before', 'action' => 'extension/termopab/event/product_view.onProductViewBefore', 'status' => 1, 'sort_order' => 0]);
+		$this->addGlbToAllowedUploads();
 		$this->session->data['success'] = 'Події Termopab зареєстровано.';
 		$this->response->redirect($this->url->link('extension/termopab/theme/termopab', 'user_token=' . $this->session->data['user_token']));
 	}
@@ -315,6 +323,18 @@ class Termopab extends \Opencart\System\Engine\Controller {
 				} catch (\Throwable $e) {
 				}
 			}
+			try {
+				$this->db->query("ALTER TABLE `" . $prefix . "product` ADD COLUMN `view_360` varchar(255) DEFAULT NULL");
+			} catch (\Throwable $e) {
+			}
+			try {
+				$this->db->query("ALTER TABLE `" . $prefix . "product` ADD COLUMN `main_video` varchar(255) DEFAULT NULL");
+			} catch (\Throwable $e) {
+			}
+			try {
+				$this->db->query("ALTER TABLE `" . $prefix . "product` ADD COLUMN `video_review` text DEFAULT NULL");
+			} catch (\Throwable $e) {
+			}
 
 			// Ensure termopab is in extension_install so autoloader registers paths (required for event menu)
 			$this->load->model('setting/extension');
@@ -422,6 +442,75 @@ class Termopab extends \Opencart\System\Engine\Controller {
 				'status'      => 1,
 				'sort_order'  => 50,
 			]);
+			// Event: override admin catalog/product controller (for 360-view tab etc.)
+			$this->model_setting_event->deleteEventByCode('termopab_admin_product');
+			$this->model_setting_event->addEvent([
+				'code'        => 'termopab_admin_product',
+				'description' => 'Termopab: override admin catalog/product controller',
+				'trigger'     => 'admin/controller/catalog/product*/before',
+				'action'      => 'extension/termopab/event/product.onAdminProductBefore',
+				'status'      => 1,
+				'sort_order'  => -100,
+			]);
+			$this->model_setting_event->addEvent([
+				'code'        => 'termopab_admin_product',
+				'description' => 'Termopab: product_form view override (360-view tab)',
+				'trigger'     => 'admin/view/catalog/product_form/before',
+				'action'      => 'extension/termopab/event/product.onProductFormViewBefore',
+				'status'      => 1,
+				'sort_order'  => -100,
+			]);
+			$this->model_setting_event->addEvent(['code' => 'termopab_admin_product', 'description' => 'Termopab: save view_360 (addProduct)', 'trigger' => 'admin/model/catalog/product.addProduct/after', 'action' => 'extension/termopab/event/product.onAddProductAfter', 'status' => 1, 'sort_order' => 0]);
+			$this->model_setting_event->addEvent(['code' => 'termopab_admin_product', 'description' => 'Termopab: save view_360 (editProduct)', 'trigger' => 'admin/model/catalog/product.editProduct/after', 'action' => 'extension/termopab/event/product.onEditProductAfter', 'status' => 1, 'sort_order' => 0]);
+			$this->model_setting_event->deleteEventByCode('termopab_catalog_product');
+			$this->model_setting_event->addEvent(['code' => 'termopab_catalog_product', 'description' => 'Termopab: product view view_360 + button_cart', 'trigger' => 'catalog/view/product/product/before', 'action' => 'extension/termopab/event/product_view.onProductViewBefore', 'status' => 1, 'sort_order' => 0]);
+			$this->addGlbToAllowedUploads();
+		}
+	}
+
+	/**
+	 * Add GLB extension and MIME type to allowed uploads (for 360° view).
+	 */
+	private function addGlbToAllowedUploads(): void {
+		$this->load->model('setting/setting');
+		$stores = [0];
+		$store_query = $this->db->query("SELECT store_id FROM `" . DB_PREFIX . "store`");
+		if ($store_query->num_rows) {
+			foreach ($store_query->rows as $row) {
+				$stores[] = (int)$row['store_id'];
+			}
+		}
+		foreach ($stores as $store_id) {
+			$config = $this->model_setting_setting->getSetting('config', $store_id);
+			if (empty($config)) {
+				continue;
+			}
+			$changed = false;
+			$ext = preg_replace('~\r?\n~', "\n", (string)($config['config_file_ext_allowed'] ?? ''));
+			$list = array_filter(array_map('trim', explode("\n", $ext)));
+			if (!in_array('glb', $list, true)) {
+				$list[] = 'glb';
+				$config['config_file_ext_allowed'] = implode("\n", $list);
+				$changed = true;
+			}
+			$mime = preg_replace('~\r?\n~', "\n", (string)($config['config_file_mime_allowed'] ?? ''));
+			$list = array_filter(array_map('trim', explode("\n", $mime)));
+			if (!in_array('model/gltf-binary', $list, true)) {
+				$list[] = 'model/gltf-binary';
+				$config['config_file_mime_allowed'] = implode("\n", $list);
+				$changed = true;
+			}
+			if ($changed) {
+				$config_filtered = [];
+				foreach ($config as $k => $v) {
+					if (strpos((string)$k, 'config_') === 0) {
+						$config_filtered[$k] = $v;
+					}
+				}
+				if (!empty($config_filtered)) {
+					$this->model_setting_setting->editSetting('config', $config_filtered, $store_id);
+				}
+			}
 		}
 	}
 
@@ -439,6 +528,8 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		$this->model_setting_event->deleteEventByCode('termopab_admin_category');
 		$this->model_setting_event->deleteEventByCode('termopab_admin_category_builder');
 		$this->model_setting_event->deleteEventByCode('termopab_catalog_category');
+		$this->model_setting_event->deleteEventByCode('termopab_admin_product');
+		$this->model_setting_event->deleteEventByCode('termopab_catalog_product');
 	}
 
 }

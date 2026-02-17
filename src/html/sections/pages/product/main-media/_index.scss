@@ -3,9 +3,9 @@
 .main-media{
     background-color: var(--color-white);
     padding-top: 32px;
-    padding-top: 121px;
+    // padding-top: 121px;
     @include md-up{
-        padding-top: 118px;
+        padding-top: 42px;
         background-color: #EBEBEB;
     }
     &__inner{
@@ -40,7 +40,31 @@
         }
     }
     &__media{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        line-height: 0;
         @include md-up{
+        }
+    }
+    &__viewer-3d{
+        width: 100%;
+        aspect-ratio: 1/1;
+        position: relative;
+        display: block;
+        line-height: 0;
+        overflow: hidden;
+        @include md-up{
+            min-height: 400px;
+            max-width: 600px;
+        }
+        canvas{
+            display: block;
+            margin: 0;
+            vertical-align: top;
+            width: 100% !important;
+            height: 100% !important;
         }
     }
     &__360{

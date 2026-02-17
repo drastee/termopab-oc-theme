@@ -1,18 +1,40 @@
+{#
+  main-media: image або 3D (glb).
+  Змінні:
+  - mediaType: 'image' | 'glb' (за замовчуванням 'image')
+  - mediaSrc: URL зображення або .glb (для image за замовчуванням product-3.webp)
+  - title: назва товару
+  - price: ціна (вже відформатована)
+  - button_cart: текст кнопки (мова з language)
+  Якщо mediaType == 'glb', показується блок .main-media__360.
+#}
+{% set mediaType = mediaType|default('image') %}
+{% set mediaSrc = mediaSrc|default('/src/assets/images/products/product-3.webp') %}
+{% set title = title|default('') %}
+{% set price = price|default('') %}
+{% set button_cart = button_cart|default('Купити') %}
+
 <section class="main-media">
     <div class="container">
         <div class="main-media__inner">
-            <h1 class="main-media__title">Форфас горизонтальний на&nbsp;1000&nbsp;л&nbsp;-&nbsp;CIP</h1>
-            <p class="main-media__price">€31 495</p>
+            {% if title %}<h1 class="main-media__title">{{ title }}</h1>{% endif %}
+            {% if price %}<p class="main-media__price">{{ price }}</p>{% endif %}
             <div class="main-media__media">
-                <img src="/src/assets/images/products/product-3.webp" class="img-base" alt="">
+                {% if mediaType == 'glb' and mediaSrc %}
+                    <div class="main-media__viewer-3d" data-glb-src="{{ mediaSrc }}" role="img" aria-label="3D модель"></div>
+                {% else %}
+                    <img src="{{ mediaSrc }}" class="img-base" alt="{{ title }}"{% if not mediaSrc %} style="display:none;"{% endif %}>
+                {% endif %}
             </div>
+            {% if mediaType == 'glb' %}
             <p class="main-media__360">
                 <svg class="icon-360"><use href="#icon-360"></use></svg>
                 <span>360º</span>
             </p>
+            {% endif %}
         </div>
     </div>
     <div class="main-media__button-wrap">
-        <button class="open-order-btn">Купити <svg class="link-arrow"><use href="#icon-short-arrow"></use></svg></button>
+        <button type="button" class="open-order-btn">{{ button_cart }} <svg class="link-arrow"><use href="#icon-short-arrow"></use></svg></button>
     </div>
 </section>

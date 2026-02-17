@@ -112,6 +112,9 @@ class Install extends \Opencart\System\Engine\Controller {
 			"ALTER TABLE `" . $prefix . "category` ADD COLUMN `hero_image` varchar(255) DEFAULT NULL",
 			"ALTER TABLE `" . $prefix . "category` ADD COLUMN `hero_image_mobile` varchar(255) DEFAULT NULL",
 			"ALTER TABLE `" . $prefix . "category` ADD COLUMN `breadcrumb_background` varchar(32) DEFAULT 'black'",
+			"ALTER TABLE `" . $prefix . "product` ADD COLUMN `view_360` varchar(255) DEFAULT NULL",
+			"ALTER TABLE `" . $prefix . "product` ADD COLUMN `main_video` varchar(255) DEFAULT NULL",
+			"ALTER TABLE `" . $prefix . "product` ADD COLUMN `video_review` text DEFAULT NULL",
 		];
 
 		try {
@@ -125,11 +128,58 @@ class Install extends \Opencart\System\Engine\Controller {
 					// Ignore duplicate column errors when columns already exist
 				}
 			}
+			$this->addGlbToAllowedUploads();
 			$this->session->data['success'] = 'Project tables created successfully.';
 		} catch (\Throwable $e) {
 			$this->session->data['error'] = 'Install error: ' . $e->getMessage();
 		}
 
 		$this->response->redirect($this->url->link('extension/termopab/project', 'user_token=' . $this->session->data['user_token']));
+	}
+
+	/**
+	 * Add GLB extension and MIME type to allowed uploads (for 360° view).
+	 */
+	private function addGlbToAllowedUploads(): void {
+		$this->load->model('setting/setting');
+		$stores = [0];
+		$store_query = $this->db->query("SELECT store_id FROM `" . DB_PREFIX . "store`");
+		if ($store_query->num_rows) {
+			foreach ($store_query->rows as $row) {
+				$stores[] = (int)$row['store_id'];
+			}
+		}
+		foreach ($stores as $store_id) {
+			$config = $this->model_setting_setting->getSetting('config', $store_id);
+			if (empty($config)) {
+				continue;
+			}
+			$changed = false;
+			$ext = preg_replace('~\r?\n~', "\n", (string)($config['config_file_ext_allowed'] ?? ''));
+			$list = array_filter(array_map('trim', explode("\n", $ext)));
+			if (!in_array('glb', $list, true)) {
+				$list[] = 'glb';
+				$config['config_file_ext_allowed'] = implode("\n", $list);
+				$changed = true;
+			}
+			$mime = preg_replace('~\r?\n~', "\n", (string)($config['config_file_mime_allowed'] ?? ''));
+			$list = array_filter(array_map('trim', explode("\n", $mime)));
+			if (!in_array('model/gltf-binary', $list, true)) {
+				$list[] = 'model/gltf-binary';
+				$config['config_file_mime_allowed'] = implode("\n", $list);
+				$changed = true;
+			}
+			if ($changed) {
+				$config_filtered = [];
+				foreach ($config as $k => $v) {
+					if (strpos((string)$k, 'config_') === 0) {
+						$config_filtered[$k] = $v;
+					}
+				}
+				if (!empty($config_filtered)) {
+					$this->model_setting_setting->editSetting('config', $config_filtered, $store_id);
+				}
+			}
+		}
 	}
 }

@@ -22,7 +22,7 @@
 {{ content_top }}
 {{ parent_top|default('') }}
 
-      {% if products|default([])|length %}
+{% if products|default([])|length %}
 <section class="catalog">
   {% if filter_groups|default([])|length %}
   <div class="filter">
