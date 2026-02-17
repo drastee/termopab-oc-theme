@@ -64,6 +64,14 @@ export default {
           dest: 'image',
         },
         {
+          src: 'src/assets/images/logo-silhouette3.webp',
+          dest: 'image',
+        },
+        {
+          src: 'src/assets/images/cta/barometer.webp',
+          dest: 'image',
+        },
+        {
           src: 'src/assets/videos/explosion.webm',
           dest: 'image',
         },

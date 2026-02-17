@@ -1,14 +1,22 @@
+{% set cap_title = title|default('Ми на звʼязку') %}
+{% set cap_subtitle = subtitle|default('Можете скористатися мессенджерами <br>для вашої зручності') %}
+{% set cap_links = social_links|default({}) %}
+{% set cap_image = image_src|default('/src/assets/images/cap.webp') %}
 <section class="cta-thin-cap">
     <div class="container">
         <div class="cta-thin-cap__inner">
             <div class="cta-thin-cap__text-block">
-                <h2 class="section-title section-title--secondary">Ми на звʼязку</h2>
-                <p>Можете скористатися мессенджерами <br>для вашої зручності</p>
-                {% include "@components/social-buttons/_social-buttons.twig" %}  
+                <h2 class="section-title section-title--secondary">{{ cap_title }}</h2>
+                <p>{{ cap_subtitle|raw }}</p>
+                {% if cap_links|length > 0 %}
+                    {% include "@components/social-buttons/_social-buttons.twig" with { social_links: cap_links } %}
+                {% else %}
+                    {% include "@components/social-buttons/_social-buttons.twig" %}
+                {% endif %}
             </div>
             <div class="cta-thin-cap__image-block">
                 <div class="cta-thin-cap__image-wrap">
-                    <img src="/src/assets/images/cap.webp" class="js-rotate-item" alt="">
+                    <img src="{{ cap_image }}" class="js-rotate-item" alt="">
                 </div>
             </div>
         </div>

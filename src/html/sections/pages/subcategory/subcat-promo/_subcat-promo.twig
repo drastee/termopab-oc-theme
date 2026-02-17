@@ -1,9 +1,14 @@
 <section class="subcat-promo">
     <div class="container">
         <div class="subcat-promo__inner">
-            <dib class="subcat-promo__text">
-                <h2 class="subcat-promo__title">Заголовок заголовок</h2>
-                <div class="subcat-promo__text-inner">
+            <div class="subcat-promo__text">
+                {% set promo_title = title|default('Заголовок заголовок') %}
+                {% set promo_text = text|default('') %}
+                <h2 class="subcat-promo__title">{{ promo_title }}</h2>
+                <div class="subcat-promo__text-inner typography">
+                    {% if promo_text is not same as('') %}
+                        {{ promo_text|raw }}
+                    {% else %}
                     <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been   Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been   Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been   Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been   Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum</p>
                     <p><b>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</b></p>
                     <ul class="marked">
@@ -11,11 +16,14 @@
                         <li>выручку</li>
                         <li>расходы</li>
                     </ul>
+                    {% endif %}
                 </div>
-            </dib>
+            </div>
             <div class="subcat-promo__image">
-                <img src="{{ image|default('/src/assets/images/category/product.webp') }}" class="img-base" alt="">
-                <img src="{{ image_hover|default('/src/assets/images/category/product-hover.webp') }}" class="img-hover" alt="">
+                {% set promo_image = image|default('/src/assets/images/category/product.webp') %}
+                {% set promo_image_hover = image_hover|default('/src/assets/images/category/product-hover.webp') %}
+                <img src="{{ promo_image }}" class="img-base" alt="">
+                <img src="{{ promo_image_hover }}" class="img-hover" alt="">
             </div>
         </div>
     </div>

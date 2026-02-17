@@ -1,23 +1,44 @@
 <section class="cta-barometer">
     <div class="container">
-    
+        {% if title_first is defined and title_first is not same as(null) %}
+        <div class="cta-form">
+            <h2 class="cta-form__title section-title">
+                {{ title_first }}{% if title_rest|default([])|length > 0 %}<br>{% for line in title_rest %}<span>{{ line }}</span>{% endfor %}{% endif %}
+            </h2>
+            <div class="cta-form__wrapper">
+                {% if social_block_enabled|default(1) and (intro_text|default('') or (social_links|default({})|length > 0)) %}
+                {% if intro_text|default('') %}<p>{{ intro_text }}</p>{% endif %}
+                {% if social_links|default({})|length > 0 %}
+                <ul class="social-buttons">
+                    {% for key, url in social_links %}
+                    <li><a href="{{ url }}" target="_blank" rel="noopener noreferrer" class="icon social social-{{ key }}"></a></li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% endif %}
+                {% include '@components/callback-form/_callback-form.twig' with {
+                    form_id: form_id|default('cta-barometer-form'),
+                    form_class: form_type|default('light'),
+                    form_label_name: form_label_name|default('Ваше імʼя'),
+                    form_placeholder_name: form_placeholder_name|default('Імʼя'),
+                    form_label_phone: form_label_phone|default('Ваш телефон'),
+                    form_placeholder_phone: form_placeholder_phone|default('+_ (___) ___-__-__'),
+                    form_button_text: form_button_text|default('Отримати консультацію'),
+                    form_agreement: form_agreement|default('')
+                } %}
+            </div>
+        </div>
+        {% else %}
         {% include "@components/cta-form-with-socials/_cta-form-with-socials.twig" with {
             formType: 'light',
             formTitle: 'Ваш задум <span>вже реальний</span>'
-            }%}
+        } %}
+        {% endif %}
 
         <div class="cta-barometer__image-wrapper">
             <picture>
-                <!-- Мобильное изображение -->
-                {# <source srcset="/src/assets/images/cta/barometer-mob.webp" media="(max-width: 1024px)"> #}
-
-                <!-- Десктопное изображение -->
-                <img src="/src/assets/images/cta/barometer.webp" alt="">
-                
+                <img src="{{ image_src|default('/src/assets/images/cta/barometer.webp') }}" alt="">
             </picture>
-
-
         </div>
-        
     </div>
 </section>

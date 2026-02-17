@@ -1,0 +1,21 @@
+<?php
+$_['heading_title']    = 'CTA Thin Cap (Termopab)';
+$_['text_extension']   = 'Расширения';
+$_['text_success']     = 'Успех: Модуль CTA Thin Cap изменён!';
+$_['text_edit']        = 'Редактировать модуль CTA Thin Cap';
+$_['entry_name']       = 'Название модуля';
+$_['entry_title']      = 'Заголовок';
+$_['entry_subtitle']   = 'Подзаголовок';
+$_['entry_socials']    = 'Соцсети';
+$_['entry_social_instagram']  = 'Instagram';
+$_['entry_social_whatsapp']   = 'WhatsApp';
+$_['entry_social_telegram']   = 'Telegram';
+$_['entry_social_facebook']   = 'Facebook';
+$_['entry_social_youtube']    = 'YouTube';
+$_['entry_status']     = 'Статус';
+$_['help_subtitle']    = 'Текст под заголовком. Допускается HTML, например <br>.';
+$_['help_socials']     = 'Выберите, какие соцсети показывать. Ссылки задаются в настройках темы (Design → Theme Termopab).';
+$_['button_save']      = 'Сохранить';
+$_['button_back']      = 'Назад';
+$_['error_permission'] = 'Внимание: Нет прав для изменения модуля CTA Thin Cap!';
+$_['error_name']       = 'Название модуля должно быть от 3 до 64 символов!';
