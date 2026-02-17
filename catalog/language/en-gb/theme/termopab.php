@@ -5,3 +5,4 @@ $_['text_call_me']     = 'Call me';
 $_['text_learn_more']  = 'Learn more';
 $_['text_content_expand']   = 'Expand';
 $_['text_content_collapse'] = 'Collapse';
+$_['text_filter_all']      = 'All';

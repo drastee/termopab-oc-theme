@@ -48,7 +48,11 @@ class Category extends \Opencart\System\Engine\Controller {
 			$data['home_url'] = $this->url->link('common/home', 'language=' . $this->config->get('config_language'));
 			$data['text_content_expand'] = $this->language->get('text_content_expand');
 			$data['text_content_collapse'] = $this->language->get('text_content_collapse');
+			$data['text_learn_more'] = $this->language->get('text_learn_more');
+			$data['text_filter_all'] = $this->language->get('text_filter_all');
 			$this->injectSlotModules($data, $category_id, $store_id, 'parent');
+			$this->injectFilterDataForParent($data, $category_id);
+			$this->rebuildProductsForParent($data, $category_id);
 		} elseif ($layout_id === $layout_child_id) {
 			$route = 'extension/termopab/product/category_child';
 			$this->injectSlotModules($data, $category_id, $store_id, 'child');
@@ -79,6 +83,55 @@ class Category extends \Opencart\System\Engine\Controller {
 		}
 	}
 
+	/**
+	 * Inject filter data for parent layout: button-style filter (filter_groups, filter_category, filter_base_url).
+	 */
+	private function injectFilterDataForParent(array &$data, int $category_id): void {
+		$url = '';
+		if (isset($this->request->get['sort'])) {
+			$url .= '&sort=' . $this->request->get['sort'];
+		}
+		if (isset($this->request->get['order'])) {
+			$url .= '&order=' . $this->request->get['order'];
+		}
+		if (isset($this->request->get['limit'])) {
+			$url .= '&limit=' . $this->request->get['limit'];
+		}
+		$path = (string)($this->request->get['path'] ?? '');
+		$data['filter_base_url'] = str_replace('&amp;', '&', $this->url->link('product/category', 'language=' . $this->config->get('config_language') . '&path=' . $path . $url));
+
+		if (isset($this->request->get['filter']) && $this->request->get['filter'] !== '') {
+			$data['filter_category'] = array_map('intval', array_filter(explode(',', $this->request->get['filter'])));
+		} else {
+			$data['filter_category'] = [];
+		}
+
+		$this->load->model('catalog/category');
+		$this->load->model('catalog/product');
+
+		$data['filter_groups'] = [];
+		$filter_groups = $this->model_catalog_category->getFilters($category_id);
+		if ($filter_groups) {
+			foreach ($filter_groups as $filter_group) {
+				$children_data = [];
+				foreach ($filter_group['filter'] as $filter) {
+					$children_data[] = [
+						'filter_id' => (int)$filter['filter_id'],
+						'name'      => $filter['name'] . ($this->config->get('config_product_count') ? ' (' . $this->model_catalog_product->getTotalProducts([
+							'filter_category_id' => $category_id,
+							'filter_filter'      => $filter['filter_id'],
+						]) . ')' : ''),
+					];
+				}
+				$data['filter_groups'][] = [
+					'filter_group_id' => (int)$filter_group['filter_group_id'],
+					'name'            => $filter_group['name'],
+					'filter'          => $children_data,
+				];
+			}
+		}
+	}
+
 	private function renderModule(string $code): string {
 		$part = explode('.', $code);
 		if (count($part) < 3) {
@@ -91,5 +144,87 @@ class Category extends \Opencart\System\Engine\Controller {
 		}
 		$output = $this->load->controller('extension/' . $part[0] . '/module/' . $part[1], $setting_info);
 		return $output instanceof \Opencart\System\Engine\Action ? '' : (string)$output;
+	}
+
+	/**
+	 * Rebuild $data['products'] for parent layout: raw items with description and first 2–3 attributes.
+	 */
+	private function rebuildProductsForParent(array &$data, int $category_id): void {
+		$filter = (string)($this->request->get['filter'] ?? '');
+		$sort = (string)($data['sort'] ?? 'p.sort_order');
+		$order = (string)($data['order'] ?? 'ASC');
+		$page = (int)($this->request->get['page'] ?? 1);
+		$limit = (int)($data['limit'] ?? $this->config->get('config_pagination'));
+
+		$url = '';
+		if (isset($this->request->get['path'])) {
+			$url .= '&path=' . $this->request->get['path'];
+		}
+		if ($filter !== '') {
+			$url .= '&filter=' . $filter;
+		}
+		if (isset($this->request->get['sort'])) {
+			$url .= '&sort=' . $this->request->get['sort'];
+		}
+		if (isset($this->request->get['order'])) {
+			$url .= '&order=' . $this->request->get['order'];
+		}
+		if (isset($this->request->get['limit'])) {
+			$url .= '&limit=' . $this->request->get['limit'];
+		}
+
+		$this->load->model('catalog/product');
+		$this->load->model('tool/image');
+
+		$filter_data = [
+			'filter_category_id'  => $category_id,
+			'filter_sub_category' => false,
+			'filter_filter'       => $filter,
+			'sort'                => $sort,
+			'order'               => $order,
+			'start'               => ($page - 1) * $limit,
+			'limit'               => $limit,
+		];
+
+		$results = $this->model_catalog_product->getProducts($filter_data);
+		$desc_length = (int)$this->config->get('config_product_description_length') ?: 100;
+		$max_attributes = 3;
+		$img_width = (int)$this->config->get('config_image_product_width') ?: 228;
+		$img_height = (int)$this->config->get('config_image_product_height') ?: 228;
+
+		$data['products'] = [];
+
+		foreach ($results as $result) {
+			$description = trim(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8')));
+			$len = function_exists('mb_strlen') ? mb_strlen($description) : strlen($description);
+			if ($len > $desc_length) {
+				$description = (function_exists('mb_substr') ? mb_substr($description, 0, $desc_length) : substr($description, 0, $desc_length)) . '..';
+			}
+
+			$image = (!empty($result['image']) && is_file(DIR_IMAGE . html_entity_decode($result['image'], ENT_QUOTES, 'UTF-8')))
+				? $result['image']
+				: 'placeholder.png';
+			$thumb = $this->model_tool_image->resize($image, $img_width, $img_height);
+
+			$params = [];
+			$attribute_groups = $this->model_catalog_product->getAttributes((int)$result['product_id']);
+			foreach ($attribute_groups as $group) {
+				foreach ($group['attribute'] ?? [] as $attr) {
+					$params[] = ['name' => $attr['name'], 'value' => $attr['text']];
+					if (count($params) >= $max_attributes) {
+						break 2;
+					}
+				}
+			}
+
+			$data['products'][] = [
+				'product_id'  => (int)$result['product_id'],
+				'name'        => $result['name'],
+				'thumb'       => $thumb,
+				'href'        => $this->url->link('product/product', 'language=' . $this->config->get('config_language') . '&product_id=' . $result['product_id'] . $url),
+				'description' => $description,
+				'params'      => $params,
+			];
+		}
 	}
 }

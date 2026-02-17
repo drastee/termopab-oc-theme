@@ -21,6 +21,63 @@
 
 {{ content_top }}
 {{ parent_top|default('') }}
+
+      {% if products|default([])|length %}
+<section class="catalog">
+  {% if filter_groups|default([])|length %}
+  <div class="filter">
+    <div class="container">
+      <div class="filter__inner">
+        <a href="{{ filter_base_url|default('') }}" class="filter__button{{ filter_category|default([])|length == 0 ? ' is-active' : '' }}"><span>{{ text_filter_all|default('Усі') }}</span></a>
+        {% for group in filter_groups %}
+          {% for f in group.filter %}
+        <a href="{{ filter_base_url|default('') }}&filter={{ f.filter_id }}" class="filter__button{{ f.filter_id in filter_category|default([]) ? ' is-active' : '' }}"><span>{{ f.name }}</span></a>
+          {% endfor %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  <div class="products">
+    <div class="container">
+      <div class="catalog__inner">
+        {% for product in products %}
+        <div class="product-card">
+          <div class="product-card__image">
+            <a href="{{ product.href }}"><img src="{{ product.thumb }}" alt="{{ product.name }}"></a>
+          </div>
+          <div class="product-card__info">
+            <h3 class="product-card__title"><a href="{{ product.href }}">{{ product.name }}</a></h3>
+            {% if product.params is defined and product.params is not empty %}
+            <dl class="product-card__params">
+              {% for item in product.params %}
+              <dt>{{ item.name }}</dt>
+              <dd>{{ item.value }}</dd>
+              {% endfor %}
+            </dl>
+            {% endif %}
+            {% if product.description is defined and product.description %}
+            <div class="product-card__description">
+              <p>{{ product.description }}</p>
+            </div>
+            {% endif %}
+            <a class="link" href="{{ product.href }}">
+              {{ text_learn_more|default('Дізнатися більше') }}
+              <svg class="link-arrow"><use href="#icon-short-arrow"></use></svg>
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="row mt-3">
+        <div class="col-sm-6 text-start">{{ pagination|default('') }}</div>
+        <div class="col-sm-6 text-end">{{ results|default('') }}</div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
 {# <div id="product-category" class="container" data-layout="parent">
   <ul class="breadcrumb">
     {% for breadcrumb in breadcrumbs %}

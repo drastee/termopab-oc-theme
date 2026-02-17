@@ -176,7 +176,7 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		$this->model_setting_event->addEvent(['code' => 'termopab_admin_category_builder', 'description' => 'Termopab: category builder save (add)', 'trigger' => 'admin/model/catalog/category.addCategory/after', 'action' => 'extension/termopab/event/category_builder.onAddCategoryAfter', 'status' => 1, 'sort_order' => 0]);
 		$this->model_setting_event->addEvent(['code' => 'termopab_admin_category_builder', 'description' => 'Termopab: category builder save (edit)', 'trigger' => 'admin/model/catalog/category.editCategory/after', 'action' => 'extension/termopab/event/category_builder.onEditCategoryAfter', 'status' => 1, 'sort_order' => 0]);
 		$this->model_setting_event->deleteEventByCode('termopab_catalog_category');
-		$this->model_setting_event->addEvent(['code' => 'termopab_catalog_category', 'description' => 'Termopab: category layout parent/child', 'trigger' => 'catalog/view/product/category/before', 'action' => 'extension/termopab/event/category.onCategoryViewBefore', 'status' => 1, 'sort_order' => 0]);
+		$this->model_setting_event->addEvent(['code' => 'termopab_catalog_category', 'description' => 'Termopab: category layout parent/child', 'trigger' => 'catalog/view/product/category/before', 'action' => 'extension/termopab/event/category.onCategoryViewBefore', 'status' => 1, 'sort_order' => 50]);
 		$this->session->data['success'] = 'Події Termopab зареєстровано.';
 		$this->response->redirect($this->url->link('extension/termopab/theme/termopab', 'user_token=' . $this->session->data['user_token']));
 	}
@@ -420,7 +420,7 @@ class Termopab extends \Opencart\System\Engine\Controller {
 				'trigger'     => 'catalog/view/product/category/before',
 				'action'      => 'extension/termopab/event/category.onCategoryViewBefore',
 				'status'      => 1,
-				'sort_order'  => 0,
+				'sort_order'  => 50,
 			]);
 		}
 	}

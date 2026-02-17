@@ -444,6 +444,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ------------------------------------------------------------------------
+    // Catalog filter (category parent) — кнопки .filter__button
+    // Якщо це посилання <a>, переход по кліку без JS. Якщо <button data-href="..."> — перехід через JS.
+    // ------------------------------------------------------------------------
+    document.body.addEventListener('click', (e) => {
+        const btn = e.target.closest('.filter__button');
+        if (!btn || btn.tagName === 'A') return;
+        const href = btn.getAttribute('data-href');
+        if (href) {
+            e.preventDefault();
+            window.location = href.replace(/&amp;/g, '&');
+        }
+    });
+
+    // ------------------------------------------------------------------------
     // Agree to Terms (Modal)
     // ------------------------------------------------------------------------
     document.body.addEventListener('click', async (e) => {
