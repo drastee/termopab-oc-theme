@@ -119,6 +119,28 @@ class Product extends \Opencart\System\Engine\Controller {
 			$this->db->query("UPDATE `" . DB_PREFIX . "product` SET " . implode(', ', $set) . " WHERE `product_id` = '" . (int)$product_id . "'");
 		}
 
+		// short_description, description_characteristics — оновлюємо product_description
+		$desc_cols = [];
+		if ($this->db->query("SHOW COLUMNS FROM `" . DB_PREFIX . "product_description` LIKE 'short_description'")->num_rows > 0) {
+			$desc_cols[] = 'short_description';
+		}
+		if ($this->db->query("SHOW COLUMNS FROM `" . DB_PREFIX . "product_description` LIKE 'description_characteristics'")->num_rows > 0) {
+			$desc_cols[] = 'description_characteristics';
+		}
+		if (!empty($desc_cols) && !empty($data['product_description']) && is_array($data['product_description'])) {
+			foreach ($data['product_description'] as $language_id => $desc) {
+				$upd = [];
+				foreach ($desc_cols as $col) {
+					if (isset($desc[$col])) {
+						$upd[] = "`" . $col . "` = '" . $this->db->escape((string)$desc[$col]) . "'";
+					}
+				}
+				if (!empty($upd)) {
+					$this->db->query("UPDATE `" . DB_PREFIX . "product_description` SET " . implode(', ', $upd) . " WHERE `product_id` = '" . (int)$product_id . "' AND `language_id` = '" . (int)$language_id . "'");
+				}
+			}
+		}
+
 		// Доп. фото: save to tp_product_extra_image
 		if ($this->db->query("SHOW TABLES LIKE '" . $this->db->escape(DB_PREFIX . 'product_extra_image') . "'")->num_rows === 0) {
 			return;

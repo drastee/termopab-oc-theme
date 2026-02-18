@@ -39,6 +39,8 @@
             <li class="nav-item"><a href="#tab-header" data-bs-toggle="tab" class="nav-link">{{ tab_header }}</a></li>
             <li class="nav-item"><a href="#tab-footer" data-bs-toggle="tab" class="nav-link">{{ tab_footer }}</a></li>
             <li class="nav-item"><a href="#tab-menu" data-bs-toggle="tab" class="nav-link">{{ tab_menu }}</a></li>
+            <li class="nav-item"><a href="#tab-delivery-payment" data-bs-toggle="tab" class="nav-link">{{ tab_delivery_payment }}</a></li>
+            <li class="nav-item"><a href="#tab-exchange-return" data-bs-toggle="tab" class="nav-link">{{ tab_exchange_return }}</a></li>
             <li class="nav-item"><a href="#tab-status" data-bs-toggle="tab" class="nav-link">{{ tab_status }}</a></li>
           </ul>
           <div class="tab-content">
@@ -372,6 +374,50 @@
                 </div>
               </fieldset>
             </div>
+            <div id="tab-delivery-payment" class="tab-pane">
+              <fieldset>
+                <legend>{{ tab_delivery_payment }}</legend>
+                <ul class="nav nav-tabs">
+                  {% for language in languages %}
+                    <li class="nav-item"><a href="#language-delivery-{{ language.language_id }}" data-bs-toggle="tab" class="nav-link{% if loop.first %} active{% endif %}"><img src="{{ language.image }}" title="{{ language.name }}"/> {{ language.name }}</a></li>
+                  {% endfor %}
+                </ul>
+                <div class="tab-content mt-3">
+                  {% for language in languages %}
+                    <div id="language-delivery-{{ language.language_id }}" class="tab-pane{% if loop.first %} active{% endif %}">
+                      <div class="row mb-3">
+                        <label for="input-delivery-payment-{{ language.language_id }}" class="col-sm-2 col-form-label">{{ entry_delivery_payment }}</label>
+                        <div class="col-sm-10">
+                          <textarea name="theme_termopab_delivery_payment[{{ language.language_id }}]" id="input-delivery-payment-{{ language.language_id }}" rows="10" data-oc-toggle="ckeditor" data-lang="{{ ckeditor }}" class="form-control theme-ckeditor">{{ (theme_termopab_delivery_payment[language.language_id] ?? '')|raw }}</textarea>
+                        </div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+              </fieldset>
+            </div>
+            <div id="tab-exchange-return" class="tab-pane">
+              <fieldset>
+                <legend>{{ tab_exchange_return }}</legend>
+                <ul class="nav nav-tabs">
+                  {% for language in languages %}
+                    <li class="nav-item"><a href="#language-exchange-{{ language.language_id }}" data-bs-toggle="tab" class="nav-link{% if loop.first %} active{% endif %}"><img src="{{ language.image }}" title="{{ language.name }}"/> {{ language.name }}</a></li>
+                  {% endfor %}
+                </ul>
+                <div class="tab-content mt-3">
+                  {% for language in languages %}
+                    <div id="language-exchange-{{ language.language_id }}" class="tab-pane{% if loop.first %} active{% endif %}">
+                      <div class="row mb-3">
+                        <label for="input-exchange-return-{{ language.language_id }}" class="col-sm-2 col-form-label">{{ entry_exchange_return }}</label>
+                        <div class="col-sm-10">
+                          <textarea name="theme_termopab_exchange_return[{{ language.language_id }}]" id="input-exchange-return-{{ language.language_id }}" rows="10" data-oc-toggle="ckeditor" data-lang="{{ ckeditor }}" class="form-control theme-ckeditor">{{ (theme_termopab_exchange_return[language.language_id] ?? '')|raw }}</textarea>
+                        </div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+              </fieldset>
+            </div>
             <div id="tab-status" class="tab-pane">
               <div class="row mb-3">
                 <label class="col-sm-2 col-form-label">{{ entry_status }}</label>
@@ -489,5 +535,11 @@ $('#form-theme').on('click', '.menu-item-down', function() {
   var $next = $row.next('.menu-item-row');
   if ($next.length) $next.after($row);
 });
+
+// CKEditor for delivery/exchange tabs
+var ckeditorLang = {{ (ckeditor|default('en'))|json_encode|raw }};
+if (typeof $('textarea[data-oc-toggle="ckeditor"]').ckeditor === 'function') {
+  $('textarea.theme-ckeditor').not('.ckeditor-applied').ckeditor({ language: ckeditorLang }).addClass('ckeditor-applied');
+}
 //--></script>
 {{ footer }}

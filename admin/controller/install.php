@@ -124,6 +124,8 @@ class Install extends \Opencart\System\Engine\Controller {
 			"ALTER TABLE `" . $prefix . "product` ADD COLUMN `main_video` varchar(255) DEFAULT NULL",
 			"ALTER TABLE `" . $prefix . "product` ADD COLUMN `main_video_poster` varchar(255) DEFAULT NULL",
 			"ALTER TABLE `" . $prefix . "product` ADD COLUMN `video_review` text DEFAULT NULL",
+			"ALTER TABLE `" . $prefix . "product_description` ADD COLUMN `short_description` text DEFAULT NULL",
+			"ALTER TABLE `" . $prefix . "product_description` ADD COLUMN `description_characteristics` text DEFAULT NULL",
 		];
 
 		try {

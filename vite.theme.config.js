@@ -72,6 +72,10 @@ export default {
           dest: 'image',
         },
         {
+          src: 'src/assets/images/cta/hop2.webp',
+          dest: 'image',
+        },
+        {
           src: 'src/assets/videos/explosion.webm',
           dest: 'image',
         },

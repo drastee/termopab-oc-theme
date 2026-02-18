@@ -2,87 +2,81 @@
     <div class="container">
         <div class="characteristics__inner">
             <h2 class="section-title about__title">
-                Технічні
-                <span>Характеристики</span>
+                {{ text_char_section_first|default('Технічні') }}
+                <span>{{ text_char_section_second|default('Характеристики') }}</span>
             </h2>
             <div class="characteristics__main tabs">
                 <div class="tabs__menu">
                     <ul>
-                        <li><button aria-controls="tab-description" role="tab" aria-selected="true">Опис</button></li>
-                        <li><button aria-controls="tab-params" role="tab" aria-selected="false">Характеристики</button></li>
-                        <li><button aria-controls="tab-review" role="tab" aria-selected="false">Огляд</button></li>
-                        <li><button aria-controls="tab-shipping" role="tab" aria-selected="false">Доставка та оплата</button></li>
-                        <li><button aria-controls="tab-return" role="tab" aria-selected="false">Обмін та повернення</button></li>
+                        <li><button aria-controls="tab-description" role="tab" aria-selected="true">{{ tab_char_description|default('Опис') }}</button></li>
+                        <li><button aria-controls="tab-params" role="tab" aria-selected="false">{{ tab_char_characteristics|default('Характеристики') }}</button></li>
+                        <li><button aria-controls="tab-review" role="tab" aria-selected="false">{{ tab_char_review|default('Огляд') }}</button></li>
+                        <li><button aria-controls="tab-shipping" role="tab" aria-selected="false">{{ tab_char_delivery_payment|default('Доставка та оплата') }}</button></li>
+                        <li><button aria-controls="tab-return" role="tab" aria-selected="false">{{ tab_char_exchange_return|default('Обмін і повернення') }}</button></li>
                     </ul>
-                    <a class="link" href="#">Відгуки <svg class="link-arrow"><use href="#icon-short-arrow"></use></svg></a>
+                    <a class="link" href="#reviews">{{ text_reviews|default('Відгуки') }} <svg class="link-arrow"><use href="#icon-short-arrow"></use></svg></a>
                 </div>
                 <div class="tabs__content">
                     <div id="tab-description" class="tab-panel" role="tabpanel">
-                        <h3 class="tab-panel__title">Опис</h3>
+                        <h3 class="tab-panel__title">{{ tab_char_description|default('Опис') }}</h3>
                         <div class="tab-panel__content two-columns">
-                            <p>
-                                Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                                Lorem Ipsum has been   Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                                Lorem Ipsum Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                                Lorem Ipsum has been   Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                                Lorem Ipsum. Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                                Lorem Ipsum has been   Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                                Lorem Ipsum Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                                Lorem Ipsum has been   Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
-                            </p>
-                            <p>
-                                Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                                Lorem Ipsum has been   Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                                Lorem Ipsum Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                                Lorem Ipsum has been   Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                                Lorem Ipsum 
-                            </p>
+                            {% set desc_content = description_characteristics|default('') %}
+                            {% if desc_content %}
+                                {% autoescape false %}{{ desc_content }}{% endautoescape %}
+                            {% elseif description|default('') %}
+                                {% autoescape false %}{{ description }}{% endautoescape %}
+                            {% else %}
+                                <p>{{ text_no_description|default('Опис відсутній.') }}</p>
+                            {% endif %}
                         </div>
                     </div>
                     <div id="tab-params" class="tab-panel" role="tabpanel" hidden>
-                        <h3 class="tab-panel__title">Характеристики</h3>
+                        <h3 class="tab-panel__title">{{ tab_char_characteristics|default('Характеристики') }}</h3>
                         <div class="tab-panel__content two-columns">
-                            <dl class="specs-list">
-                                <div class="specs-list__item">
-                                    <dt>Тип установки:</dt>
-                                    <dd>Гібрид</dd>
-                                </div>
-
-                                <div class="specs-list__item">
-                                    <dt>Потужність:</dt>
-                                    <dd>5678</dd>
-                                </div>
-
-                                <div class="specs-list__item">
-                                    <dt>Матеріал:</dt>
-                                    <dd>харчова нержавіюча сталь AISI 304</dd>
-                                </div>
-
-                                <div class="specs-list__item">
-                                    <dt>Загальний обсяг танка:</dt>
-                                    <dd>1200 л.</dd>
-                                </div>
-
-                                <div class="specs-list__item">
-                                    <dt>Довжина:</dt>
-                                    <dd>2100 мм</dd>
-                                </div>
-
-                                <div class="specs-list__item">
-                                    <dt>Висота:</dt>
-                                    <dd>2900 мм.</dd>
-                                </div>
-                            </dl>
+                            {% if product_attributes_flat|default([]) is not empty %}
+                                <dl class="specs-list">
+                                    {% for attr in product_attributes_flat %}
+                                        <div class="specs-list__item">
+                                            <dt>{{ attr.name }}:</dt>
+                                            <dd>{{ attr.text }}</dd>
+                                        </div>
+                                    {% endfor %}
+                                </dl>
+                            {% else %}
+                                <p>{{ text_no_attributes|default('Характеристики відсутні.') }}</p>
+                            {% endif %}
                         </div>
                     </div>
                     <div id="tab-review" class="tab-panel" role="tabpanel" hidden>
-                        <h3 class="tab-panel__title">Огляд</h3>
+                        <h3 class="tab-panel__title">{{ tab_char_review|default('Огляд') }}</h3>
                         <div class="tab-panel__content">
-                            <iframe width="100%" height="auto" src="https://www.youtube.com/embed/pHWPvAm_U-c" title="Аламбік на 300 літрів" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                            {% if video_review|default('') %}
+                                {% autoescape false %}{{ video_review }}{% endautoescape %}
+                            {% else %}
+                                <p>{{ text_no_review|default('Відео-огляд відсутній.') }}</p>
+                            {% endif %}
                         </div>
                     </div>
-                    <div id="tab-shipping" class="tab-panel" role="tabpanel" hidden></div>
-                    <div id="tab-return" class="tab-panel" role="tabpanel" hidden></div>
+                    <div id="tab-shipping" class="tab-panel" role="tabpanel" hidden>
+                        <h3 class="tab-panel__title">{{ tab_char_delivery_payment|default('Доставка та оплата') }}</h3>
+                        <div class="tab-panel__content two-columns">
+                            {% if characteristics_delivery_payment|default('') %}
+                                {% autoescape false %}{{ characteristics_delivery_payment }}{% endautoescape %}
+                            {% else %}
+                                <p>{{ text_no_content|default('Інформація відсутня.') }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div id="tab-return" class="tab-panel" role="tabpanel" hidden>
+                        <h3 class="tab-panel__title">{{ tab_char_exchange_return|default('Обмін і повернення') }}</h3>
+                        <div class="tab-panel__content two-columns">
+                            {% if characteristics_exchange_return|default('') %}
+                                {% autoescape false %}{{ characteristics_exchange_return }}{% endautoescape %}
+                            {% else %}
+                                <p>{{ text_no_content|default('Інформація відсутня.') }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

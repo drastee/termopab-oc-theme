@@ -12,6 +12,8 @@ $_['tab_main']         = 'Основне';
 $_['tab_header']       = 'Шапка';
 $_['tab_footer']       = 'Підвал';
 $_['tab_menu']         = 'Основне меню';
+$_['tab_delivery_payment'] = 'Доставка і оплата';
+$_['tab_exchange_return']  = 'Обмін і повернення';
 $_['tab_status']       = 'Статус';
 
 // Entry
@@ -41,6 +43,8 @@ $_['entry_menu_item_category'] = 'Категорія';
 $_['entry_menu_item_custom'] = 'Довільне посилання';
 $_['entry_menu_item_title'] = 'Назва';
 $_['entry_menu_item_url'] = 'URL';
+$_['entry_delivery_payment'] = 'Текст доставки та оплати';
+$_['entry_exchange_return']  = 'Текст обміну та повернення';
 
 // Button
 $_['text_install_project_tables'] = 'Створити таблиці проєктів';

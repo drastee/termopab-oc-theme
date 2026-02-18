@@ -41,6 +41,8 @@ $_['entry_menu_item_category'] = 'Category';
 $_['entry_menu_item_custom'] = 'Custom link';
 $_['entry_menu_item_title'] = 'Title';
 $_['entry_menu_item_url'] = 'URL';
+$_['entry_delivery_payment'] = 'Delivery and payment text';
+$_['entry_exchange_return']  = 'Exchange and return text';
 
 // Button
 $_['text_install_project_tables'] = 'Create project tables';

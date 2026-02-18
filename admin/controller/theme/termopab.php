@@ -84,6 +84,13 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		$data['theme_termopab_email'] = is_array($email_raw) ? (string)reset($email_raw) : (string)$email_raw;
 		$data['theme_termopab_schedule'] = isset($setting_info['theme_termopab_schedule']) ? $setting_info['theme_termopab_schedule'] : [];
 		$data['theme_termopab_worknote'] = isset($setting_info['theme_termopab_worknote']) ? $setting_info['theme_termopab_worknote'] : [];
+		$data['theme_termopab_delivery_payment'] = isset($setting_info['theme_termopab_delivery_payment']) ? $setting_info['theme_termopab_delivery_payment'] : [];
+		$data['theme_termopab_exchange_return'] = isset($setting_info['theme_termopab_exchange_return']) ? $setting_info['theme_termopab_exchange_return'] : [];
+
+		$this->document->addScript('view/javascript/ckeditor/ckeditor.js');
+		$this->document->addScript('view/javascript/ckeditor/adapters/jquery.js');
+		$this->load->language('default');
+		$data['ckeditor'] = $this->language->get('ckeditor') ?: 'en';
 
 		$social_keys = ['instagram', 'whatsapp', 'telegram', 'facebook', 'youtube'];
 		foreach ($social_keys as $key) {
@@ -242,6 +249,8 @@ class Termopab extends \Opencart\System\Engine\Controller {
 				'theme_termopab_email'   => '',
 				'theme_termopab_schedule'=> [],
 				'theme_termopab_worknote'=> [],
+				'theme_termopab_delivery_payment' => [],
+				'theme_termopab_exchange_return' => [],
 				'theme_termopab_footer_menu_use_main' => 1,
 				'theme_termopab_footer_menu' => [],
 				'theme_termopab_menu_column1' => [],
@@ -337,6 +346,14 @@ class Termopab extends \Opencart\System\Engine\Controller {
 			}
 			try {
 				$this->db->query("ALTER TABLE `" . $prefix . "product` ADD COLUMN `video_review` text DEFAULT NULL");
+			} catch (\Throwable $e) {
+			}
+			try {
+				$this->db->query("ALTER TABLE `" . $prefix . "product_description` ADD COLUMN `short_description` text DEFAULT NULL");
+			} catch (\Throwable $e) {
+			}
+			try {
+				$this->db->query("ALTER TABLE `" . $prefix . "product_description` ADD COLUMN `description_characteristics` text DEFAULT NULL");
 			} catch (\Throwable $e) {
 			}
 

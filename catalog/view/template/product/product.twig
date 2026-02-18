@@ -6,6 +6,7 @@
                 mediaType: 'glb',
                 mediaSrc: view_360_url,
                 title: heading_title,
+                short_description: short_description|default(''),
                 price: special ? special : price,
                 button_cart: button_cart|default('Купити')
             } %}
@@ -14,6 +15,7 @@
                 mediaType: 'image',
                 mediaSrc: thumb|default(popup)|default(''),
                 title: heading_title,
+                short_description: short_description|default(''),
                 price: special ? special : price,
                 button_cart: button_cart|default('Купити')
             } %}
@@ -37,6 +39,44 @@
                 <img src="{{ main_video_poster_url }}" alt="{{ heading_title|default('') }}" class="video-block__image" loading="lazy">
             </section>
         {% endif %}
-    {% endif %}
+
+        {% include "@termopab/sections/pages/product/characteristics/_characteristics.twig" with {
+            description_characteristics: description_characteristics|default(''),
+            description: description|default(''),
+            product_attributes_flat: product_attributes_flat|default([]),
+            video_review: video_review|default(''),
+            characteristics_delivery_payment: characteristics_delivery_payment|default(''),
+            characteristics_exchange_return: characteristics_exchange_return|default('')
+        } %}
+
+
+        {% include "@termopab/sections/shared/cta-hop-2/_cta-hop-2.twig" with {
+            cta_hop_2_title_1: cta_hop_2_title_1|default('Ваш задум'),
+            cta_hop_2_title_2: cta_hop_2_title_2|default('вже реальний'),
+            cta_hop_2_image: cta_hop_2_image|default(''),
+            cta_hop_2_video: cta_hop_2_video|default(''),
+            form_label_name: cta_hop_2_form_label_name|default('Ваше імʼя'),
+            form_placeholder_name: cta_hop_2_form_placeholder_name|default('Імʼя'),
+            form_label_phone: cta_hop_2_form_label_phone|default('Ваш телефон'),
+            form_placeholder_phone: cta_hop_2_form_placeholder_phone|default('+_ (___) ___-__-__'),
+            form_button_text: cta_hop_2_form_button_text|default('Отримати консультацію'),
+            form_agreement: cta_hop_2_form_agreement|default('')
+        } %}
+        {% endif %}
+        {% if products_related_preview|default([]) is not empty %}
+            {% include "@termopab/sections/pages/main/products-preview/_products-preview.twig" with {
+                products: products_related_preview,
+                text_learn_more: text_learn_more|default('Дізнатися більше')
+            } %}
+        {% endif %}
+
+        {% set desc_full = description|default('') %}
+        {% if desc_full %}
+            {% include "@termopab/sections/shared/text-content/_text-content.twig" with {
+                content: desc_full,
+                text_expand: text_expand|default('Розгорнути'),
+                text_collapse: text_collapse|default('Згорнути')
+            } %}
+        {% endif %}
 </main>
 {{ footer }}

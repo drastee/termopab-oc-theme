@@ -1,7 +1,7 @@
 <section class="cta-hop-2">
     <div class="container">
         <div class="cta-hop-2__image-wrapper">
-            <img src="/src/assets/images/cta/hop2.webp" alt="">
+            <img src="{{ cta_hop_2_image|default('/src/assets/images/cta/hop2.webp') }}" alt="">
 
             <video
                 class="explosion"
@@ -10,17 +10,22 @@
                 loop
                 playsinline
                 >
-                <source src="/src/assets/videos/explosion.webm" type="video/webm">
+                <source src="{{ cta_hop_2_video|default('/src/assets/videos/explosion.webm') }}" type="video/webm">
             </video>
-            
         </div>
         <div class="cta-hop-2__content-wrapper">
-    
-            <h2 class="cta-hop-2__title section-title">Ваш задум <span>вже реальний</span></h2>
+            <h2 class="cta-hop-2__title section-title">{{ cta_hop_2_title_1|default('Ваш задум') }} <span>{{ cta_hop_2_title_2|default('вже реальний') }}</span></h2>
 
             <div class="cta-hop-2__contact-form">
-                
-                {% include "@components/callback-form/_callback-form.twig" %}  
+                {% include "@components/callback-form/_callback-form.twig" with {
+                    form_id: 'cta-hop-2-form',
+                    form_label_name: form_label_name|default('Ваше імʼя'),
+                    form_placeholder_name: form_placeholder_name|default('Імʼя'),
+                    form_label_phone: form_label_phone|default('Ваш телефон'),
+                    form_placeholder_phone: form_placeholder_phone|default('+_ (___) ___-__-__'),
+                    form_button_text: form_button_text|default('Отримати консультацію'),
+                    form_agreement: form_agreement|default('')
+                } %}
             </div>
         </div>
     </div>
