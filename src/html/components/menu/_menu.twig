@@ -15,7 +15,7 @@
                         {% for item in col1 %}
                         <li>
                             {% if item.children|length > 0 %}
-                            <button{% if item.image %} data-image="{{ item.image }}"{% endif %}>{{ item.name }}</button>
+                            <a href="{{ item.href }}" class="nav__parent-link"{% if item.image %} data-image="{{ item.image }}"{% endif %}>{{ item.name }}</a>
                             <ul class="nav__submenu" hidden>
                                 {% for child in item.children %}
                                 <li><a href="{{ child.href }}">{{ child.name }}</a></li>

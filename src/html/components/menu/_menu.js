@@ -18,16 +18,15 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   }
 
-  // --- 2. Механика подменю (Твой код) ---
-  const submenuButtons = document.querySelectorAll('.nav__list > li > button');
-
-  submenuButtons.forEach(btn => {
-      btn.addEventListener('click', function() {
-          const submenu = this.nextElementSibling;
-          if (submenu && submenu.classList.contains('nav__submenu')) {
-              submenu.hidden = !submenu.hidden;
-              this.classList.toggle('is-active', !submenu.hidden);
-          }
+  // --- 2. Механика подменю: на десктопе — переход по ссылке, на мобилке — раскрытие ---
+  document.querySelectorAll('.nav__submenu').forEach(submenu => {
+      const trigger = submenu.previousElementSibling;
+      if (!trigger) return;
+      trigger.addEventListener('click', function(e) {
+          if (window.matchMedia('(min-width: 992px)').matches) return; // десктоп: стандартный переход по href
+          e.preventDefault();
+          submenu.hidden = !submenu.hidden;
+          this.classList.toggle('is-active', !submenu.hidden);
       });
   });
 

@@ -18,10 +18,9 @@ class Category extends \Opencart\System\Engine\Controller {
 		}
 
 		$this->load->model('catalog/category');
-		$layout_id = (int)$this->model_catalog_category->getLayoutId($category_id);
-		$layout_parent_id = (int)$this->config->get('theme_termopab_layout_parent_id') ?: 19;
-		$layout_child_id = (int)$this->config->get('theme_termopab_layout_child_id') ?: 20;
 		$store_id = (int)$this->config->get('config_store_id');
+		$path_parts = array_filter(explode('_', $path), 'strlen');
+		$is_parent = count($path_parts) <= 1;
 
 		$has_mobile = $this->db->query("SHOW COLUMNS FROM `" . DB_PREFIX . "category` LIKE 'hero_image_mobile'")->num_rows > 0;
 		$sel = $has_mobile ? "`hero_image`, `hero_image_mobile`, `breadcrumb_background`" : "`hero_image`, `breadcrumb_background`";
@@ -39,13 +38,14 @@ class Category extends \Opencart\System\Engine\Controller {
 			$data['breadcrumb_background'] = 'black';
 		}
 
-		if ($layout_id === $layout_parent_id) {
-			$route = 'extension/termopab/product/category_parent';
-			$this->load->language('extension/termopab/theme/termopab');
-			$this->load->language('default');
-			$home_raw = $this->language->get('text_home');
-			$data['text_home'] = trim(strip_tags($home_raw ?? '')) ?: 'Головна';
-			$data['home_url'] = $this->url->link('common/home', 'language=' . $this->config->get('config_language'));
+		$this->load->language('extension/termopab/theme/termopab');
+		$this->load->language('default');
+		$home_raw = $this->language->get('text_home');
+		$data['text_home'] = trim(strip_tags($home_raw ?? '')) ?: 'Головна';
+		$data['home_url'] = $this->url->link('common/home', 'language=' . $this->config->get('config_language'));
+
+		$data['layout_type'] = $is_parent ? 'parent' : 'child';
+		if ($is_parent) {
 			$data['text_content_expand'] = $this->language->get('text_content_expand');
 			$data['text_content_collapse'] = $this->language->get('text_content_collapse');
 			$data['text_learn_more'] = $this->language->get('text_learn_more');
@@ -53,10 +53,10 @@ class Category extends \Opencart\System\Engine\Controller {
 			$this->injectSlotModules($data, $category_id, $store_id, 'parent');
 			$this->injectFilterDataForParent($data, $category_id);
 			$this->rebuildProductsForParent($data, $category_id);
-		} elseif ($layout_id === $layout_child_id) {
-			$route = 'extension/termopab/product/category_child';
+		} else {
 			$this->injectSlotModules($data, $category_id, $store_id, 'child');
 		}
+		$route = 'extension/termopab/product/category';
 	}
 
 	private function injectSlotModules(array &$data, int $category_id, int $store_id, string $layout_type): void {

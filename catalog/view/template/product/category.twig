@@ -1,0 +1,201 @@
+{{ header }}
+<main>
+{% if hero_image|default('') or hero_image_mobile|default('') %}
+{% include '@termopab/sections/shared/hero-secondary/_hero-secondary.twig' with {
+  background_image_desktop: hero_image|default(hero_image_mobile)|default(''),
+  background_image_mobile: hero_image_mobile|default(hero_image)|default(''),
+  title: heading_title|default(''),
+  class: ''
+} %}
+{% endif %}
+{% set bc_rest = breadcrumbs|slice(1) %}
+{% set bc_items = [] %}
+{% for b in bc_rest %}
+  {% set bc_items = bc_items|merge([{ name: b.text, url: b.href }]) %}
+{% endfor %}
+{% include '@termopab/components/breadcrumbs/_breadcrumbs.twig' with {
+  home: { url: home_url|default('/'), name: text_home|default('Головна') },
+  breadcrumbs: bc_items,
+  background: breadcrumb_background|default('black')
+} %}
+
+{{ content_top }}
+{% if layout_type == 'parent' %}
+{{ parent_top|default('') }}
+
+{% if products|default([])|length %}
+<section class="catalog">
+  {% if filter_groups|default([])|length %}
+  <div class="filter">
+    <div class="container">
+      <div class="filter__inner">
+        <a href="{{ filter_base_url|default('') }}" class="filter__button{{ filter_category|default([])|length == 0 ? ' is-active' : '' }}"><span>{{ text_filter_all|default('Усі') }}</span></a>
+        {% for group in filter_groups %}
+          {% for f in group.filter %}
+        <a href="{{ filter_base_url|default('') }}&filter={{ f.filter_id }}" class="filter__button{{ f.filter_id in filter_category|default([]) ? ' is-active' : '' }}"><span>{{ f.name }}</span></a>
+          {% endfor %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  <div class="products">
+    <div class="container">
+      <div class="catalog__inner">
+        {% for product in products %}
+        <div class="product-card">
+          <div class="product-card__image">
+            <a href="{{ product.href }}"><img src="{{ product.thumb }}" alt="{{ product.name }}"></a>
+          </div>
+          <div class="product-card__info">
+            <h3 class="product-card__title"><a href="{{ product.href }}">{{ product.name }}</a></h3>
+            {% if product.params is defined and product.params is not empty %}
+            <dl class="product-card__params">
+              {% for item in product.params %}
+              <dt>{{ item.name }}</dt>
+              <dd>{{ item.value }}</dd>
+              {% endfor %}
+            </dl>
+            {% endif %}
+            {% if product.description is defined and product.description %}
+            <div class="product-card__description">
+              <p>{{ product.description }}</p>
+            </div>
+            {% endif %}
+            <a class="link" href="{{ product.href }}">
+              {{ text_learn_more|default('Дізнатися більше') }}
+              <svg class="link-arrow"><use href="#icon-short-arrow"></use></svg>
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="row mt-3">
+        <div class="col-sm-6 text-start">{{ pagination|default('') }}</div>
+        <div class="col-sm-6 text-end">{{ results|default('') }}</div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{{ parent_bottom|default('') }}
+{% elseif layout_type == 'child' or layout_type is null %}
+{# Child / default: standard layout with slot modules #}
+{# <div id="product-category" class="container" data-layout="{{ layout_type|default('default') }}">
+  <div class="row">{{ column_left|default('') }}
+    <div id="content" class="col">
+  <h1>{{ heading_title }}</h1>
+  {% if image or description %}
+    <div class="row">
+      {% if image %}
+        <div class="col-3"><img src="{{ image }}" alt="{{ heading_title }}" title="{{ heading_title }}" class="img-thumbnail"/></div>
+      {% endif %}
+      {% if description %}
+        <div class="col-9">{{ description }}</div>
+      {% endif %}
+    </div>
+    <hr/>
+  {% endif %}
+  {{ child_top|default('') }}
+
+  {% if categories %}
+    <h3>{{ text_refine }}</h3>
+    {% if categories|length <= 5 %}
+      <div class="row">
+        <div class="col-sm-3">
+          <ul>
+            {% for category in categories %}
+              <li><a href="{{ category.href }}">{{ category.name }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    {% else %}
+      <div class="row row-cols-sm-2 row-cols-lg-4">
+        {% set total = categories|length %}
+        {% if total > 20 %}
+          {% set batch = (total / 4)|round(0, 'ceil') %}
+        {% else %}
+          {% set batch = 5 %}
+        {% endif %}
+        {% for category in categories|batch(batch) %}
+          <div class="col">
+            <ul>
+              {% for child in category %}
+                <li><a href="{{ child.href }}">{{ child.name }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endfor %}
+      </div>
+      <br/>
+    {% endif %}
+  {% endif %}
+
+  {% if products %}
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="mb-3">
+          <a href="{{ compare }}" id="compare-total" class="btn btn-primary d-block"><i class="fa-solid fa-arrow-right-arrow-left"></i> <span class="d-none d-xl-inline">{{ text_compare }}</span></a>
+        </div>
+      </div>
+      <div class="col-lg-1 d-none d-lg-block">
+        <div class="btn-group">
+          <button type="button" id="button-list" class="btn btn-light" data-bs-toggle="tooltip" title="{{ button_list }}"><i class="fa-solid fa-table-list"></i></button>
+          <button type="button" id="button-grid" class="btn btn-light" data-bs-toggle="tooltip" title="{{ button_grid }}"><i class="fa-solid fa-table-cells"></i></button>
+        </div>
+      </div>
+      <div class="col-lg-4 offset-lg-1 col-6">
+        <div class="input-group mb-3">
+          <label for="input-sort" class="input-group-text">{{ text_sort }}</label>
+          <select id="input-sort" class="form-select" onchange="location = this.value;">
+            {% for sorts in sorts %}
+              <option value="{{ sorts.href }}"{% if sorts.value == '%s-%s'|format(sort, order) %} selected{% endif %}>{{ sorts.text }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="col-lg-3 col-6">
+        <div class="input-group mb-3">
+          <label for="input-limit" class="input-group-text">{{ text_limit }}</label>
+          <select id="input-limit" class="form-select" onchange="location = this.value;">
+            {% for limits in limits %}
+              <option value="{{ limits.href }}"{% if limits.value == limit %} selected{% endif %}>{{ limits.text }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div id="product-list" class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4">
+      {% for product in products %}
+        <div class="col mb-3">{{ product }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="row">
+      <div class="col-sm-6 text-start">{{ pagination }}</div>
+      <div class="col-sm-6 text-end">{{ results }}</div>
+    </div>
+  {% endif %}
+  {% if not categories|default([]) and not products|default([]) %}
+    <p>{{ text_no_results }}</p>
+    <div class="text-end"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
+  {% endif %}
+  {{ child_bottom|default('') }}
+    </div>
+  {{ column_right|default('') }}</div>
+</div> #}
+{% endif %}
+
+{{ content_bottom }}
+{% if layout_type == 'parent' and description %}
+  {% include '@termopab/sections/shared/text-content/_text-content.twig' with {
+    content: description,
+    text_expand: text_content_expand|default('Розгорнути'),
+    text_collapse: text_content_collapse|default('Згорнути')
+  } %}
+{% endif %}
+</main>
+{{ footer }}

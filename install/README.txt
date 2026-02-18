@@ -16,20 +16,11 @@ OCMOD не используется.
 Таблицы проектов (project, project_description, project_image) и оглядів пивоварень (brewery_review, brewery_review_description, brewery_review_image):
 - Создаются при первом посещении extension/termopab/install или по кнопке «Створити таблиці» на странице списка оглядів пивоварень.
 
-Conditional Category Layout (hero_image, breadcrumb_background):
+Category custom fields (hero_image, breadcrumb_background, slots):
 - Колонки hero_image, breadcrumb_background добавляются в таблицу category при установке темы или при запуске extension/termopab/install
   (кнопка «Створити таблиці проєктів» в налаштуваннях теми).
-- События загружают/сохраняют поля в админке. OCMOD устанавливается ТОЛЬКО через Extensions → Installer:
+- События загружают/сохраняют поля в админке. Виджет встроен в category_form.twig.
 
-  Как упаковать и установить OCMOD (OpenCart 4):
-  Структура .ocmod.zip: install.json (обязательно!) + ocmod/category_layout_mod.ocmod.xml
-  Готовый архив уже создан: install/category_layout_mod.ocmod.zip
-  1. Extensions → Installer → Upload → выберите category_layout_mod.ocmod.zip
-  2. Extensions → Extensions → найдите Category Layout Mod → Install
-  3. Extensions → Modifications → Refresh
+  OCMOD удалён — не используется.
 
-  Пересобрать архив: cd install && zip -r category_layout_mod.ocmod.zip install.json ocmod/category_layout_mod.ocmod.xml
-
-  Примечание: Extensions → Modifications не принимает загрузку XML напрямую — только .ocmod.zip через Installer.
-
-- У налаштуваннях теми (вкладка Статус) вкажіть макет для батьківської/лендинг категорії. У формі категорії при виборі цього макету з’являться поля «Фонове зображення шапки» та «Хлібні крихти».
+- Всі поля завжди видимі на вкладці Design. Parent/child визначається за path (глибина категорії).

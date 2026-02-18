@@ -11,8 +11,6 @@ class Category extends \Opencart\System\Engine\Controller {
 	 * Hook: admin/view/catalog/category_form/before
 	 */
 	public function onCategoryFormBefore(string &$route, array &$data, string &$code = '', string &$output = ''): void {
-		$data['termopab_layout_parent_id'] = (int)$this->config->get('theme_termopab_layout_parent_id') ?: 19;
-		$data['termopab_layout_child_id'] = (int)$this->config->get('theme_termopab_layout_child_id') ?: 20;
 		$category_id = (int)($data['category_id'] ?? 0);
 
 		$data['hero_image'] = '';

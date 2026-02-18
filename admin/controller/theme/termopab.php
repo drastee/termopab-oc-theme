@@ -58,8 +58,6 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		$this->load->model('design/layout');
 
 		$data['layouts'] = $this->model_design_layout->getLayouts();
-		$data['theme_termopab_layout_parent_id'] = (int)($setting_info['theme_termopab_layout_parent_id'] ?? 0);
-		$data['theme_termopab_layout_child_id'] = (int)($setting_info['theme_termopab_layout_child_id'] ?? 0);
 
 		$data['languages'] = $this->model_localisation_language->getLanguages();
 		$data['categories'] = $this->model_catalog_category->getCategories(['filter_parent_id' => 0]);
@@ -256,8 +254,6 @@ class Termopab extends \Opencart\System\Engine\Controller {
 				'theme_termopab_menu_column1' => [],
 				'theme_termopab_menu_column2' => [],
 				'theme_termopab_menu_column3' => [],
-				'theme_termopab_layout_parent_id' => 0,
-				'theme_termopab_layout_child_id' => 0,
 			], $social_defaults, $this->request->post);
 
 			if (isset($post['theme_termopab_footer_menu_use_main'])) {
@@ -286,8 +282,6 @@ class Termopab extends \Opencart\System\Engine\Controller {
 				$post['theme_termopab_footer_social_' . $key] = isset($this->request->post['theme_termopab_footer_social_' . $key]) && $this->request->post['theme_termopab_footer_social_' . $key] ? 1 : 0;
 			}
 
-			$post['theme_termopab_layout_parent_id'] = (int)($post['theme_termopab_layout_parent_id'] ?? 0);
-			$post['theme_termopab_layout_child_id'] = (int)($post['theme_termopab_layout_child_id'] ?? 0);
 
 			$this->model_setting_setting->editSetting('theme_termopab', $post, $store_id);
 
