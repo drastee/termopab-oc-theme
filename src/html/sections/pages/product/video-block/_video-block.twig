@@ -1,10 +1,14 @@
 <section class="video-block">
-    <video class="video-block__video" playsinline>
-        <source src="/src/assets/videos/hero.mp4" type="video/mp4">
-        <source src="/src/assets/videos/hero.webm" type="video/webm">
+    <video class="video-block__video" playsinline{% if video_src|default('') %} poster="{{ poster|default('') }}"{% endif %}>
+        {% if video_src|default('') %}
+            <source src="{{ video_src }}" type="video/mp4">
+        {% else %}
+            <source src="/src/assets/videos/hero.mp4" type="video/mp4">
+            <source src="/src/assets/videos/hero.webm" type="video/webm">
+        {% endif %}
     </video>
 
-    <img src="/src/assets/images/video-poster.webp" alt="" class="video-block__poster">
+    <img src="{{ poster|default('/src/assets/images/video-poster.webp') }}" alt="" class="video-block__poster">
 
     {% include '@components/video-play-button/_video-play-button.twig' with { class: "video-block__button" } %}
     

@@ -332,6 +332,10 @@ class Termopab extends \Opencart\System\Engine\Controller {
 			} catch (\Throwable $e) {
 			}
 			try {
+				$this->db->query("ALTER TABLE `" . $prefix . "product` ADD COLUMN `main_video_poster` varchar(255) DEFAULT NULL");
+			} catch (\Throwable $e) {
+			}
+			try {
 				$this->db->query("ALTER TABLE `" . $prefix . "product` ADD COLUMN `video_review` text DEFAULT NULL");
 			} catch (\Throwable $e) {
 			}
@@ -469,7 +473,8 @@ class Termopab extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
-	 * Add GLB extension and MIME type to allowed uploads (for 360° view).
+	 * Add GLB and WebP to allowed uploads (360° view + WebP images).
+	 * Uses \r\n as delimiter — OpenCart filemanager uses explode("\r\n", ...).
 	 */
 	private function addGlbToAllowedUploads(): void {
 		$this->load->model('setting/setting');
@@ -480,27 +485,41 @@ class Termopab extends \Opencart\System\Engine\Controller {
 				$stores[] = (int)$row['store_id'];
 			}
 		}
+		$eol = "\r\n"; // Filemanager expects \r\n
 		foreach ($stores as $store_id) {
 			$config = $this->model_setting_setting->getSetting('config', $store_id);
 			if (empty($config)) {
 				continue;
 			}
-			$changed = false;
-			$ext = preg_replace('~\r?\n~', "\n", (string)($config['config_file_ext_allowed'] ?? ''));
+			$ext_raw = (string)($config['config_file_ext_allowed'] ?? '');
+			$ext = preg_replace('~\r?\n~', "\n", $ext_raw);
 			$list = array_filter(array_map('trim', explode("\n", $ext)));
-			if (!in_array('glb', $list, true)) {
-				$list[] = 'glb';
-				$config['config_file_ext_allowed'] = implode("\n", $list);
-				$changed = true;
+			$ext_changed = false;
+			foreach (['glb', 'webp'] as $add) {
+				if (!in_array($add, $list, true)) {
+					$list[] = $add;
+					$ext_changed = true;
+				}
 			}
-			$mime = preg_replace('~\r?\n~', "\n", (string)($config['config_file_mime_allowed'] ?? ''));
+			$needs_normalize = (strpos($ext_raw, "\r\n") === false && strpos($ext_raw, "\n") !== false);
+			if ($ext_changed || $needs_normalize) {
+				$config['config_file_ext_allowed'] = implode($eol, $list);
+			}
+			$mime_raw = (string)($config['config_file_mime_allowed'] ?? '');
+			$mime = preg_replace('~\r?\n~', "\n", $mime_raw);
 			$list = array_filter(array_map('trim', explode("\n", $mime)));
-			if (!in_array('model/gltf-binary', $list, true)) {
-				$list[] = 'model/gltf-binary';
-				$config['config_file_mime_allowed'] = implode("\n", $list);
-				$changed = true;
+			$mime_changed = false;
+			foreach (['model/gltf-binary', 'image/webp'] as $add) {
+				if (!in_array($add, $list, true)) {
+					$list[] = $add;
+					$mime_changed = true;
+				}
 			}
-			if ($changed) {
+			$mime_needs_normalize = (strpos($mime_raw, "\r\n") === false && strpos($mime_raw, "\n") !== false);
+			if ($mime_changed || $mime_needs_normalize) {
+				$config['config_file_mime_allowed'] = implode($eol, $list);
+			}
+			if ($ext_changed || $needs_normalize || $mime_changed || $mime_needs_normalize) {
 				$config_filtered = [];
 				foreach ($config as $k => $v) {
 					if (strpos((string)$k, 'config_') === 0) {

@@ -18,6 +18,25 @@
                 button_cart: button_cart|default('Купити')
             } %}
         {% endif %}
+
+        {% if product_extra_images|default([]) is not empty %}
+            {% set gallery_images = [] %}
+            {% for img in product_extra_images %}
+                {% set gallery_images = gallery_images|merge([{ href: img.popup|default(img.thumb)|default(img.image), src: img.thumb|default(img.image) }]) %}
+            {% endfor %}
+            {% include "@termopab/sections/shared/gallery/_gallery.twig" with { images: gallery_images } %}
+        {% endif %}
+
+        {% if main_video_url|default('') %}
+            {% include "@termopab/sections/pages/product/video-block/_video-block.twig" with {
+                video_src: main_video_url,
+                poster: main_video_poster_url|default(thumb)|default(popup)|default('')
+            } %}
+        {% elseif main_video_poster_url|default('') %}
+            <section class="video-block video-block--image-only">
+                <img src="{{ main_video_poster_url }}" alt="{{ heading_title|default('') }}" class="video-block__image" loading="lazy">
+            </section>
+        {% endif %}
     {% endif %}
 </main>
 {{ footer }}

@@ -102,6 +102,14 @@ class Install extends \Opencart\System\Engine\Controller {
 				PRIMARY KEY (`category_content_id`),
 				KEY `category_store_layout` (`category_id`,`store_id`,`layout_type`,`position`,`sort_order`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+			"CREATE TABLE IF NOT EXISTS `" . $prefix . "product_extra_image` (
+				`product_extra_image_id` int(11) NOT NULL AUTO_INCREMENT,
+				`product_id` int(11) NOT NULL,
+				`image` varchar(255) NOT NULL,
+				`sort_order` int(11) NOT NULL DEFAULT 0,
+				PRIMARY KEY (`product_extra_image_id`),
+				KEY `product_id` (`product_id`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
 		];
 
 		$alters = [
@@ -114,6 +122,7 @@ class Install extends \Opencart\System\Engine\Controller {
 			"ALTER TABLE `" . $prefix . "category` ADD COLUMN `breadcrumb_background` varchar(32) DEFAULT 'black'",
 			"ALTER TABLE `" . $prefix . "product` ADD COLUMN `view_360` varchar(255) DEFAULT NULL",
 			"ALTER TABLE `" . $prefix . "product` ADD COLUMN `main_video` varchar(255) DEFAULT NULL",
+			"ALTER TABLE `" . $prefix . "product` ADD COLUMN `main_video_poster` varchar(255) DEFAULT NULL",
 			"ALTER TABLE `" . $prefix . "product` ADD COLUMN `video_review` text DEFAULT NULL",
 		];
 
@@ -138,7 +147,8 @@ class Install extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
-	 * Add GLB extension and MIME type to allowed uploads (for 360° view).
+	 * Add GLB and WebP to allowed uploads (360° view + WebP images).
+	 * Uses \r\n as delimiter — OpenCart filemanager uses explode("\r\n", ...).
 	 */
 	private function addGlbToAllowedUploads(): void {
 		$this->load->model('setting/setting');
@@ -149,27 +159,41 @@ class Install extends \Opencart\System\Engine\Controller {
 				$stores[] = (int)$row['store_id'];
 			}
 		}
+		$eol = "\r\n"; // Filemanager expects \r\n
 		foreach ($stores as $store_id) {
 			$config = $this->model_setting_setting->getSetting('config', $store_id);
 			if (empty($config)) {
 				continue;
 			}
-			$changed = false;
-			$ext = preg_replace('~\r?\n~', "\n", (string)($config['config_file_ext_allowed'] ?? ''));
+			$ext_raw = (string)($config['config_file_ext_allowed'] ?? '');
+			$ext = preg_replace('~\r?\n~', "\n", $ext_raw);
 			$list = array_filter(array_map('trim', explode("\n", $ext)));
-			if (!in_array('glb', $list, true)) {
-				$list[] = 'glb';
-				$config['config_file_ext_allowed'] = implode("\n", $list);
-				$changed = true;
+			$ext_changed = false;
+			foreach (['glb', 'webp'] as $add) {
+				if (!in_array($add, $list, true)) {
+					$list[] = $add;
+					$ext_changed = true;
+				}
 			}
-			$mime = preg_replace('~\r?\n~', "\n", (string)($config['config_file_mime_allowed'] ?? ''));
+			$needs_normalize = (strpos($ext_raw, "\r\n") === false && strpos($ext_raw, "\n") !== false);
+			if ($ext_changed || $needs_normalize) {
+				$config['config_file_ext_allowed'] = implode($eol, $list);
+			}
+			$mime_raw = (string)($config['config_file_mime_allowed'] ?? '');
+			$mime = preg_replace('~\r?\n~', "\n", $mime_raw);
 			$list = array_filter(array_map('trim', explode("\n", $mime)));
-			if (!in_array('model/gltf-binary', $list, true)) {
-				$list[] = 'model/gltf-binary';
-				$config['config_file_mime_allowed'] = implode("\n", $list);
-				$changed = true;
+			$mime_changed = false;
+			foreach (['model/gltf-binary', 'image/webp'] as $add) {
+				if (!in_array($add, $list, true)) {
+					$list[] = $add;
+					$mime_changed = true;
+				}
 			}
-			if ($changed) {
+			$mime_needs_normalize = (strpos($mime_raw, "\r\n") === false && strpos($mime_raw, "\n") !== false);
+			if ($mime_changed || $mime_needs_normalize) {
+				$config['config_file_mime_allowed'] = implode($eol, $list);
+			}
+			if ($ext_changed || $needs_normalize || $mime_changed || $mime_needs_normalize) {
 				$config_filtered = [];
 				foreach ($config as $k => $v) {
 					if (strpos((string)$k, 'config_') === 0) {

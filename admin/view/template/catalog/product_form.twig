@@ -30,6 +30,7 @@
             <li class="nav-item"><a href="#tab-subscription" data-bs-toggle="tab" class="nav-link">{{ tab_subscription }}</a></li>
             <li class="nav-item"><a href="#tab-discount" data-bs-toggle="tab" class="nav-link">{{ tab_discount }}</a></li>
             <li class="nav-item"><a href="#tab-image" data-bs-toggle="tab" class="nav-link">{{ tab_image }}</a></li>
+            <li class="nav-item"><a href="#tab-extra-images" data-bs-toggle="tab" class="nav-link">{{ tab_extra_images|default('Доп. фото') }}</a></li>
             <li class="nav-item"><a href="#tab-view360" data-bs-toggle="tab" class="nav-link">{{ tab_view360|default('360-view') }}</a></li>
             <li class="nav-item"><a href="#tab-video" data-bs-toggle="tab" class="nav-link">{{ tab_video|default('Відео') }}</a></li>
             <li class="nav-item"><a href="#tab-reward" data-bs-toggle="tab" class="nav-link">{{ tab_reward }}</a></li>
@@ -1177,6 +1178,49 @@
               </fieldset>
             </div>
 
+            <div id="tab-extra-images" class="tab-pane">
+              <fieldset>
+                <legend>{{ tab_extra_images|default('Доп. фото') }}</legend>
+                <p class="text-muted">{{ help_extra_images|default('Додаткові фото для окремого блоку на сторінці товару.') }}</p>
+                <div class="table-responsive">
+                  <table id="product-extra-image" class="table table-bordered table-hover">
+                    <thead>
+                      <tr>
+                        <th>{{ entry_image }}</th>
+                        <th>{{ entry_sort_order }}</th>
+                        <th class="text-end"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% set extra_image_row = 0 %}
+                      {% for extra_image in product_extra_images|default([]) %}
+                        <tr id="product-extra-image-row-{{ extra_image_row }}">
+                          <td>
+                            <div class="border rounded d-block" style="max-width: 300px;">
+                              <img src="{{ extra_image.thumb }}" alt="" title="" id="product-extra-image-thumb-{{ extra_image_row }}" data-oc-placeholder="{{ placeholder }}" class="img-fluid"/> <input type="hidden" name="product_extra_image[{{ extra_image_row }}][image]" value="{{ extra_image.image }}" id="input-product-extra-image-{{ extra_image_row }}"/>
+                              <div class="d-grid">
+                                <button type="button" data-oc-toggle="image" data-oc-target="#input-product-extra-image-{{ extra_image_row }}" data-oc-thumb="#product-extra-image-thumb-{{ extra_image_row }}" class="btn btn-primary rounded-0"><i class="fa-solid fa-pencil"></i> {{ button_edit }}</button>
+                                <button type="button" data-oc-toggle="clear" data-oc-target="#input-product-extra-image-{{ extra_image_row }}" data-oc-thumb="#product-extra-image-thumb-{{ extra_image_row }}" class="btn btn-warning rounded-0"><i class="fa-regular fa-trash-can"></i> {{ button_clear }}</button>
+                              </div>
+                            </div>
+                          </td>
+                          <td><input type="text" name="product_extra_image[{{ extra_image_row }}][sort_order]" value="{{ extra_image.sort_order }}" placeholder="{{ entry_sort_order }}" class="form-control"/></td>
+                          <td class="text-end"><button type="button" onclick="$('#product-extra-image-row-{{ extra_image_row }}').remove();" data-bs-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa-solid fa-minus-circle"></i></button></td>
+                        </tr>
+                        {% set extra_image_row = extra_image_row + 1 %}
+                      {% endfor %}
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <td colspan="2"></td>
+                        <td class="text-end"><button type="button" id="button-extra-image" data-bs-toggle="tooltip" title="{{ button_image_add }}" class="btn btn-primary"><i class="fa-solid fa-plus-circle"></i></button></td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </fieldset>
+            </div>
+
             <div id="tab-view360" class="tab-pane">
               <fieldset>
                 <legend>360° View</legend>
@@ -1206,6 +1250,20 @@
                       <button type="button" data-oc-toggle="clear" data-oc-target="#input-main-video" class="btn btn-outline-danger"><i class="fa-solid fa-eraser"></i></button>
                     </div>
                     <div class="form-text">{{ help_main_video|default('Основне відео товару для відображення на сторінці') }}</div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="input-main-video-poster" class="col-sm-2 col-form-label">{{ entry_main_video_poster|default('Постер / зображення') }}</label>
+                  <div class="col-sm-10">
+                    <div id="main-video-poster" class="border rounded d-block" style="max-width: 300px;">
+                      <img src="{{ main_video_poster_thumb|default(placeholder) }}" alt="" title="" id="thumb-main-video-poster" data-oc-placeholder="{{ placeholder }}" class="img-fluid"/>
+                      <input type="hidden" name="main_video_poster" value="{{ main_video_poster|default('') }}" id="input-main-video-poster"/>
+                      <div class="d-grid">
+                        <button type="button" data-oc-toggle="image" data-oc-target="#input-main-video-poster" data-oc-thumb="#thumb-main-video-poster" class="btn btn-primary rounded-0"><i class="fa-solid fa-pencil"></i> {{ button_edit }}</button>
+                        <button type="button" data-oc-toggle="clear" data-oc-target="#input-main-video-poster" data-oc-thumb="#thumb-main-video-poster" class="btn btn-warning rounded-0"><i class="fa-regular fa-trash-can"></i> {{ button_clear }}</button>
+                      </div>
+                    </div>
+                    <div class="form-text">{{ help_main_video_poster|default('Якщо є відео — використовується як постер. Якщо немає відео — виводиться як зображення') }}</div>
                   </div>
                 </div>
               </fieldset>
@@ -1917,6 +1975,26 @@ $('#button-image').on('click', function() {
     $('#product-image tbody').append(html);
 
     image_row++;
+});
+
+var extra_image_row = {{ extra_image_row|default(0) }};
+
+$('#button-extra-image').on('click', function() {
+    html = '<tr id="product-extra-image-row-' + extra_image_row + '">';
+    html += '  <td><div class="border rounded d-block" style="max-width: 300px;">';
+    html += '    <img src="{{ placeholder|escape('js') }}" alt="" title="" id="product-extra-image-thumb-' + extra_image_row + '" data-oc-placeholder="{{ placeholder|escape('js') }}" class="img-fluid"/> <input type="hidden" name="product_extra_image[' + extra_image_row + '][image]" value="" id="input-product-extra-image-' + extra_image_row + '"/>';
+    html += '    <div class="d-grid">';
+    html += '      <button type="button" data-oc-toggle="image" data-oc-target="#input-product-extra-image-' + extra_image_row + '" data-oc-thumb="#product-extra-image-thumb-' + extra_image_row + '" class="btn btn-primary rounded-0"><i class="fa-solid fa-pencil"></i> {{ button_edit|escape('js') }}</button>';
+    html += '      <button type="button" data-oc-toggle="clear" data-oc-target="#input-product-extra-image-' + extra_image_row + '" data-oc-thumb="#product-extra-image-thumb-' + extra_image_row + '" class="btn btn-warning rounded-0"><i class="fa-regular fa-trash-can"></i> {{ button_clear|escape('js') }}</button>';
+    html += '    </div>';
+    html += '  </div></td>';
+    html += '  <td><input type="text" name="product_extra_image[' + extra_image_row + '][sort_order]" value="0" placeholder="{{ entry_sort_order|escape('js') }}" class="form-control"/></td>';
+    html += '  <td class="text-end"><button type="button" onclick="$(\'#product-extra-image-row-' + extra_image_row + '\').remove();" data-bs-toggle="tooltip" title="{{ button_remove|escape('js') }}" class="btn btn-danger"><i class="fa-solid fa-minus-circle"></i></button></td>';
+    html += '</tr>';
+
+    $('#product-extra-image tbody').append(html);
+
+    extra_image_row++;
 });
 
 var subscription_row = {{ subscription_row }};
