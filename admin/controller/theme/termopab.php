@@ -100,6 +100,7 @@ class Termopab extends \Opencart\System\Engine\Controller {
 
 		$data['theme_termopab_modal_payment_address']  = isset($setting_info['theme_termopab_modal_payment_address']) ? (int)$setting_info['theme_termopab_modal_payment_address'] : 0;
 		$data['theme_termopab_modal_shipping_address'] = isset($setting_info['theme_termopab_modal_shipping_address']) ? (int)$setting_info['theme_termopab_modal_shipping_address'] : 0;
+		$data['theme_termopab_modal_address_match_default'] = isset($setting_info['theme_termopab_modal_address_match_default']) ? (int)$setting_info['theme_termopab_modal_address_match_default'] : 0;
 		$modalField = function ($key) use ($setting_info) {
 			return !isset($setting_info['theme_termopab_modal_field_' . $key]) || $setting_info['theme_termopab_modal_field_' . $key];
 		};
@@ -289,6 +290,7 @@ class Termopab extends \Opencart\System\Engine\Controller {
 				'theme_termopab_exchange_return' => [],
 				'theme_termopab_modal_payment_address'  => 0,
 				'theme_termopab_modal_shipping_address' => 0,
+				'theme_termopab_modal_address_match_default' => 0,
 				'theme_termopab_modal_field_country'   => 1,
 				'theme_termopab_modal_field_zone'     => 1,
 				'theme_termopab_modal_field_city'     => 1,
@@ -331,6 +333,7 @@ class Termopab extends \Opencart\System\Engine\Controller {
 
 			$post['theme_termopab_modal_payment_address']  = isset($this->request->post['theme_termopab_modal_payment_address']) && $this->request->post['theme_termopab_modal_payment_address'] ? 1 : 0;
 			$post['theme_termopab_modal_shipping_address'] = isset($this->request->post['theme_termopab_modal_shipping_address']) && $this->request->post['theme_termopab_modal_shipping_address'] ? 1 : 0;
+			$post['theme_termopab_modal_address_match_default'] = isset($this->request->post['theme_termopab_modal_address_match_default']) && $this->request->post['theme_termopab_modal_address_match_default'] ? 1 : 0;
 			foreach (['country', 'zone', 'city', 'address_1', 'address_2', 'company', 'postcode'] as $key) {
 				$post['theme_termopab_modal_field_' . $key] = isset($this->request->post['theme_termopab_modal_field_' . $key]) && $this->request->post['theme_termopab_modal_field_' . $key] ? 1 : 0;
 			}

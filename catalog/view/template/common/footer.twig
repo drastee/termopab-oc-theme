@@ -93,6 +93,8 @@
         modal_cart_country_id: modal_cart_country_id|default(0),
         modal_cart_payment_address_required: modal_cart_payment_address_required|default(false),
         modal_cart_has_shipping: modal_cart_has_shipping|default(false),
+        modal_cart_shipping_methods: modal_cart_shipping_methods|default([]),
+        modal_cart_label_shipping_method: modal_cart_label_shipping_method|default(''),
         modal_cart_show_field_country: modal_cart_show_field_country is defined ? modal_cart_show_field_country : true,
         modal_cart_show_field_zone: modal_cart_show_field_zone is defined ? modal_cart_show_field_zone : true,
         modal_cart_show_field_city: modal_cart_show_field_city is defined ? modal_cart_show_field_city : true,
@@ -113,7 +115,8 @@
         modal_cart_text_payment_address: modal_cart_text_payment_address|default(''),
         modal_cart_text_shipping_address: modal_cart_text_shipping_address|default(''),
         modal_cart_text_same_address: modal_cart_text_same_address|default(''),
-        modal_cart_address_field_order: modal_cart_address_field_order|default(['country','zone','city','address_1','address_2','company','postcode'])
+        modal_cart_address_field_order: modal_cart_address_field_order|default(['country','zone','city','address_1','address_2','company','postcode']),
+        modal_cart_address_match_default: modal_cart_address_match_default|default(false)
     } %}
 
     <script>
@@ -129,6 +132,7 @@
     </script>
 
     <script type="module" src="{{base}}extension/termopab/catalog/view/javascript/theme.js"></script>
+    <script src="{{base}}extension/termopab/catalog/view/javascript/payment-confirm.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.5.6/dialog-polyfill.min.js"></script>
     
     

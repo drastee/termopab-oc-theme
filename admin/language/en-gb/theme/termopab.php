@@ -48,6 +48,7 @@ $_['entry_delivery_payment'] = 'Delivery and payment text';
 $_['entry_exchange_return']  = 'Exchange and return text';
 $_['entry_modal_payment_address']  = 'Show «Payment address» block in cart modal';
 $_['entry_modal_shipping_address'] = 'Show «Shipping address» block in cart modal';
+$_['entry_modal_address_match_default'] = 'Shipping address = payment address by default (toggle hidden)';
 $_['entry_modal_fields']       = 'Which fields to show';
 $_['entry_modal_field_company']    = 'Company';
 $_['entry_modal_field_address_2']  = 'Address 2';
@@ -87,6 +88,7 @@ $_['help_menu_columns'] = 'All three columns have the same structure. Add menu i
 $_['help_checkout_modal'] = 'Settings for the checkout modal (Buy button on product card). Enabled blocks are shown in the form with address, country and zone fields.';
 $_['help_modal_payment_address']  = 'If disabled, the payment address block is hidden in the modal.';
 $_['help_modal_shipping_address'] = 'If disabled, the shipping address block is hidden in the modal.';
+$_['help_modal_address_match_default'] = 'If enabled, the «Same as payment address» toggle is checked by default and hidden — the customer cannot choose a different shipping address.';
 $_['help_modal_fields'] = 'Enable or disable individual fields in the Payment and Shipping address blocks. When disabled, a field is not shown and not required on submit.';
 $_['help_modal_address_field_order'] = 'Use «Move up» / «Move down» to change the order in which fields appear in the form.';
 

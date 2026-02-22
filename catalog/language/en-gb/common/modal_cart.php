@@ -8,6 +8,7 @@ $_['modal_cart_placeholder_phone'] = '+_ (___) ___-__-__';
 $_['modal_cart_label_email']       = 'Your E-Mail';
 $_['modal_cart_placeholder_email'] = 'E-Mail';
 $_['modal_cart_label_delivery']    = 'Nova Poshta delivery';
+$_['modal_cart_label_shipping_method'] = 'Shipping method';
 $_['modal_cart_placeholder_city']  = 'Enter city';
 $_['modal_cart_placeholder_office'] = 'Enter branch';
 $_['modal_cart_label_payment']     = 'Select payment method';

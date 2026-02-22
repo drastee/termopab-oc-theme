@@ -8,6 +8,7 @@ $_['modal_cart_placeholder_phone'] = '+_ (___) ___-__-__';
 $_['modal_cart_label_email']       = 'Введите ваш E-Mail';
 $_['modal_cart_placeholder_email'] = 'E-Mail';
 $_['modal_cart_label_delivery']    = 'Доставка новой почтой';
+$_['modal_cart_label_shipping_method'] = 'Способ доставки';
 $_['modal_cart_placeholder_city']  = 'Введите город';
 $_['modal_cart_placeholder_office'] = 'Введите отделение';
 $_['modal_cart_label_payment']     = 'Выберите способ оплаты';

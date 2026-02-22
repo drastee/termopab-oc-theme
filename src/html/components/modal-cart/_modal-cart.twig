@@ -139,10 +139,10 @@
                 {% endif %}
 
                 {% if modal_cart_has_shipping|default(false) %}
-                    <h3 class="label">{{ modal_cart_text_shipping_address|default('Адреса доставки') }}</h3>
-                    <div class="fields-wrapper">
+                    <h3 class="label" {% if modal_cart_address_match_default|default(false) %} style="display: none"{% endif %}>{{ modal_cart_text_shipping_address|default('Адреса доставки') }}</h3>
+                    <div class="fields-wrapper"{% if modal_cart_address_match_default|default(false) %} style="display: none"{% endif %}>
                         <label class="radio-label">
-                            <input type="checkbox" name="address_match" id="modal-cart-address-match" value="1">
+                            <input type="checkbox" name="address_match" id="modal-cart-address-match" value="1"{% if modal_cart_address_match_default|default(false) %} checked{% endif %}>
                             {{ modal_cart_text_same_address|default('Та сама, що й адреса оплати') }}
                         </label>
                     </div>
@@ -257,6 +257,19 @@
                             {% endif %}
                         {% endfor %}
                     </div>
+
+                    {% if modal_cart_shipping_methods|default([])|length > 0 %}
+                        <div class="fields-wrapper">
+                            <span class="label">{{ modal_cart_label_shipping_method|default('Спосіб доставки') }}</span>
+                            {% for sm in modal_cart_shipping_methods %}
+                                <label class="radio-label">
+                                    <input type="radio" name="shipping_method" value="{{ sm.code }}"{{ loop.first ? ' checked' : '' }}>
+                                    <span class="radio-text">{{ sm.name }}{% if sm.text %} — {{ sm.text }}{% endif %}</span>
+                                </label>
+                            {% endfor %}
+                            <span class="modal-cart__error" id="modal-cart-error-shipping-method" aria-live="polite"></span>
+                        </div>
+                    {% endif %}
                 {% endif %}
 
                 {% if modal_cart_payment_methods|default([])|length > 0 %}
@@ -291,12 +304,14 @@
                         </label>
                     </div>
                 {% endif %}
+                <span class="modal-cart__error" id="modal-cart-error-payment-method" aria-live="polite"></span>
             </div>
             <div>
                 <div id="modal-cart-products" class="modal-cart__products" aria-label="Товари в кошику">
                     {# Список товарів заповнюється JS при відкритті модалки #}
                     <p id="modal-cart-products-empty" class="modal-cart__products-empty text-muted" style="display: none;">Кошик порожній</p>
                 </div>
+                <span class="modal-cart__error" id="modal-cart-error-confirm" aria-live="polite"></span>
                 <button type="submit" class="btn btn-primary">
                     {{ modal_cart_button }}
                     <svg class="icon-arrow"><use href="#icon-short-arrow"></use></svg>

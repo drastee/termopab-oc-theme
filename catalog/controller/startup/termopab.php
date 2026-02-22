@@ -161,6 +161,14 @@ class Termopab extends \Opencart\System\Engine\Controller {
 			? (bool)$theme_shipping
 			: $this->cart->hasShipping();
 
+		if ($data['modal_cart_has_shipping']) {
+			$data['modal_cart_shipping_methods'] = $this->model_extension_termopab_common_modal_cart->getShippingMethods();
+			$data['modal_cart_label_shipping_method'] = $this->language->get('modal_cart_label_shipping_method');
+		} else {
+			$data['modal_cart_shipping_methods'] = [];
+			$data['modal_cart_label_shipping_method'] = '';
+		}
+
 		// Показувати поля: якщо ключ не збережений — так (default); якщо збережений 1 — так; якщо 0 — ні.
 		$showField = function ($key) {
 			$v = $this->config->get('theme_termopab_modal_field_' . $key);
@@ -185,6 +193,48 @@ class Termopab extends \Opencart\System\Engine\Controller {
 			}
 		}
 		$data['modal_cart_address_field_order'] = $order;
+
+		$data['modal_cart_address_match_default'] = (bool)$this->config->get('theme_termopab_modal_address_match_default');
+
+		// Значення з сесії для підстановки в форму (як на стандартному checkout) — сумісність модалки та сторінки оформлення
+		$data['modal_cart_fill'] = [];
+		if (isset($this->session->data['customer'])) {
+			$c = $this->session->data['customer'];
+			$data['modal_cart_fill']['firstname'] = $c['firstname'] ?? '';
+			$data['modal_cart_fill']['lastname']  = $c['lastname'] ?? '';
+			$data['modal_cart_fill']['email']     = $c['email'] ?? '';
+			$data['modal_cart_fill']['telephone'] = $c['telephone'] ?? '';
+		}
+		if (isset($this->session->data['payment_address'])) {
+			$p = $this->session->data['payment_address'];
+			$data['modal_cart_fill']['payment_company']     = $p['company'] ?? '';
+			$data['modal_cart_fill']['payment_address_1']   = $p['address_1'] ?? '';
+			$data['modal_cart_fill']['payment_address_2']  = $p['address_2'] ?? '';
+			$data['modal_cart_fill']['payment_city']       = $p['city'] ?? '';
+			$data['modal_cart_fill']['payment_postcode']   = $p['postcode'] ?? '';
+			$data['modal_cart_fill']['payment_country_id'] = (int)($p['country_id'] ?? 0);
+			$data['modal_cart_fill']['payment_zone_id']     = (int)($p['zone_id'] ?? 0);
+		}
+		if (isset($this->session->data['shipping_address'])) {
+			$s = $this->session->data['shipping_address'];
+			$data['modal_cart_fill']['shipping_company']     = $s['company'] ?? '';
+			$data['modal_cart_fill']['shipping_address_1']   = $s['address_1'] ?? '';
+			$data['modal_cart_fill']['shipping_address_2']  = $s['address_2'] ?? '';
+			$data['modal_cart_fill']['shipping_city']       = $s['city'] ?? '';
+			$data['modal_cart_fill']['shipping_postcode']   = $s['postcode'] ?? '';
+			$data['modal_cart_fill']['shipping_country_id'] = (int)($s['country_id'] ?? 0);
+			$data['modal_cart_fill']['shipping_zone_id']    = (int)($s['zone_id'] ?? 0);
+		}
+		if (isset($this->session->data['payment_method']['code'])) {
+			$data['modal_cart_fill']['payment_method'] = $this->session->data['payment_method']['code'];
+		}
+		if (isset($this->session->data['shipping_method']['code'])) {
+			$data['modal_cart_fill']['shipping_method'] = $this->session->data['shipping_method']['code'];
+		}
+		$data['modal_cart_fill']['address_match'] = (!empty($this->session->data['shipping_address']) && !empty($this->session->data['payment_address'])
+			&& ($this->session->data['shipping_address']['address_1'] ?? '') === ($this->session->data['payment_address']['address_1'] ?? '')
+			&& ($this->session->data['shipping_address']['zone_id'] ?? '') === ($this->session->data['payment_address']['zone_id'] ?? '')) ? '1' : '';
+		$data['modal_cart_fill']['agreement'] = !empty($this->session->data['agree']) ? '1' : '';
 
 		$this->load->language('checkout/payment_address');
 		$data['modal_cart_entry_firstname']   = $this->language->get('entry_firstname');

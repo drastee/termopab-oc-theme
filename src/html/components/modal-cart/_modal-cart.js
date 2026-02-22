@@ -2,6 +2,8 @@ const modal = document.querySelector('#order-modal');
 const openBtns = document.querySelectorAll('.open-order-btn');
 const closeBtn = document.querySelector('.popup-close');
 
+const MODAL_CART_DRAFT_KEY = 'termopab_modal_cart_draft';
+
 const productsUrl = () => (typeof window.MODAL_CART_PRODUCTS_URL !== 'undefined' ? window.MODAL_CART_PRODUCTS_URL : '');
 const removeUrl = () => (typeof window.MODAL_CART_REMOVE_URL !== 'undefined' ? window.MODAL_CART_REMOVE_URL : '');
 
@@ -294,17 +296,22 @@ if (form) {
     })
       .then((r) => r.json())
       .then((json) => {
-        if (json.redirect) {
-          window.location.href = json.redirect;
-          return;
-        }
+        // Сначала показываем ошибки — редирект только если ошибок нет
         if (json.error && typeof json.error === 'object') {
+          let firstErrorEl = null;
           Object.keys(json.error).forEach((key) => {
             const errId = 'modal-cart-error-' + key.replace(/_/g, '-');
             showError(errId, json.error[key]);
             const input = form.querySelector('[name="' + key.replace(/(_[0-9]+)$/, '') + '"]') || form.querySelector('[name="' + key + '"]') || document.getElementById(errId.replace('modal-cart-error-', 'modal-cart-'));
             if (input) setInvalid(input, true);
+            if (!firstErrorEl) firstErrorEl = document.getElementById(errId) || input;
           });
+          if (firstErrorEl) firstErrorEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          return;
+        }
+        if (json.redirect) {
+          clearDraft();
+          window.location.href = json.redirect;
         }
       })
       .catch((err) => {
@@ -344,4 +351,78 @@ if (form) {
     paymentRadios.forEach((radio) => radio.addEventListener('change', togglePaymentContent));
     togglePaymentContent();
   }
+
+  // Чернетка форми в localStorage — відновлення після перезавантаження (як у стандартному checkout)
+  function getFormDraft() {
+    const draft = {};
+    for (const el of form.elements) {
+      if (!el.name || el.disabled) continue;
+      if (el.type === 'radio') {
+        if (el.checked) draft[el.name] = el.value;
+      } else if (el.type === 'checkbox') {
+        draft[el.name] = el.checked ? (el.value || '1') : '';
+      } else {
+        draft[el.name] = el.value;
+      }
+    }
+    return draft;
+  }
+
+  function applyFormDraft(data) {
+    if (!data || typeof data !== 'object') return;
+    for (const name of Object.keys(data)) {
+      const value = data[name];
+      const els = form.querySelectorAll('[name="' + name.replace(/[[\]]/g, '\\$&') + '"]');
+      if (!els.length) continue;
+      const first = els[0];
+      if (first.type === 'radio') {
+        els.forEach((r) => { r.checked = (r.value === value); });
+      } else if (first.type === 'checkbox') {
+        first.checked = (value === '1' || value === true || value === 'on' || value === 1);
+      } else {
+        first.value = value == null ? '' : String(value);
+      }
+    }
+    if (addressMatch && shippingFields) {
+      const hide = addressMatch.checked;
+      shippingFields.style.display = hide ? 'none' : '';
+      shippingFields.querySelectorAll('input, select, textarea').forEach((el) => {
+        el.disabled = hide;
+        if (hide) el.removeAttribute('required');
+        else if (el.closest('.required')) el.setAttribute('required', 'required');
+      });
+    }
+    togglePaymentContent();
+  }
+
+  function saveDraft() {
+    try {
+      localStorage.setItem(MODAL_CART_DRAFT_KEY, JSON.stringify(getFormDraft()));
+    } catch (e) {}
+  }
+
+  function restoreDraft() {
+    try {
+      const raw = localStorage.getItem(MODAL_CART_DRAFT_KEY);
+      if (raw) applyFormDraft(JSON.parse(raw));
+    } catch (e) {}
+  }
+
+  function clearDraft() {
+    try {
+      localStorage.removeItem(MODAL_CART_DRAFT_KEY);
+    } catch (e) {}
+  }
+
+  let draftSaveTimer = null;
+  form.addEventListener('input', () => {
+    clearTimeout(draftSaveTimer);
+    draftSaveTimer = setTimeout(saveDraft, 400);
+  });
+  form.addEventListener('change', () => {
+    clearTimeout(draftSaveTimer);
+    draftSaveTimer = setTimeout(saveDraft, 400);
+  });
+
+  restoreDraft();
 }

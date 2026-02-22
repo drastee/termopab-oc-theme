@@ -89,6 +89,7 @@ class ModalCart extends \Opencart\System\Engine\Controller {
 			'shipping_custom_field'=> [],
 			'address_match'        => 0,
 			'payment_method'       => '',
+			'shipping_method'      => '',
 			'agreement'            => 0,
 		];
 		$post = $this->request->post + $required;
@@ -193,28 +194,51 @@ class ModalCart extends \Opencart\System\Engine\Controller {
 			unset($this->session->data['payment_address']);
 		}
 
-		// Shipping address session
-		if ($has_shipping) {
-			if (!empty($post['address_match']) && $payment_required && isset($this->session->data['payment_address'])) {
-				$shipping = $this->session->data['payment_address'];
-				$shipping['address_id'] = 0;
-				$this->session->data['shipping_address'] = $shipping;
+		// Shipping address session — заповнюємо завжди, коли в кошику є доставка (для checkout/confirm)
+		$cart_has_shipping = $this->cart->hasShipping();
+		if ($cart_has_shipping) {
+			if ($has_shipping) {
+				// Тема показує блок доставки: з форми або «та сама, що й оплата»
+				if (!empty($post['address_match']) && $payment_required && isset($this->session->data['payment_address'])) {
+					$shipping = $this->session->data['payment_address'];
+					$shipping['address_id'] = 0;
+					$this->session->data['shipping_address'] = $shipping;
+				} else {
+					$firstname = $post['firstname'];
+					$lastname  = $post['lastname'];
+					$this->session->data['shipping_address'] = $this->buildAddressSession(
+						$firstname,
+						$lastname,
+						$post['shipping_company'],
+						$post['shipping_address_1'],
+						$post['shipping_address_2'],
+						$post['shipping_city'],
+						$post['shipping_postcode'],
+						(int)$post['shipping_country_id'],
+						(int)$post['shipping_zone_id'],
+						is_array($post['shipping_custom_field']) ? $post['shipping_custom_field'] : []
+					);
+				}
 			} else {
-				// У модалці завжди використовуємо контактні ім'я/прізвище для доставки (поля shipping_firstname/lastname у формі не показуються)
-				$firstname = $post['firstname'];
-				$lastname  = $post['lastname'];
-				$this->session->data['shipping_address'] = $this->buildAddressSession(
-					$firstname,
-					$lastname,
-					$post['shipping_company'],
-					$post['shipping_address_1'],
-					$post['shipping_address_2'],
-					$post['shipping_city'],
-					$post['shipping_postcode'],
-					(int)$post['shipping_country_id'],
-					(int)$post['shipping_zone_id'],
-					is_array($post['shipping_custom_field']) ? $post['shipping_custom_field'] : []
-				);
+				// Тема не показує блок доставки, але кошик з доставкою — підставляємо адресу оплати або мінімум
+				if ($payment_required && isset($this->session->data['payment_address'])) {
+					$shipping = $this->session->data['payment_address'];
+					$shipping['address_id'] = 0;
+					$this->session->data['shipping_address'] = $shipping;
+				} else {
+					$this->session->data['shipping_address'] = $this->buildAddressSession(
+						$post['firstname'],
+						$post['lastname'],
+						'',
+						'',
+						'',
+						'',
+						'',
+						(int)$this->config->get('config_country_id'),
+						(int)$this->config->get('config_zone_id') ?: 0,
+						[]
+					);
+				}
 			}
 		} else {
 			unset($this->session->data['shipping_address']);
@@ -229,12 +253,88 @@ class ModalCart extends \Opencart\System\Engine\Controller {
 			$this->session->data['agree'] = true;
 		}
 
-		unset($this->session->data['shipping_method']);
-		unset($this->session->data['shipping_methods']);
+		if ($cart_has_shipping) {
+			$this->load->model('checkout/shipping_method');
+			$shipping_methods = $this->model_checkout_shipping_method->getMethods($this->session->data['shipping_address']);
+			$this->session->data['shipping_methods'] = $shipping_methods;
 
-		$json['success'] = true;
-		$json['redirect'] = $this->url->link('checkout/checkout', 'language=' . $this->config->get('config_language'), true);
+			$found = false;
+			if ($has_shipping) {
+				$selected_code = trim((string)$post['shipping_method']);
+				if ($selected_code !== '') {
+					foreach ($shipping_methods as $method) {
+						if (empty($method['quote']) || !is_array($method['quote'])) {
+							continue;
+						}
+						foreach ($method['quote'] as $quote) {
+							if (($quote['code'] ?? '') === $selected_code) {
+								$this->session->data['shipping_method'] = $quote;
+								$found = true;
+								break 2;
+							}
+						}
+					}
+				}
+			}
+			if (!$found) {
+				// З форми не вибрано або тема не показує доставку — беремо перший доступний спосіб
+				foreach ($shipping_methods as $method) {
+					if (!empty($method['quote']) && is_array($method['quote'])) {
+						$first = reset($method['quote']);
+						if (!empty($first)) {
+							$this->session->data['shipping_method'] = $first;
+							$found = true;
+							break;
+						}
+					}
+				}
+			}
+			if (!$found) {
+				$this->load->language('checkout/shipping_method');
+				$json['error']['shipping_method'] = $this->language->get('error_shipping_method');
+			}
+		} else {
+			unset($this->session->data['shipping_method']);
+			unset($this->session->data['shipping_methods']);
+		}
 
+		if (!empty($json['error'])) {
+			$this->response->addHeader('Content-Type: application/json');
+			$this->response->setOutput(json_encode($json));
+			return;
+		}
+
+		// Перевірки як у checkout/confirm — якщо щось не так, одразу повертаємо причину
+		$confirm_reason = $this->getConfirmFailureReason();
+		if ($confirm_reason !== null) {
+			$json['error']['confirm'] = $confirm_reason;
+			$this->response->addHeader('Content-Type: application/json');
+			$this->response->setOutput(json_encode($json));
+			return;
+		}
+
+		// Завжди створюємо замовлення тут (з доставкою і без) — редирект на success або помилка в модалку
+		$this->load->controller('checkout/confirm');
+		if (!empty($this->session->data['order_id'])) {
+			$this->load->model('checkout/order');
+			$payment_code = $this->session->data['payment_method']['code'] ?? '';
+			$code = (strpos($payment_code, '.') !== false) ? explode('.', $payment_code)[0] : $payment_code;
+			$status_id = (int)$this->config->get('payment_' . $code . '_order_status_id');
+			if (!$status_id) {
+				$status_id = (int)$this->config->get('config_order_status_id');
+			}
+			if ($status_id) {
+				$this->model_checkout_order->addHistory($this->session->data['order_id'], $status_id);
+			}
+			$json['redirect'] = $this->url->link('checkout/success', 'language=' . $this->config->get('config_language'), true);
+			$this->response->addHeader('Content-Type: application/json');
+			$this->response->setOutput(json_encode($json));
+			return;
+		}
+
+		// Confirm не створив замовлення — повертаємо помилку в модалку, без редиректу
+		$this->load->language('extension/termopab/common/modal_cart');
+		$json['error']['confirm'] = $this->language->get('error_confirm_failed') ?: 'Не вдалося створити замовлення. Спробуйте ще раз або оформте на сторінці кошика.';
 		$this->response->addHeader('Content-Type: application/json');
 		$this->response->setOutput(json_encode($json));
 	}
@@ -363,5 +463,40 @@ class ModalCart extends \Opencart\System\Engine\Controller {
 			'address_format' => $address_format,
 			'custom_field'   => $custom_field,
 		];
+	}
+
+	/**
+	 * Ті самі перевірки, що в checkout/confirm — повертає текст помилки або null.
+	 * Допомагає зрозуміти, чому замовлення не створилось.
+	 *
+	 * @return string|null
+	 */
+	private function getConfirmFailureReason(): ?string {
+		$this->load->language('extension/termopab/common/modal_cart');
+
+		if (!isset($this->session->data['customer'])) {
+			return $this->language->get('error_confirm_no_customer');
+		}
+		if (!$this->cart->hasProducts() || (!$this->cart->hasStock() && !$this->config->get('config_stock_checkout')) || !$this->cart->hasMinimum()) {
+			return $this->language->get('error_confirm_cart');
+		}
+		if ($this->cart->hasShipping()) {
+			if (!isset($this->session->data['shipping_address']['address_id'])) {
+				return $this->language->get('error_confirm_shipping_address');
+			}
+			if (!isset($this->session->data['shipping_method'])) {
+				return $this->language->get('error_confirm_shipping_method');
+			}
+		}
+		if ($this->config->get('config_checkout_payment_address') && !isset($this->session->data['payment_address'])) {
+			return $this->language->get('error_confirm_payment_address');
+		}
+		if (!isset($this->session->data['payment_method'])) {
+			return $this->language->get('error_confirm_payment_method');
+		}
+		if ($this->config->get('config_checkout_id') && empty($this->session->data['agree'])) {
+			return $this->language->get('error_confirm_agree');
+		}
+		return null;
 	}
 }
