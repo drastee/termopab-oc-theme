@@ -27,17 +27,17 @@
                     <input id="modal-cart-office" name="office" type="text" placeholder="{{ modal_cart_placeholder_office }}">
                 </div>
 
-                <div class="fields-wrapper">
-                    <span class="label">{{ modal_cart_label_payment }}</span>
-                    <label class="radio-label">
-                        <input type="radio" name="payment_method" value="cashless" checked>
-                        <span class="radio-text">{{ modal_cart_payment_cashless }}</span>
-                    </label>
-                    <label class="radio-label">
-                        <input type="radio" name="payment_method" value="cash">
-                        <span class="radio-text">{{ modal_cart_payment_cash }}</span>
-                    </label>
-                </div>
+                {% if modal_cart_payment_methods|default([])|length > 0 %}
+                    <div class="fields-wrapper">
+                        <span class="label">{{ modal_cart_label_payment }}</span>
+                        {% for pm in modal_cart_payment_methods %}
+                            <label class="radio-label">
+                                <input type="radio" name="payment_method" value="{{ pm.code }}"{{ loop.first ? ' checked' : '' }}>
+                                <span class="radio-text">{{ pm.name }}</span>
+                            </label>
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </div>
             <div>
                 <div class="cart-product" id="modal-cart-product">
@@ -56,9 +56,9 @@
                 <hr class="custom">
                 <div class="agreement">
                     <input type="checkbox" id="modal-cart-agreement" name="agreement">
-                    <label for="modal-cart-agreement">{{ modal_cart_agreement|raw }}</label>
-                    <span class="modal-cart__error" id="modal-cart-error-agreement" aria-live="polite"></span>
+                    <label for="modal-cart-agreement">{{ modal_cart_agreement|raw }}<br><span class="modal-cart__error" id="modal-cart-error-agreement" aria-live="polite"></span></label>
                 </div>
+                
             </div>
         </form>
 

@@ -140,6 +140,9 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		$data['modal_cart_error_email'] = $this->language->get('modal_cart_error_email');
 		$data['modal_cart_error_agreement'] = $this->language->get('modal_cart_error_agreement');
 
+		// Payment methods from OpenCart (enabled in admin) for modal cart
+		$data['modal_cart_payment_methods'] = $this->getModalCartPaymentMethods();
+
 		$data['menu_columns'] = $this->buildMenuColumns($language_id);
 		$data['footer_menu'] = $this->buildFooterMenu($language_id);
 		// Append Projects link (extension/termopab/project)
@@ -154,6 +157,36 @@ class Termopab extends \Opencart\System\Engine\Controller {
 			'name' => $this->language->get('heading_title'),
 			'href' => $this->url->link('extension/termopab/brewery_review', 'language=' . $this->config->get('config_language')),
 		];
+	}
+
+	/**
+	 * Get payment methods for modal cart (enabled in admin). Uses store default country/zone so geo-zones apply.
+	 *
+	 * @return array<int, array{code: string, name: string}>
+	 */
+	private function getModalCartPaymentMethods(): array {
+		$payment_address = [
+			'country_id' => (int)$this->config->get('config_country_id'),
+			'zone_id'    => (int)$this->config->get('config_zone_id'),
+			'address_id' => 0,
+		];
+		$this->load->model('checkout/payment_method');
+		$methods = $this->model_checkout_payment_method->getMethods($payment_address);
+		$list = [];
+		foreach ($methods as $method) {
+			if (empty($method['option']) || !is_array($method['option'])) {
+				continue;
+			}
+			foreach ($method['option'] as $option) {
+				if (!empty($option['code']) && isset($option['name'])) {
+					$list[] = [
+						'code' => $option['code'],
+						'name' => $option['name'],
+					];
+				}
+			}
+		}
+		return $list;
 	}
 
 	/**
