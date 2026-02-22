@@ -8,7 +8,11 @@
                 title: heading_title,
                 short_description: short_description|default(''),
                 price: special ? special : price,
-                button_cart: button_cart|default('Купити')
+                button_cart: button_cart|default('Купити'),
+                product_id: product_id,
+                product_thumb: thumb|default(popup)|default(''),
+                cart_add: cart_add|default(''),
+                cart_info: cart_info|default('')
             } %}
         {% else %}
             {% include "@termopab/sections/pages/product/main-media/_main-media.twig" with {
@@ -17,7 +21,11 @@
                 title: heading_title,
                 short_description: short_description|default(''),
                 price: special ? special : price,
-                button_cart: button_cart|default('Купити')
+                button_cart: button_cart|default('Купити'),
+                product_id: product_id,
+                product_thumb: thumb|default(popup)|default(''),
+                cart_add: cart_add|default(''),
+                cart_info: cart_info|default('')
             } %}
         {% endif %}
 

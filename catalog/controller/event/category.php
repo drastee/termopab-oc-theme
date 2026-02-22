@@ -99,7 +99,7 @@ class Category extends \Opencart\System\Engine\Controller {
 		}
 		$path = (string)($this->request->get['path'] ?? '');
 		$data['filter_base_url'] = str_replace('&amp;', '&', $this->url->link('product/category', 'language=' . $this->config->get('config_language') . '&path=' . $path . $url));
-
+		
 		if (isset($this->request->get['filter']) && $this->request->get['filter'] !== '') {
 			$data['filter_category'] = array_map('intval', array_filter(explode(',', $this->request->get['filter'])));
 		} else {
@@ -195,10 +195,16 @@ class Category extends \Opencart\System\Engine\Controller {
 		$data['products'] = [];
 
 		foreach ($results as $result) {
-			$description = trim(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8')));
-			$len = function_exists('mb_strlen') ? mb_strlen($description) : strlen($description);
-			if ($len > $desc_length) {
-				$description = (function_exists('mb_substr') ? mb_substr($description, 0, $desc_length) : substr($description, 0, $desc_length)) . '..';
+			$short = isset($result['short_description']) ? trim(strip_tags(html_entity_decode($result['short_description'], ENT_QUOTES, 'UTF-8'))) : '';
+	
+			if ($short !== '') {
+				$description = $short;
+			} else {
+				$description = trim(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8')));
+				$len = function_exists('mb_strlen') ? mb_strlen($description) : strlen($description);
+				if ($len > $desc_length) {
+					$description = (function_exists('mb_substr') ? mb_substr($description, 0, $desc_length) : substr($description, 0, $desc_length)) . '..';
+				}
 			}
 
 			$image = (!empty($result['image']) && is_file(DIR_IMAGE . html_entity_decode($result['image'], ENT_QUOTES, 'UTF-8')))

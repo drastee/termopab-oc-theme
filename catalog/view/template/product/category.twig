@@ -28,11 +28,11 @@
   {% if filter_groups|default([])|length %}
   <div class="filter">
     <div class="container">
-      <div class="filter__inner">
-        <a href="{{ filter_base_url|default('') }}" class="filter__button{{ filter_category|default([])|length == 0 ? ' is-active' : '' }}"><span>{{ text_filter_all|default('Усі') }}</span></a>
+      <div class="filter__inner" id="filter">
+        <a href="{{ filter_base_url|default('') }}#filter" class="filter__button{{ filter_category|default([])|length == 0 ? ' is-active' : '' }}"><span>{{ text_filter_all|default('Усі') }}</span></a>
         {% for group in filter_groups %}
           {% for f in group.filter %}
-        <a href="{{ filter_base_url|default('') }}&filter={{ f.filter_id }}" class="filter__button{{ f.filter_id in filter_category|default([]) ? ' is-active' : '' }}"><span>{{ f.name }}</span></a>
+        <a href="{{ filter_base_url|default('') }}&filter={{ f.filter_id }}#filter" class="filter__button{{ f.filter_id in filter_category|default([]) ? ' is-active' : '' }}"><span>{{ f.name }}</span></a>
           {% endfor %}
         {% endfor %}
       </div>
@@ -190,7 +190,7 @@
 {% endif %}
 
 {{ content_bottom }}
-{% if layout_type == 'parent' and description %}
+{% if description %}
   {% include '@termopab/sections/shared/text-content/_text-content.twig' with {
     content: description,
     text_expand: text_content_expand|default('Розгорнути'),

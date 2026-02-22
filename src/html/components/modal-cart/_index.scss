@@ -61,6 +61,20 @@
         margin-bottom: 20px;
     }
 
+    &__error{
+        display: block;
+        font-size: 12px;
+        color: var(--color-accent, #c00);
+        margin-top: 4px;
+        min-height: 1em;
+        &:empty{ display: none; }
+    }
+
+    input.is-invalid{
+        border-color: var(--color-accent, #c00);
+        outline-color: var(--color-accent, #c00);
+    }
+
     input{
         background-color: #CDCDCD;
         color: currentColor;

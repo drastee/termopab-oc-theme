@@ -120,6 +120,26 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		$this->load->language('extension/termopab/theme/termopab');
 		$data['text_call_me'] = $this->language->get('text_call_me');
 
+		$this->load->language('extension/termopab/common/modal_cart');
+		$data['modal_cart_title'] = $this->language->get('modal_cart_title');
+		$data['modal_cart_label_name'] = $this->language->get('modal_cart_label_name');
+		$data['modal_cart_placeholder_name'] = $this->language->get('modal_cart_placeholder_name');
+		$data['modal_cart_label_phone'] = $this->language->get('modal_cart_label_phone');
+		$data['modal_cart_placeholder_phone'] = $this->language->get('modal_cart_placeholder_phone');
+		$data['modal_cart_label_email'] = $this->language->get('modal_cart_label_email');
+		$data['modal_cart_placeholder_email'] = $this->language->get('modal_cart_placeholder_email');
+		$data['modal_cart_label_delivery'] = $this->language->get('modal_cart_label_delivery');
+		$data['modal_cart_placeholder_city'] = $this->language->get('modal_cart_placeholder_city');
+		$data['modal_cart_placeholder_office'] = $this->language->get('modal_cart_placeholder_office');
+		$data['modal_cart_label_payment'] = $this->language->get('modal_cart_label_payment');
+		$data['modal_cart_payment_cashless'] = $this->language->get('modal_cart_payment_cashless');
+		$data['modal_cart_payment_cash'] = $this->language->get('modal_cart_payment_cash');
+		$data['modal_cart_button'] = $this->language->get('modal_cart_button');
+		$data['modal_cart_agreement'] = $this->language->get('modal_cart_agreement');
+		$data['modal_cart_error_required'] = $this->language->get('modal_cart_error_required');
+		$data['modal_cart_error_email'] = $this->language->get('modal_cart_error_email');
+		$data['modal_cart_error_agreement'] = $this->language->get('modal_cart_error_agreement');
+
 		$data['menu_columns'] = $this->buildMenuColumns($language_id);
 		$data['footer_menu'] = $this->buildFooterMenu($language_id);
 		// Append Projects link (extension/termopab/project)

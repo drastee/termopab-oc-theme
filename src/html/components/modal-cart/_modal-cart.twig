@@ -1,61 +1,63 @@
 <dialog id="order-modal" class="modal-cart">
     <div class="modal-cart__container">
-        <h2 class="modal-cart__title section-title">Оформлення замовлення</h2>
-        <form class="modal-cart__inner" action="#">
+        <h2 class="modal-cart__title section-title">{{ modal_cart_title }}</h2>
+        <form class="modal-cart__inner" action="#" id="modal-cart-form">
             <div>
                 <div class="fields-wrapper">
-                    <label class="label" for="telephone">Введіть імʼя</label>
-                    <input id="name" name="name" type="text" placeholder="ПІБ">
+                    <label class="label" for="modal-cart-name">{{ modal_cart_label_name }}</label>
+                    <input id="modal-cart-name" name="name" type="text" placeholder="{{ modal_cart_placeholder_name }}">
+                    <span class="modal-cart__error" id="modal-cart-error-name" aria-live="polite"></span>
                 </div>
 
                 <div class="fields-wrapper">
-                    <label class="label" for="phone">Ваш телефон</label>
-                    <input id="phone" name="phone" type="tel" placeholder="+_ (___) ___-__-__">
-                </div>
-
-
-                <div class="fields-wrapper">
-                    <label class="label" for="email">Введіть ваш E-Mail</label>
-                    <input id="email" name="email" type="email" placeholder="E-Mail">
+                    <label class="label" for="modal-cart-phone">{{ modal_cart_label_phone }}</label>
+                    <input id="modal-cart-phone" name="phone" type="tel" placeholder="{{ modal_cart_placeholder_phone }}">
+                    <span class="modal-cart__error" id="modal-cart-error-phone" aria-live="polite"></span>
                 </div>
 
                 <div class="fields-wrapper">
-                    <label class="label">Доставка новою поштою</label>
-                    <input id="city" name="name" type="text" placeholder="Введіть місто">
-                    <input id="office" name="name" type="text" placeholder="Введіть відділення">
+                    <label class="label" for="modal-cart-email">{{ modal_cart_label_email }}</label>
+                    <input id="modal-cart-email" name="email" type="email" placeholder="{{ modal_cart_placeholder_email }}">
+                    <span class="modal-cart__error" id="modal-cart-error-email" aria-live="polite"></span>
                 </div>
 
                 <div class="fields-wrapper">
-                    <span class="label">Оберіть спосіб оплати</span>
+                    <label class="label" for="modal-cart-city">{{ modal_cart_label_delivery }}</label>
+                    <input id="modal-cart-city" name="city" type="text" placeholder="{{ modal_cart_placeholder_city }}">
+                    <input id="modal-cart-office" name="office" type="text" placeholder="{{ modal_cart_placeholder_office }}">
+                </div>
+
+                <div class="fields-wrapper">
+                    <span class="label">{{ modal_cart_label_payment }}</span>
                     <label class="radio-label">
                         <input type="radio" name="payment_method" value="cashless" checked>
-                        <span class="radio-text">Безготівковий розрахунок для юридичних осіб</span>
+                        <span class="radio-text">{{ modal_cart_payment_cashless }}</span>
                     </label>
-
                     <label class="radio-label">
                         <input type="radio" name="payment_method" value="cash">
-                        <span class="radio-text">Розрахунок готівкою при отриманні товару</span>
+                        <span class="radio-text">{{ modal_cart_payment_cash }}</span>
                     </label>
                 </div>
             </div>
             <div>
-                <div class="cart-product">
+                <div class="cart-product" id="modal-cart-product">
                     <div class="cart-product__image">
-                        <img src="/src/assets/images/thumb.webp" class="img-base" alt="">
+                        <img id="modal-cart-product-img" src="" class="img-base" alt="" style="display: none;">
                     </div>
                     <div class="cart-product__info">
-                        <h3 class="cart-product__title">Форфас горизонтальний на 1000 л - CIP</h3>
-                        <p class="cart-product__price">€31 495</p>
+                        <h3 class="cart-product__title" id="modal-cart-product-title"></h3>
+                        <p class="cart-product__price" id="modal-cart-product-price"></p>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">
-                    Отримати консультацію
+                    {{ modal_cart_button }}
                     <svg class="icon-arrow"><use href="#icon-short-arrow"></use></svg>
                 </button>
                 <hr class="custom">
                 <div class="agreement">
-                    <input type="checkbox" id="agreement" name="agreement" />
-                    <label for="agreement">Натискаючи на кнопку, ви даєте згоду на обробку своїх персональних даних і погоджуєтеся з <a href="#">Політикою конфіденційності</a></label>
+                    <input type="checkbox" id="modal-cart-agreement" name="agreement">
+                    <label for="modal-cart-agreement">{{ modal_cart_agreement|raw }}</label>
+                    <span class="modal-cart__error" id="modal-cart-error-agreement" aria-live="polite"></span>
                 </div>
             </div>
         </form>

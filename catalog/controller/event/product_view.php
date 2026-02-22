@@ -160,6 +160,8 @@ class ProductView extends \Opencart\System\Engine\Controller {
 		if (!isset($data['button_cart']) || $data['button_cart'] === '') {
 			$data['button_cart'] = $this->language->get('button_cart');
 		}
+		$data['cart_add'] = $this->url->link('checkout/cart.add', 'language=' . $this->config->get('config_language'));
+		$data['cart_info'] = $this->url->link('common/cart.info', 'language=' . $this->config->get('config_language'));
 
 		// Доп. фото для окремого блоку на сторінці товару
 		$data['product_extra_images'] = [];

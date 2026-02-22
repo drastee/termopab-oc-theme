@@ -14,11 +14,15 @@
 {% set short_description = short_description|default('') %}
 {% set price = price|default('') %}
 {% set button_cart = button_cart|default('Купити') %}
+{% set product_id = product_id|default('') %}
+{% set product_thumb = product_thumb|default(mediaSrc) %}
+{% set cart_add = cart_add|default('') %}
+{% set cart_info = cart_info|default('') %}
 
 <section class="main-media">
     <div class="container">
         <div class="main-media__inner">
-            {% if title %}<h1 class="main-media__title">{{ title }}</h1>{% endif %}
+            {% if title %}<h2 class="main-media__title">{{ title }}</h2>{% endif %}
             {% if price %}<p class="main-media__price">{{ price }}</p>{% endif %}
             <div class="main-media__media">
                 {% if mediaType == 'glb' and mediaSrc %}
@@ -36,6 +40,13 @@
         </div>
     </div>
     <div class="main-media__button-wrap">
-        <button type="button" class="open-order-btn">{{ button_cart }} <svg class="link-arrow"><use href="#icon-short-arrow"></use></svg></button>
+        <button type="button" class="open-order-btn"
+                {% if product_id %}data-product-id="{{ product_id }}"{% endif %}
+                {% if title %}data-product-title="{{ title|e('html_attr') }}"{% endif %}
+                {% if price %}data-product-price="{{ price|e('html_attr') }}"{% endif %}
+                {% if product_thumb %}data-product-thumb="{{ product_thumb|e('html_attr') }}"{% endif %}
+                {% if cart_add %}data-cart-add="{{ cart_add|e('html_attr') }}"{% endif %}
+                {% if cart_info %}data-cart-info="{{ cart_info|e('html_attr') }}"{% endif %}
+        >{{ button_cart }} <svg class="link-arrow"><use href="#icon-short-arrow"></use></svg></button>
     </div>
 </section>

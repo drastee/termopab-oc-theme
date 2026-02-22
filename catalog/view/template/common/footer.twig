@@ -70,8 +70,32 @@
 
     </div>
 
-    {% include "@termopab/components/modal-cart/_modal-cart.twig" %}
-    
+    {% include "@termopab/components/modal-cart/_modal-cart.twig" with {
+        modal_cart_title: modal_cart_title|default(''),
+        modal_cart_label_name: modal_cart_label_name|default(''),
+        modal_cart_placeholder_name: modal_cart_placeholder_name|default(''),
+        modal_cart_label_phone: modal_cart_label_phone|default(''),
+        modal_cart_placeholder_phone: modal_cart_placeholder_phone|default(''),
+        modal_cart_label_email: modal_cart_label_email|default(''),
+        modal_cart_placeholder_email: modal_cart_placeholder_email|default(''),
+        modal_cart_label_delivery: modal_cart_label_delivery|default(''),
+        modal_cart_placeholder_city: modal_cart_placeholder_city|default(''),
+        modal_cart_placeholder_office: modal_cart_placeholder_office|default(''),
+        modal_cart_label_payment: modal_cart_label_payment|default(''),
+        modal_cart_payment_cashless: modal_cart_payment_cashless|default(''),
+        modal_cart_payment_cash: modal_cart_payment_cash|default(''),
+        modal_cart_button: modal_cart_button|default(''),
+        modal_cart_agreement: modal_cart_agreement|default('')
+    } %}
+
+    <script>
+    window.MODAL_CART_MESSAGES = {
+        required: {{ (modal_cart_error_required|default(''))|json_encode|raw }},
+        email: {{ (modal_cart_error_email|default(''))|json_encode|raw }},
+        agreement: {{ (modal_cart_error_agreement|default(''))|json_encode|raw }}
+    };
+    </script>
+
     <script type="module" src="{{base}}extension/termopab/catalog/view/javascript/theme.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.5.6/dialog-polyfill.min.js"></script>
     
