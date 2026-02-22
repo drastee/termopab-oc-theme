@@ -98,6 +98,44 @@ class Termopab extends \Opencart\System\Engine\Controller {
 			$data['theme_termopab_footer_social_' . $key] = isset($setting_info['theme_termopab_footer_social_' . $key]) ? (int)$setting_info['theme_termopab_footer_social_' . $key] : 1;
 		}
 
+		$data['theme_termopab_modal_payment_address']  = isset($setting_info['theme_termopab_modal_payment_address']) ? (int)$setting_info['theme_termopab_modal_payment_address'] : 0;
+		$data['theme_termopab_modal_shipping_address'] = isset($setting_info['theme_termopab_modal_shipping_address']) ? (int)$setting_info['theme_termopab_modal_shipping_address'] : 0;
+		$modalField = function ($key) use ($setting_info) {
+			return !isset($setting_info['theme_termopab_modal_field_' . $key]) || $setting_info['theme_termopab_modal_field_' . $key];
+		};
+		$data['theme_termopab_modal_field_country']   = $modalField('country');
+		$data['theme_termopab_modal_field_zone']     = $modalField('zone');
+		$data['theme_termopab_modal_field_city']     = $modalField('city');
+		$data['theme_termopab_modal_field_address_1'] = $modalField('address_1');
+		$data['theme_termopab_modal_field_address_2'] = $modalField('address_2');
+		$data['theme_termopab_modal_field_company']   = $modalField('company');
+		$data['theme_termopab_modal_field_postcode']  = $modalField('postcode');
+		$data['theme_termopab_modal_address_field_order'] = isset($setting_info['theme_termopab_modal_address_field_order']) ? $setting_info['theme_termopab_modal_address_field_order'] : '';
+
+		// Ordered list of address fields (key + label) for sortable UI in checkout tab
+		$allowed_order_keys = ['country', 'zone', 'city', 'address_1', 'address_2', 'company', 'postcode'];
+		$field_labels = [
+			'country'   => $this->language->get('entry_modal_field_country'),
+			'zone'      => $this->language->get('entry_modal_field_zone'),
+			'city'      => $this->language->get('entry_modal_field_city'),
+			'address_1' => $this->language->get('entry_modal_field_address_1'),
+			'address_2' => $this->language->get('entry_modal_field_address_2'),
+			'company'   => $this->language->get('entry_modal_field_company'),
+			'postcode'  => $this->language->get('entry_modal_field_postcode'),
+		];
+		$order_raw = $data['theme_termopab_modal_address_field_order'];
+		$order = [];
+		if (is_string($order_raw) && $order_raw !== '') {
+			$order = array_values(array_intersect($allowed_order_keys, array_unique(array_map('trim', explode(',', $order_raw)))));
+		}
+		if (empty($order)) {
+			$order = $allowed_order_keys;
+		}
+		$data['modal_address_fields_ordered'] = [];
+		foreach ($order as $key) {
+			$data['modal_address_fields_ordered'][] = ['key' => $key, 'label' => $field_labels[$key] ?? $key];
+		}
+
 		$data['footer_menu_use_main'] = !isset($setting_info['theme_termopab_footer_menu_use_main']) || $setting_info['theme_termopab_footer_menu_use_main'];
 		$data['footer_menu_items'] = [];
 		if (!empty($setting_info['theme_termopab_footer_menu'])) {
@@ -249,6 +287,15 @@ class Termopab extends \Opencart\System\Engine\Controller {
 				'theme_termopab_worknote'=> [],
 				'theme_termopab_delivery_payment' => [],
 				'theme_termopab_exchange_return' => [],
+				'theme_termopab_modal_payment_address'  => 0,
+				'theme_termopab_modal_shipping_address' => 0,
+				'theme_termopab_modal_field_country'   => 1,
+				'theme_termopab_modal_field_zone'     => 1,
+				'theme_termopab_modal_field_city'     => 1,
+				'theme_termopab_modal_field_address_1' => 1,
+				'theme_termopab_modal_field_address_2' => 1,
+				'theme_termopab_modal_field_company'   => 1,
+				'theme_termopab_modal_field_postcode'  => 1,
 				'theme_termopab_footer_menu_use_main' => 1,
 				'theme_termopab_footer_menu' => [],
 				'theme_termopab_menu_column1' => [],
@@ -282,6 +329,12 @@ class Termopab extends \Opencart\System\Engine\Controller {
 				$post['theme_termopab_footer_social_' . $key] = isset($this->request->post['theme_termopab_footer_social_' . $key]) && $this->request->post['theme_termopab_footer_social_' . $key] ? 1 : 0;
 			}
 
+			$post['theme_termopab_modal_payment_address']  = isset($this->request->post['theme_termopab_modal_payment_address']) && $this->request->post['theme_termopab_modal_payment_address'] ? 1 : 0;
+			$post['theme_termopab_modal_shipping_address'] = isset($this->request->post['theme_termopab_modal_shipping_address']) && $this->request->post['theme_termopab_modal_shipping_address'] ? 1 : 0;
+			foreach (['country', 'zone', 'city', 'address_1', 'address_2', 'company', 'postcode'] as $key) {
+				$post['theme_termopab_modal_field_' . $key] = isset($this->request->post['theme_termopab_modal_field_' . $key]) && $this->request->post['theme_termopab_modal_field_' . $key] ? 1 : 0;
+			}
+			$post['theme_termopab_modal_address_field_order'] = isset($this->request->post['theme_termopab_modal_address_field_order']) ? trim((string)$this->request->post['theme_termopab_modal_address_field_order']) : '';
 
 			$this->model_setting_setting->editSetting('theme_termopab', $post, $store_id);
 

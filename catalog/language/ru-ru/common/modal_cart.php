@@ -19,3 +19,5 @@ $_['modal_cart_agreement']         = 'Нажимая на кнопку, вы д�
 $_['modal_cart_error_required']    = 'Заполните это поле';
 $_['modal_cart_error_email']       = 'Введите корректный E-Mail';
 $_['modal_cart_error_agreement']   = 'Требуется согласие на обработку персональных данных';
+
+$_['modal_cart_text_same_address'] = 'Та же, что и адрес оплаты';

@@ -140,8 +140,81 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		$data['modal_cart_error_email'] = $this->language->get('modal_cart_error_email');
 		$data['modal_cart_error_agreement'] = $this->language->get('modal_cart_error_agreement');
 
-		// Payment methods from OpenCart (enabled in admin) for modal cart
-		$data['modal_cart_payment_methods'] = $this->getModalCartPaymentMethods();
+		// Payment methods for modal cart (via model; keeps payment logic out of startup)
+		$this->load->model('extension/termopab/common/modal_cart');
+		$data['modal_cart_payment_methods'] = $this->model_extension_termopab_common_modal_cart->getPaymentMethods();
+
+		// Address form data for modal cart (payment_address / shipping_address compatibility)
+		$address_data = $this->model_extension_termopab_common_modal_cart->getAddressFormData();
+		$data['modal_cart_countries']      = $address_data['countries'];
+		$data['modal_cart_zones']         = $address_data['zones'];
+		$data['modal_cart_custom_fields'] = $address_data['custom_fields'];
+		$data['modal_cart_country_id']    = $address_data['country_id'];
+
+		$theme_payment = $this->config->get('theme_termopab_modal_payment_address');
+		$data['modal_cart_payment_address_required'] = ($theme_payment !== null && $theme_payment !== '')
+			? (bool)$theme_payment
+			: (bool)$this->config->get('config_checkout_payment_address');
+
+		$theme_shipping = $this->config->get('theme_termopab_modal_shipping_address');
+		$data['modal_cart_has_shipping'] = ($theme_shipping !== null && $theme_shipping !== '')
+			? (bool)$theme_shipping
+			: $this->cart->hasShipping();
+
+		// Показувати поля: якщо ключ не збережений — так (default); якщо збережений 1 — так; якщо 0 — ні.
+		$showField = function ($key) {
+			$v = $this->config->get('theme_termopab_modal_field_' . $key);
+			return ($v === '' || $v === null) ? true : in_array($v, [1, '1'], true);
+		};
+		$data['modal_cart_show_field_country']   = $showField('country');
+		$data['modal_cart_show_field_zone']      = $showField('zone');
+		$data['modal_cart_show_field_city']      = $showField('city');
+		$data['modal_cart_show_field_address_1'] = $showField('address_1');
+		$data['modal_cart_show_field_address_2'] = $showField('address_2');
+		$data['modal_cart_show_field_company']   = $showField('company');
+		$data['modal_cart_show_field_postcode']  = $showField('postcode');
+
+		// Порядок полів адреси: країна → область → місто → адреса (опційні: address_2, company, postcode — за бажанням з адмінки).
+		$allowed_order_keys = ['country', 'zone', 'city', 'address_1', 'address_2', 'company', 'postcode'];
+		$order_raw = $this->config->get('theme_termopab_modal_address_field_order');
+		$order = ['country', 'zone', 'city', 'address_1', 'address_2', 'company', 'postcode'];
+		if (is_string($order_raw) && $order_raw !== '') {
+			$parsed = array_values(array_intersect($allowed_order_keys, array_unique(array_map('trim', explode(',', $order_raw)))));
+			if (!empty($parsed)) {
+				$order = $parsed;
+			}
+		}
+		$data['modal_cart_address_field_order'] = $order;
+
+		$this->load->language('checkout/payment_address');
+		$data['modal_cart_entry_firstname']   = $this->language->get('entry_firstname');
+		$data['modal_cart_entry_lastname']    = $this->language->get('entry_lastname');
+		$data['modal_cart_entry_company']     = $this->language->get('entry_company');
+		$data['modal_cart_entry_address_1']   = $this->language->get('entry_address_1');
+		$data['modal_cart_entry_address_2']   = $this->language->get('entry_address_2');
+		$data['modal_cart_entry_city']       = $this->language->get('entry_city');
+		$data['modal_cart_entry_postcode']   = $this->language->get('entry_postcode');
+		$data['modal_cart_entry_country']    = $this->language->get('entry_country');
+		$data['modal_cart_entry_zone']       = $this->language->get('entry_zone');
+		$data['modal_cart_text_select']      = $this->language->get('text_select');
+		$data['modal_cart_error_firstname']  = $this->language->get('error_firstname');
+		$data['modal_cart_error_lastname']   = $this->language->get('error_lastname');
+		$data['modal_cart_error_address_1']  = $this->language->get('error_address_1');
+		$data['modal_cart_error_city']       = $this->language->get('error_city');
+		$data['modal_cart_error_postcode']   = $this->language->get('error_postcode');
+		$data['modal_cart_error_country']    = $this->language->get('error_country');
+		$data['modal_cart_error_zone']       = $this->language->get('error_zone');
+		$data['modal_cart_error_custom_field'] = $this->language->get('error_custom_field');
+		$data['modal_cart_error_regex']      = $this->language->get('error_regex');
+		$data['modal_cart_text_payment_address']  = $this->language->get('heading_title');
+		$this->load->language('checkout/shipping_address');
+		$data['modal_cart_text_shipping_address']  = $this->language->get('heading_title');
+		$data['modal_cart_text_same_address'] = $this->language->get('modal_cart_text_same_address');
+
+		$data['modal_cart_save_url']     = $this->url->link('extension/termopab/common/modal_cart.saveAddresses', 'language=' . $this->config->get('config_language'));
+		$data['modal_cart_zones_url']    = $this->url->link('extension/termopab/common/modal_cart.zones', 'language=' . $this->config->get('config_language'));
+		$data['modal_cart_products_url'] = $this->url->link('extension/termopab/common/modal_cart.getCartProducts', 'language=' . $this->config->get('config_language'));
+		$data['modal_cart_remove_url']   = $this->url->link('common/cart.remove', 'language=' . $this->config->get('config_language'));
 
 		$data['menu_columns'] = $this->buildMenuColumns($language_id);
 		$data['footer_menu'] = $this->buildFooterMenu($language_id);
@@ -157,36 +230,6 @@ class Termopab extends \Opencart\System\Engine\Controller {
 			'name' => $this->language->get('heading_title'),
 			'href' => $this->url->link('extension/termopab/brewery_review', 'language=' . $this->config->get('config_language')),
 		];
-	}
-
-	/**
-	 * Get payment methods for modal cart (enabled in admin). Uses store default country/zone so geo-zones apply.
-	 *
-	 * @return array<int, array{code: string, name: string}>
-	 */
-	private function getModalCartPaymentMethods(): array {
-		$payment_address = [
-			'country_id' => (int)$this->config->get('config_country_id'),
-			'zone_id'    => (int)$this->config->get('config_zone_id'),
-			'address_id' => 0,
-		];
-		$this->load->model('checkout/payment_method');
-		$methods = $this->model_checkout_payment_method->getMethods($payment_address);
-		$list = [];
-		foreach ($methods as $method) {
-			if (empty($method['option']) || !is_array($method['option'])) {
-				continue;
-			}
-			foreach ($method['option'] as $option) {
-				if (!empty($option['code']) && isset($option['name'])) {
-					$list[] = [
-						'code' => $option['code'],
-						'name' => $option['name'],
-					];
-				}
-			}
-		}
-		return $list;
 	}
 
 	/**

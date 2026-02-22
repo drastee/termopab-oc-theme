@@ -19,3 +19,5 @@ $_['modal_cart_agreement']         = 'By clicking the button, you consent to the
 $_['modal_cart_error_required']    = 'This field is required';
 $_['modal_cart_error_email']       = 'Enter a valid E-Mail';
 $_['modal_cart_error_agreement']   = 'You must agree to the processing of personal data';
+
+$_['modal_cart_text_same_address'] = 'Same as payment address';

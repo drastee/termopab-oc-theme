@@ -61,6 +61,16 @@
         margin-bottom: 20px;
     }
 
+    &__payment-extra{
+        margin-top: 12px;
+    }
+
+    &__payment-method-content{
+        margin-top: 8px;
+        /* Кнопка підтвердження з шаблону способу оплати (checkout) у модалці не використовується */
+        #button-confirm{ display: none; }
+    }
+
     &__error{
         display: block;
         font-size: 12px;
@@ -116,22 +126,33 @@
     }
 }
 
-.cart-product{
+.modal-cart__products {
+    max-height: 240px;
+    overflow-y: auto;
+    margin-bottom: 16px;
+}
+.modal-cart__products-empty {
+    margin: 0;
+    padding: 12px 0;
+    font-size: 14px;
+}
+.cart-product {
+    position: relative;
     display: grid;
     grid-template-columns: 137px 1fr;
     gap: 18px;
     margin-bottom: 12px;
-    &__image{
-        img{
+    &__image {
+        img {
             object-fit: contain;
         }
     }
-    &__info{
+    &__info {
         display: flex;
         flex-direction: column;
         justify-content: center;
     }
-    &__title{
+    &__title {
         font-weight: 500;
         font-family: var(--font-alt);
         color: var(--color-accent);
@@ -139,8 +160,33 @@
         line-height: 1.4;
         margin-bottom: 10px;
     }
-    &__price{
+    &__price {
         font-size: 16px;
         font-weight: 400;
+    }
+    &__remove {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        width: 24px;
+        height: 24px;
+        padding: 0;
+        border: none;
+        background: rgba(0, 0, 0, 0.08);
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #666;
+        transition: background 0.15s, color 0.15s;
+        &:hover {
+            background: rgba(0, 0, 0, 0.12);
+            color: #333;
+        }
+        &:focus {
+            outline: 2px solid var(--color-accent, #c00);
+            outline-offset: 1px;
+        }
     }
 }

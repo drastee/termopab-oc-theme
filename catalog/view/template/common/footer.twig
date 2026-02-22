@@ -86,7 +86,34 @@
         modal_cart_payment_cash: modal_cart_payment_cash|default(''),
         modal_cart_payment_methods: modal_cart_payment_methods|default([]),
         modal_cart_button: modal_cart_button|default(''),
-        modal_cart_agreement: modal_cart_agreement|default('')
+        modal_cart_agreement: modal_cart_agreement|default(''),
+        modal_cart_countries: modal_cart_countries|default([]),
+        modal_cart_zones: modal_cart_zones|default([]),
+        modal_cart_custom_fields: modal_cart_custom_fields|default([]),
+        modal_cart_country_id: modal_cart_country_id|default(0),
+        modal_cart_payment_address_required: modal_cart_payment_address_required|default(false),
+        modal_cart_has_shipping: modal_cart_has_shipping|default(false),
+        modal_cart_show_field_country: modal_cart_show_field_country is defined ? modal_cart_show_field_country : true,
+        modal_cart_show_field_zone: modal_cart_show_field_zone is defined ? modal_cart_show_field_zone : true,
+        modal_cart_show_field_city: modal_cart_show_field_city is defined ? modal_cart_show_field_city : true,
+        modal_cart_show_field_address_1: modal_cart_show_field_address_1 is defined ? modal_cart_show_field_address_1 : true,
+        modal_cart_show_field_address_2: modal_cart_show_field_address_2 is defined ? modal_cart_show_field_address_2 : false,
+        modal_cart_show_field_company: modal_cart_show_field_company is defined ? modal_cart_show_field_company : false,
+        modal_cart_show_field_postcode: modal_cart_show_field_postcode is defined ? modal_cart_show_field_postcode : false,
+        modal_cart_entry_firstname: modal_cart_entry_firstname|default(''),
+        modal_cart_entry_lastname: modal_cart_entry_lastname|default(''),
+        modal_cart_entry_company: modal_cart_entry_company|default(''),
+        modal_cart_entry_address_1: modal_cart_entry_address_1|default(''),
+        modal_cart_entry_address_2: modal_cart_entry_address_2|default(''),
+        modal_cart_entry_city: modal_cart_entry_city|default(''),
+        modal_cart_entry_postcode: modal_cart_entry_postcode|default(''),
+        modal_cart_entry_country: modal_cart_entry_country|default(''),
+        modal_cart_entry_zone: modal_cart_entry_zone|default(''),
+        modal_cart_text_select: modal_cart_text_select|default(''),
+        modal_cart_text_payment_address: modal_cart_text_payment_address|default(''),
+        modal_cart_text_shipping_address: modal_cart_text_shipping_address|default(''),
+        modal_cart_text_same_address: modal_cart_text_same_address|default(''),
+        modal_cart_address_field_order: modal_cart_address_field_order|default(['country','zone','city','address_1','address_2','company','postcode'])
     } %}
 
     <script>
@@ -95,6 +122,10 @@
         email: {{ (modal_cart_error_email|default(''))|json_encode|raw }},
         agreement: {{ (modal_cart_error_agreement|default(''))|json_encode|raw }}
     };
+    window.MODAL_CART_SAVE_URL = {{ (modal_cart_save_url|default(''))|json_encode|raw }};
+    window.MODAL_CART_ZONES_URL = {{ (modal_cart_zones_url|default(''))|json_encode|raw }};
+    window.MODAL_CART_PRODUCTS_URL = {{ (modal_cart_products_url|default(''))|json_encode|raw }};
+    window.MODAL_CART_REMOVE_URL = {{ (modal_cart_remove_url|default(''))|json_encode|raw }};
     </script>
 
     <script type="module" src="{{base}}extension/termopab/catalog/view/javascript/theme.js"></script>
