@@ -403,6 +403,10 @@ if (form) {
 
   function restoreDraft() {
     try {
+      const firstnameEl = form.querySelector('[name="firstname"]');
+      if (firstnameEl && firstnameEl.value.trim() !== '') {
+        return; // форма вже заповнена з сесії, не перезаписуємо з localStorage
+      }
       const raw = localStorage.getItem(MODAL_CART_DRAFT_KEY);
       if (raw) applyFormDraft(JSON.parse(raw));
     } catch (e) {}
@@ -425,4 +429,9 @@ if (form) {
   });
 
   restoreDraft();
+
+  // На сторінці checkout форма є поза модалкою — одразу завантажуємо товари кошика
+  if (!modal || !modal.contains(form)) {
+    loadAndRenderCartProducts();
+  }
 }

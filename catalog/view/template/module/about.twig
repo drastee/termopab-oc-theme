@@ -2,10 +2,13 @@
     <div class="container about__inner">
 
         <h2 class="section-title about__title">
-            {{ title_first }}{% if title_rest|length > 0 %}<br>{% for line in title_rest %}<span>{{ line }}</span>{% endfor %}{% endif %}
+            {{ title_first|raw }}{% for line in title_rest %}<br><span>{{ line|raw }}</span>{% endfor %}
         </h2>
-
-        {% if description or button_text or facts|length > 0 %}
+        {% 
+            if description is not empty 
+            or button_text is not empty 
+            or facts is not empty 
+        %}
             <div class="about__content">
 
                 <div class="about__text">

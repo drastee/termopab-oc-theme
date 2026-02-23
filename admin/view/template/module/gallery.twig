@@ -1,0 +1,149 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="float-end">
+        <button type="submit" form="form-module" data-bs-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa-solid fa-save"></i></button>
+        <a href="{{ back }}" data-bs-toggle="tooltip" title="{{ button_back }}" class="btn btn-light"><i class="fa-solid fa-reply"></i></a>
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ol class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+          <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-header"><i class="fa-solid fa-pencil"></i> {{ text_edit }}</div>
+      <div class="card-body">
+        <form id="form-module" action="{{ save }}" method="post" data-oc-toggle="ajax">
+          <div class="row mb-3">
+            <label for="input-name" class="col-sm-2 col-form-label">{{ entry_name }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control"/>
+              <div id="error-name" class="invalid-feedback"></div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_gallery_images }}</label>
+            <div class="col-sm-10">
+              <div id="gallery-module-images" class="border rounded p-3 bg-light" data-empty-text="{{ text_no_gallery|e('html_attr') }}">
+                {% for img in gallery_image %}
+                  <div class="gallery-module-row mb-3 d-flex align-items-center gap-2" data-index="{{ loop.index0 }}">
+                    <div class="border rounded" style="width: 60px; height: 60px; overflow: hidden;">
+                      <img src="{{ img.image_thumb }}" alt="" id="thumb-gallery-module-{{ loop.index0 }}" class="img-fluid" data-oc-placeholder="{{ placeholder }}"/>
+                    </div>
+                    <input type="hidden" name="gallery_image[{{ loop.index0 }}][image]" value="{{ img.image }}" id="input-gallery-module-{{ loop.index0 }}" class="gallery-module-input"/>
+                    <button type="button" class="btn btn-sm btn-outline-secondary gallery-module-pick" data-oc-toggle="image" data-oc-target="#input-gallery-module-{{ loop.index0 }}" data-oc-thumb="#thumb-gallery-module-{{ loop.index0 }}"><i class="fa-solid fa-pencil"></i></button>
+                    <button type="button" class="btn btn-sm btn-danger gallery-module-remove"><i class="fa-solid fa-trash"></i></button>
+                  </div>
+                {% else %}
+                  <p class="text-muted mb-0" id="gallery-module-empty">{{ text_no_gallery }}</p>
+                {% endfor %}
+              </div>
+              <button type="button" id="btn-add-gallery-module-image" class="btn btn-success btn-sm mt-2"><i class="fa-solid fa-plus"></i> {{ button_add_image }}</button>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_marquee }}</label>
+            <div class="col-sm-10">
+              <div class="form-check form-switch form-switch-lg">
+                <input type="hidden" name="marquee_enabled" value="0"/>
+                <input type="checkbox" name="marquee_enabled" value="1" id="input-marquee-enabled" class="form-check-input"{% if marquee_enabled %} checked{% endif %}/>
+                <label class="form-check-label" for="input-marquee-enabled">{{ entry_marquee_show }}</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-3" id="marquee-text-block">
+            <label class="col-sm-2 col-form-label">{{ entry_marquee_text }}</label>
+            <div class="col-sm-10">
+              <ul class="nav nav-tabs" role="tablist">
+                {% for language in languages %}
+                  <li class="nav-item">
+                    <a class="nav-link{% if loop.first %} active{% endif %}" data-bs-toggle="tab" href="#tab-marquee-{{ language.language_id }}">{% if language.image %}<img src="{{ language.image }}" alt="{{ language.name }}" title="{{ language.name }}" class="me-1"/>{% endif %}{{ language.name }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+              <div class="tab-content mt-2">
+                {% for language in languages %}
+                  <div id="tab-marquee-{{ language.language_id }}" class="tab-pane{% if loop.first %} active{% endif %}">
+                    <input type="text" name="marquee_text[{{ language.language_id }}]" value="{{ (marquee_text[language.language_id] ?? '') }}" class="form-control" placeholder="{{ entry_marquee_text_placeholder }}"/>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_status }}</label>
+            <div class="col-sm-10">
+              <div class="form-check form-switch form-switch-lg">
+                <input type="hidden" name="status" value="0"/>
+                <input type="checkbox" name="status" value="1" id="input-status" class="form-check-input"{% if status %} checked{% endif %}/>
+              </div>
+            </div>
+          </div>
+          <input type="hidden" name="module_id" value="{{ module_id }}" id="input-module-id"/>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<template id="gallery-module-row-tpl">
+  <div class="gallery-module-row mb-3 d-flex align-items-center gap-2" data-index="__IDX__">
+    <div class="border rounded" style="width: 60px; height: 60px; overflow: hidden;">
+      <img src="{{ placeholder }}" alt="" id="thumb-gallery-module-__IDX__" class="img-fluid" data-oc-placeholder="{{ placeholder }}"/>
+    </div>
+    <input type="hidden" name="gallery_image[__IDX__][image]" value="" id="input-gallery-module-__IDX__" class="gallery-module-input"/>
+    <button type="button" class="btn btn-sm btn-outline-secondary gallery-module-pick" data-oc-toggle="image" data-oc-target="#input-gallery-module-__IDX__" data-oc-thumb="#thumb-gallery-module-__IDX__"><i class="fa-solid fa-pencil"></i></button>
+    <button type="button" class="btn btn-sm btn-danger gallery-module-remove"><i class="fa-solid fa-trash"></i></button>
+  </div>
+</template>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var gallery = document.getElementById('gallery-module-images');
+  var emptyEl = document.getElementById('gallery-module-empty');
+  var tpl = document.getElementById('gallery-module-row-tpl');
+
+  function galleryCount() {
+    return gallery ? gallery.querySelectorAll('.gallery-module-row').length : 0;
+  }
+  function renumberGallery() {
+    if (!gallery) return;
+    var rows = gallery.querySelectorAll('.gallery-module-row');
+    rows.forEach(function(row, i) {
+      row.setAttribute('data-index', i);
+      var inp = row.querySelector('.gallery-module-input');
+      var thumb = row.querySelector('img.img-fluid');
+      var pick = row.querySelector('.gallery-module-pick');
+      if (inp) { inp.name = 'gallery_image[' + i + '][image]'; inp.id = 'input-gallery-module-' + i; }
+      if (thumb) thumb.id = 'thumb-gallery-module-' + i;
+      if (pick) { pick.setAttribute('data-oc-target', '#input-gallery-module-' + i); pick.setAttribute('data-oc-thumb', '#thumb-gallery-module-' + i); }
+    });
+    if (rows.length === 0 && gallery.getAttribute('data-empty-text')) {
+      gallery.innerHTML = '<p class="text-muted mb-0" id="gallery-module-empty">' + gallery.getAttribute('data-empty-text') + '</p>';
+    }
+    if (emptyEl) emptyEl.style.display = rows.length ? 'none' : '';
+  }
+  document.getElementById('btn-add-gallery-module-image')?.addEventListener('click', function() {
+    if (!tpl || !tpl.innerHTML || !gallery) return;
+    var idx = galleryCount();
+    var html = tpl.innerHTML.replace(/__IDX__/g, idx);
+    if (emptyEl) emptyEl.style.display = 'none';
+    gallery.insertAdjacentHTML('beforeend', html);
+    renumberGallery();
+  });
+  gallery?.addEventListener('click', function(e) {
+    if (e.target.closest('.gallery-module-remove')) {
+      e.target.closest('.gallery-module-row')?.remove();
+      renumberGallery();
+    }
+  });
+});
+</script>
+{{ footer }}

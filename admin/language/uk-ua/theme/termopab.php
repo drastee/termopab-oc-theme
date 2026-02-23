@@ -15,7 +15,13 @@ $_['tab_menu']         = 'Основне меню';
 $_['tab_delivery_payment'] = 'Доставка і оплата';
 $_['tab_exchange_return']  = 'Обмін і повернення';
 $_['tab_checkout']     = 'Оформлення замовлення';
+$_['tab_about']        = 'Про нас (SEO)';
 $_['tab_status']       = 'Статус';
+
+$_['entry_meta_title']       = 'Meta Title';
+$_['entry_meta_description'] = 'Meta Description';
+$_['entry_meta_keyword']     = 'Meta Keywords';
+$_['help_about_seo']         = 'SEO-налаштування для сторінки «Про нас» (маршрут: extension/termopab/common/about). Якщо порожньо — використовується заголовок із мовного файлу.';
 
 // Entry
 $_['entry_status']     = 'Статус';

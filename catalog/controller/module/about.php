@@ -13,8 +13,11 @@ class About extends \Opencart\System\Engine\Controller {
 		$data['title_first'] = '';
 		$data['title_rest'] = [];
 		if (!empty($lines)) {
-			$data['title_first'] = $lines[0];
-			$data['title_rest'] = array_slice($lines, 1);
+			$data['title_first'] = html_entity_decode((string)$lines[0], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+			$rest = array_slice($lines, 1);
+			$data['title_rest'] = array_map(function ($line) {
+				return html_entity_decode((string)$line, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+			}, $rest);
 		}
 		if ($data['title_first'] === '' && empty($data['title_rest'])) {
 			$data['title_first'] = 'Компанія Термопаб';
@@ -31,9 +34,6 @@ class About extends \Opencart\System\Engine\Controller {
 		$data['button_text'] = $button_text[$language_id] ?? '';
 		if ($data['button_text'] === '' && !empty($button_text)) {
 			$data['button_text'] = (string)reset($button_text);
-		}
-		if ($data['button_text'] === '') {
-			$data['button_text'] = 'Дізнайтеся більше про нас у відео';
 		}
 
 		$data['button_url'] = trim($setting['button_url'] ?? '') ?: '#';

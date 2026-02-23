@@ -7,6 +7,7 @@ class Termopab extends \Opencart\System\Engine\Controller {
 			$this->addDesignPath();
 			$this->template->addPath('extension/termopab', DIR_EXTENSION . 'termopab/catalog/view/template/');
 			$this->event->register('view/*/before', new \Opencart\System\Engine\Action('extension/termopab/startup/termopab.event'));
+			$this->event->register('extension/termopab/checkout/form_data', new \Opencart\System\Engine\Action('extension/termopab/startup/termopab.addModalCartFormData'));
 		}
 	}
 
@@ -38,6 +39,7 @@ class Termopab extends \Opencart\System\Engine\Controller {
 			'common/currency',
 			'common/language',
 			'product/product',
+			'checkout/checkout',
 		];
 		if (in_array($route, $override)) {
 			$route = 'extension/termopab/' . $route;
@@ -49,77 +51,10 @@ class Termopab extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
-	 * Add theme settings to view data for header/footer
+	 * Add modal cart / checkout form data to $data. Used by footer (modal) and by checkout page.
+	 * Trigger: extension/termopab/checkout/form_data with [&$data].
 	 */
-	private function addThemeData(array &$data): void {
-		$language_id = (int)$this->config->get('config_language_id');
-
-		$brand = $this->config->get('theme_termopab_brand');
-		$data['brand'] = (is_array($brand) && isset($brand[$language_id])) ? $brand[$language_id] : '';
-
-		$address = $this->config->get('theme_termopab_address');
-		$data['address'] = (is_array($address) && isset($address[$language_id])) ? $address[$language_id] : '';
-
-		$telephone = $this->config->get('theme_termopab_telephone');
-		$data['telephones'] = is_string($telephone)
-			? array_filter(array_map('trim', explode("\n", $telephone)))
-			: [];
-
-		if (!isset($data['telephone'])) {
-			$data['telephone'] = $this->config->get('config_telephone');
-		}
-		if (!isset($data['name'])) {
-			$data['name'] = $this->config->get('config_name');
-		}
-
-		$email = $this->config->get('theme_termopab_email');
-		$data['email'] = is_string($email) ? $email : '';
-
-		$schedule = $this->config->get('theme_termopab_schedule');
-		$schedule_text = (is_array($schedule) && isset($schedule[$language_id])) ? $schedule[$language_id] : '';
-		if ($schedule_text) {
-			$lines = array_filter(array_map('trim', explode("\n", $schedule_text)));
-			$data['schedule'] = implode('', array_map(function ($line) {
-				return '<p>' . htmlspecialchars($line, ENT_QUOTES, 'UTF-8') . '</p>';
-			}, $lines));
-		} else {
-			$data['schedule'] = '';
-		}
-
-		$worknote = $this->config->get('theme_termopab_worknote');
-		$data['worknote'] = (is_array($worknote) && isset($worknote[$language_id])) ? $worknote[$language_id] : '';
-
-		$social_keys = ['instagram', 'whatsapp', 'telegram', 'facebook', 'youtube'];
-		$all_social_links = [
-			'instagram' => trim((string)$this->config->get('theme_termopab_social_instagram')),
-			'whatsapp'  => trim((string)$this->config->get('theme_termopab_social_whatsapp')),
-			'telegram'  => trim((string)$this->config->get('theme_termopab_social_telegram')),
-			'facebook'  => trim((string)$this->config->get('theme_termopab_social_facebook')),
-			'youtube'   => trim((string)$this->config->get('theme_termopab_social_youtube')),
-		];
-		$data['social_links'] = $all_social_links;
-
-		$header_social_links = [];
-		$footer_social_links = [];
-		foreach ($social_keys as $key) {
-			$url = $all_social_links[$key] ?? '';
-			$url = $url !== '' ? $url : '#';
-			// Show if checkbox not explicitly 0 (not set or 1 = show); allow empty URL to show icon with #
-			$header_val = $this->config->get('theme_termopab_header_social_' . $key);
-			if ($header_val !== 0 && $header_val !== '0') {
-				$header_social_links[$key] = $url;
-			}
-			$footer_val = $this->config->get('theme_termopab_footer_social_' . $key);
-			if ($footer_val !== 0 && $footer_val !== '0') {
-				$footer_social_links[$key] = $url;
-			}
-		}
-		$data['header_social_links'] = $header_social_links;
-		$data['footer_social_links'] = $footer_social_links;
-
-		$this->load->language('extension/termopab/theme/termopab');
-		$data['text_call_me'] = $this->language->get('text_call_me');
-
+	public function addModalCartFormData(array &$data): void {
 		$this->load->language('extension/termopab/common/modal_cart');
 		$data['modal_cart_title'] = $this->language->get('modal_cart_title');
 		$data['modal_cart_label_name'] = $this->language->get('modal_cart_label_name');
@@ -140,11 +75,9 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		$data['modal_cart_error_email'] = $this->language->get('modal_cart_error_email');
 		$data['modal_cart_error_agreement'] = $this->language->get('modal_cart_error_agreement');
 
-		// Payment methods for modal cart (via model; keeps payment logic out of startup)
 		$this->load->model('extension/termopab/common/modal_cart');
 		$data['modal_cart_payment_methods'] = $this->model_extension_termopab_common_modal_cart->getPaymentMethods();
 
-		// Address form data for modal cart (payment_address / shipping_address compatibility)
 		$address_data = $this->model_extension_termopab_common_modal_cart->getAddressFormData();
 		$data['modal_cart_countries']      = $address_data['countries'];
 		$data['modal_cart_zones']         = $address_data['zones'];
@@ -169,7 +102,6 @@ class Termopab extends \Opencart\System\Engine\Controller {
 			$data['modal_cart_label_shipping_method'] = '';
 		}
 
-		// Показувати поля: якщо ключ не збережений — так (default); якщо збережений 1 — так; якщо 0 — ні.
 		$showField = function ($key) {
 			$v = $this->config->get('theme_termopab_modal_field_' . $key);
 			return ($v === '' || $v === null) ? true : in_array($v, [1, '1'], true);
@@ -182,7 +114,6 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		$data['modal_cart_show_field_company']   = $showField('company');
 		$data['modal_cart_show_field_postcode']  = $showField('postcode');
 
-		// Порядок полів адреси: країна → область → місто → адреса (опційні: address_2, company, postcode — за бажанням з адмінки).
 		$allowed_order_keys = ['country', 'zone', 'city', 'address_1', 'address_2', 'company', 'postcode'];
 		$order_raw = $this->config->get('theme_termopab_modal_address_field_order');
 		$order = ['country', 'zone', 'city', 'address_1', 'address_2', 'company', 'postcode'];
@@ -196,7 +127,6 @@ class Termopab extends \Opencart\System\Engine\Controller {
 
 		$data['modal_cart_address_match_default'] = (bool)$this->config->get('theme_termopab_modal_address_match_default');
 
-		// Значення з сесії для підстановки в форму (як на стандартному checkout) — сумісність модалки та сторінки оформлення
 		$data['modal_cart_fill'] = [];
 		if (isset($this->session->data['customer'])) {
 			$c = $this->session->data['customer'];
@@ -265,6 +195,84 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		$data['modal_cart_zones_url']    = $this->url->link('extension/termopab/common/modal_cart.zones', 'language=' . $this->config->get('config_language'));
 		$data['modal_cart_products_url'] = $this->url->link('extension/termopab/common/modal_cart.getCartProducts', 'language=' . $this->config->get('config_language'));
 		$data['modal_cart_remove_url']   = $this->url->link('common/cart.remove', 'language=' . $this->config->get('config_language'));
+	}
+
+	/**
+	 * Add theme settings to view data for header/footer
+	 */
+	private function addThemeData(array &$data): void {
+		$language_id = (int)$this->config->get('config_language_id');
+
+		$route = (string)($this->request->get['route'] ?? 'common/home');
+		$data['pageClass'] = $this->getPageClassFromRoute($route);
+
+		$this->addModalCartFormData($data);
+
+		$brand = $this->config->get('theme_termopab_brand');
+		$data['brand'] = (is_array($brand) && isset($brand[$language_id])) ? $brand[$language_id] : '';
+
+		$address = $this->config->get('theme_termopab_address');
+		$data['address'] = (is_array($address) && isset($address[$language_id])) ? $address[$language_id] : '';
+
+		$telephone = $this->config->get('theme_termopab_telephone');
+		$data['telephones'] = is_string($telephone)
+			? array_filter(array_map('trim', explode("\n", $telephone)))
+			: [];
+
+		if (!isset($data['telephone'])) {
+			$data['telephone'] = $this->config->get('config_telephone');
+		}
+		if (!isset($data['name'])) {
+			$data['name'] = $this->config->get('config_name');
+		}
+
+		$email = $this->config->get('theme_termopab_email');
+		$data['email'] = is_string($email) ? $email : '';
+
+		$schedule = $this->config->get('theme_termopab_schedule');
+		$schedule_text = (is_array($schedule) && isset($schedule[$language_id])) ? $schedule[$language_id] : '';
+		if ($schedule_text) {
+			$lines = array_filter(array_map('trim', explode("\n", $schedule_text)));
+			$data['schedule'] = implode('', array_map(function ($line) {
+				return '<p>' . htmlspecialchars($line, ENT_QUOTES, 'UTF-8') . '</p>';
+			}, $lines));
+		} else {
+			$data['schedule'] = '';
+		}
+
+		$worknote = $this->config->get('theme_termopab_worknote');
+		$data['worknote'] = (is_array($worknote) && isset($worknote[$language_id])) ? $worknote[$language_id] : '';
+
+		$social_keys = ['instagram', 'whatsapp', 'telegram', 'facebook', 'youtube'];
+		$all_social_links = [
+			'instagram' => trim((string)$this->config->get('theme_termopab_social_instagram')),
+			'whatsapp'  => trim((string)$this->config->get('theme_termopab_social_whatsapp')),
+			'telegram'  => trim((string)$this->config->get('theme_termopab_social_telegram')),
+			'facebook'  => trim((string)$this->config->get('theme_termopab_social_facebook')),
+			'youtube'   => trim((string)$this->config->get('theme_termopab_social_youtube')),
+		];
+		$data['social_links'] = $all_social_links;
+
+		$header_social_links = [];
+		$footer_social_links = [];
+		foreach ($social_keys as $key) {
+			$url = $all_social_links[$key] ?? '';
+			$url = $url !== '' ? $url : '#';
+			// Show if checkbox not explicitly 0 (not set or 1 = show); allow empty URL to show icon with #
+			$header_val = $this->config->get('theme_termopab_header_social_' . $key);
+			if ($header_val !== 0 && $header_val !== '0') {
+				$header_social_links[$key] = $url;
+			}
+			$footer_val = $this->config->get('theme_termopab_footer_social_' . $key);
+			if ($footer_val !== 0 && $footer_val !== '0') {
+				$footer_social_links[$key] = $url;
+			}
+		}
+		$data['header_social_links'] = $header_social_links;
+		$data['footer_social_links'] = $footer_social_links;
+
+		$this->load->language('extension/termopab/theme/termopab');
+		$data['text_call_me'] = $this->language->get('text_call_me');
 
 		$data['menu_columns'] = $this->buildMenuColumns($language_id);
 		$data['footer_menu'] = $this->buildFooterMenu($language_id);
@@ -280,6 +288,26 @@ class Termopab extends \Opencart\System\Engine\Controller {
 			'name' => $this->language->get('heading_title'),
 			'href' => $this->url->link('extension/termopab/brewery_review', 'language=' . $this->config->get('config_language')),
 		];
+	}
+
+	/**
+	 * Клас для body за типом сторінки (route).
+	 */
+	private function getPageClassFromRoute(string $route): string {
+		$map = [
+			'common/home'                         => 'home-page',
+			'extension/termopab/common/about'     => 'about-us',
+			'extension/termopab/project'          => 'project-page',
+			'extension/termopab/brewery_review'   => 'testimonials-page',
+			'information/contact'                 => 'contacts-page',
+			'product/product'                     => 'product-page',
+			'product/category'                    => 'category-page',
+			'checkout/checkout'                   => 'checkout-page',
+		];
+		if (isset($map[$route])) {
+			return $map[$route];
+		}
+		return str_replace(['/', '.'], ['-', '-'], $route);
 	}
 
 	/**

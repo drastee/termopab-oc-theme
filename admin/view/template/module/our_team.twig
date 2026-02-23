@@ -1,0 +1,126 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="float-end">
+        <button type="submit" form="form-module" data-bs-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa-solid fa-save"></i></button>
+        <a href="{{ back }}" data-bs-toggle="tooltip" title="{{ button_back }}" class="btn btn-light"><i class="fa-solid fa-reply"></i></a>
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ol class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+          <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-header"><i class="fa-solid fa-pencil"></i> {{ text_edit }}</div>
+      <div class="card-body">
+        <form id="form-module" action="{{ save }}" method="post" data-oc-toggle="ajax">
+          <div class="row mb-3">
+            <label for="input-name" class="col-sm-2 col-form-label">{{ entry_name }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control"/>
+              <div id="error-name" class="invalid-feedback"></div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_content }}</label>
+            <div class="col-sm-10">
+              <ul class="nav nav-tabs" role="tablist">
+                {% for language in languages %}
+                  <li class="nav-item">
+                    <a class="nav-link{% if loop.first %} active{% endif %}" data-bs-toggle="tab" href="#tab-lang-{{ language.language_id }}">{% if language.image %}<img src="{{ language.image }}" alt="{{ language.name }}" title="{{ language.name }}" class="me-1"/>{% endif %}{{ language.name }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+              <div class="tab-content mt-2">
+                {% for language in languages %}
+                  <div id="tab-lang-{{ language.language_id }}" class="tab-pane{% if loop.first %} active{% endif %}">
+                    <div class="mb-3">
+                      <label class="form-label">{{ entry_title }}</label>
+                      <input type="text" name="title[{{ language.language_id }}]" value="{{ (title[language.language_id] ?? '') }}" class="form-control" placeholder="{{ entry_title }}"/>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col-sm-6">
+                        <label class="form-label">{{ entry_founder_name }}</label>
+                        <input type="text" name="founder_name[{{ language.language_id }}]" value="{{ (founder_name[language.language_id] ?? '') }}" class="form-control" placeholder="{{ entry_founder_name }}"/>
+                      </div>
+                      <div class="col-sm-6">
+                        <label class="form-label">{{ entry_founder_role }}</label>
+                        <input type="text" name="founder_role[{{ language.language_id }}]" value="{{ (founder_role[language.language_id] ?? '') }}" class="form-control" placeholder="{{ entry_founder_role }}"/>
+                      </div>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label">{{ entry_text }}</label>
+                      <textarea name="text[{{ language.language_id }}]" id="input-text-{{ language.language_id }}" class="form-control our-team-text" rows="6" data-oc-toggle="ckeditor" data-lang="{{ ckeditor }}" placeholder="{{ entry_text }}">{{ (text[language.language_id] ?? '')|raw }}</textarea>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col-sm-6">
+                        <label class="form-label">{{ entry_button_text }}</label>
+                        <input type="text" name="button_text[{{ language.language_id }}]" value="{{ (button_text[language.language_id] ?? '') }}" class="form-control" placeholder="{{ entry_button_text }}"/>
+                      </div>
+                      <div class="col-sm-6">
+                        <label class="form-label">{{ entry_button_url }}</label>
+                        <input type="text" name="button_url[{{ language.language_id }}]" value="{{ (button_url[language.language_id] ?? '') }}" placeholder="{{ entry_button_url }}" class="form-control"/>
+                      </div>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_owner_photo }}</label>
+            <div class="col-sm-10">
+              <div class="d-flex align-items-center gap-2">
+                <div class="border rounded" style="width: 100px; height: 100px; overflow: hidden;">
+                  <img src="{{ owner_thumb }}" alt="" id="thumb-owner-photo" class="img-fluid" data-oc-placeholder="{{ placeholder }}"/>
+                </div>
+                <input type="hidden" name="owner_photo" value="{{ owner_photo }}" id="input-owner-photo"/>
+                <button type="button" class="btn btn-outline-secondary" data-oc-toggle="image" data-oc-target="#input-owner-photo" data-oc-thumb="#thumb-owner-photo"><i class="fa-solid fa-pencil"></i></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_extra_image }}</label>
+            <div class="col-sm-10">
+              <div class="d-flex align-items-center gap-2">
+                <div class="border rounded" style="width: 100px; height: 100px; overflow: hidden;">
+                  <img src="{{ extra_image_thumb }}" alt="" id="thumb-extra-image" class="img-fluid" data-oc-placeholder="{{ placeholder }}"/>
+                </div>
+                <input type="hidden" name="extra_image" value="{{ extra_image }}" id="input-extra-image"/>
+                <button type="button" class="btn btn-outline-secondary" data-oc-toggle="image" data-oc-target="#input-extra-image" data-oc-thumb="#thumb-extra-image"><i class="fa-solid fa-pencil"></i></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_status }}</label>
+            <div class="col-sm-10">
+              <div class="form-check form-switch form-switch-lg">
+                <input type="hidden" name="status" value="0"/>
+                <input type="checkbox" name="status" value="1" id="input-status" class="form-check-input"{% if status %} checked{% endif %}/>
+              </div>
+            </div>
+          </div>
+          <input type="hidden" name="module_id" value="{{ module_id }}" id="input-module-id"/>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var ckeditorLang = {{ (ckeditor|default('en'))|json_encode }};
+  if (typeof $ !== 'undefined' && typeof $('textarea[data-oc-toggle="ckeditor"]').ckeditor === 'function') {
+    $('textarea.our-team-text').not('.ckeditor-applied').ckeditor({ language: ckeditorLang }).addClass('ckeditor-applied');
+  }
+});
+</script>
+{{ footer }}

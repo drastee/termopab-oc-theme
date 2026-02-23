@@ -84,6 +84,9 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		$data['theme_termopab_worknote'] = isset($setting_info['theme_termopab_worknote']) ? $setting_info['theme_termopab_worknote'] : [];
 		$data['theme_termopab_delivery_payment'] = isset($setting_info['theme_termopab_delivery_payment']) ? $setting_info['theme_termopab_delivery_payment'] : [];
 		$data['theme_termopab_exchange_return'] = isset($setting_info['theme_termopab_exchange_return']) ? $setting_info['theme_termopab_exchange_return'] : [];
+		$data['theme_termopab_about_meta_title'] = isset($setting_info['theme_termopab_about_meta_title']) ? $setting_info['theme_termopab_about_meta_title'] : [];
+		$data['theme_termopab_about_meta_description'] = isset($setting_info['theme_termopab_about_meta_description']) ? $setting_info['theme_termopab_about_meta_description'] : [];
+		$data['theme_termopab_about_meta_keyword'] = isset($setting_info['theme_termopab_about_meta_keyword']) ? $setting_info['theme_termopab_about_meta_keyword'] : [];
 
 		$this->document->addScript('view/javascript/ckeditor/ckeditor.js');
 		$this->document->addScript('view/javascript/ckeditor/adapters/jquery.js');
@@ -303,6 +306,9 @@ class Termopab extends \Opencart\System\Engine\Controller {
 				'theme_termopab_menu_column1' => [],
 				'theme_termopab_menu_column2' => [],
 				'theme_termopab_menu_column3' => [],
+				'theme_termopab_about_meta_title' => [],
+				'theme_termopab_about_meta_description' => [],
+				'theme_termopab_about_meta_keyword' => [],
 			], $social_defaults, $this->request->post);
 
 			if (isset($post['theme_termopab_footer_menu_use_main'])) {

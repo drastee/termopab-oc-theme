@@ -1,0 +1,319 @@
+{# Спільний контент форми оформлення — використовується в модалці та на сторінці checkout/checkout #}
+{% set fill = modal_cart_fill|default({}) %}
+<div>
+    <div class="fields-wrapper">
+        <label class="label" for="modal-cart-firstname">{{ modal_cart_entry_firstname|default('Ім\'я') }}</label>
+        <input id="modal-cart-firstname" name="firstname" type="text" placeholder="{{ modal_cart_entry_firstname|default('') }}" value="{{ fill.firstname|default('') }}">
+        <span class="modal-cart__error" id="modal-cart-error-firstname" aria-live="polite"></span>
+    </div>
+    <div class="fields-wrapper">
+        <label class="label" for="modal-cart-lastname">{{ modal_cart_entry_lastname|default('Прізвище') }}</label>
+        <input id="modal-cart-lastname" name="lastname" type="text" placeholder="{{ modal_cart_entry_lastname|default('') }}" value="{{ fill.lastname|default('') }}">
+        <span class="modal-cart__error" id="modal-cart-error-lastname" aria-live="polite"></span>
+    </div>
+
+    <div class="fields-wrapper">
+        <label class="label" for="modal-cart-phone">{{ modal_cart_label_phone }}</label>
+        <input id="modal-cart-phone" name="telephone" type="tel" placeholder="{{ modal_cart_placeholder_phone }}" value="{{ fill.telephone|default('') }}">
+        <span class="modal-cart__error" id="modal-cart-error-telephone" aria-live="polite"></span>
+    </div>
+
+    <div class="fields-wrapper">
+        <label class="label" for="modal-cart-email">{{ modal_cart_label_email }}</label>
+        <input id="modal-cart-email" name="email" type="email" placeholder="{{ modal_cart_placeholder_email }}" value="{{ fill.email|default('') }}">
+        <span class="modal-cart__error" id="modal-cart-error-email" aria-live="polite"></span>
+    </div>
+
+    {% if modal_cart_payment_address_required|default(false) %}
+        {% for field_key in modal_cart_address_field_order|default(['country','zone','city','address_1','address_2','company','postcode']) %}
+            {% if field_key == 'company' %}
+                {% if modal_cart_show_field_company is same as(true) %}
+                <div class="fields-wrapper">
+                    <label class="label" for="modal-cart-payment-company">{{ modal_cart_entry_company|default('Компанія') }}</label>
+                    <input id="modal-cart-payment-company" name="payment_company" type="text" value="{{ fill.payment_company|default('') }}">
+                </div>
+                {% endif %}
+            {% elseif field_key == 'address_1' %}
+                {% if modal_cart_show_field_address_1 is same as(true) %}
+                <div class="fields-wrapper required">
+                    <label class="label" for="modal-cart-payment-address-1">{{ modal_cart_entry_address_1|default('Адреса') }}</label>
+                    <input id="modal-cart-payment-address-1" name="payment_address_1" type="text" value="{{ fill.payment_address_1|default('') }}">
+                    <span class="modal-cart__error" id="modal-cart-error-payment-address-1" aria-live="polite"></span>
+                </div>
+                {% endif %}
+            {% elseif field_key == 'address_2' %}
+                {% if modal_cart_show_field_address_2 is same as(true) %}
+                <div class="fields-wrapper">
+                    <input name="payment_address_2" type="text" placeholder="{{ modal_cart_entry_address_2|default('') }}" value="{{ fill.payment_address_2|default('') }}">
+                </div>
+                {% endif %}
+            {% elseif field_key == 'city' %}
+                {% if modal_cart_show_field_city is same as(true) %}
+                <div class="fields-wrapper required">
+                    <label class="label" for="modal-cart-payment-city">{{ modal_cart_entry_city|default('Місто') }}</label>
+                    <input id="modal-cart-payment-city" name="payment_city" type="text" value="{{ fill.payment_city|default('') }}">
+                    <span class="modal-cart__error" id="modal-cart-error-payment-city" aria-live="polite"></span>
+                </div>
+                {% endif %}
+            {% elseif field_key == 'postcode' %}
+                {% if modal_cart_show_field_postcode is same as(true) %}
+                <div class="fields-wrapper">
+                    <label class="label" for="modal-cart-payment-postcode">{{ modal_cart_entry_postcode|default('Індекс') }}</label>
+                    <input id="modal-cart-payment-postcode" name="payment_postcode" type="text" value="{{ fill.payment_postcode|default('') }}">
+                    <span class="modal-cart__error" id="modal-cart-error-payment-postcode" aria-live="polite"></span>
+                </div>
+                {% endif %}
+            {% elseif field_key == 'country' %}
+                {% if modal_cart_show_field_country is same as(true) %}
+                <div class="fields-wrapper required">
+                    <label class="label" for="modal-cart-payment-country">{{ modal_cart_entry_country|default('Країна') }}</label>
+                    <select id="modal-cart-payment-country" name="payment_country_id" class="modal-cart-country">
+                        <option value="0">{{ modal_cart_text_select|default('---') }}</option>
+                        {% for c in modal_cart_countries|default([]) %}
+                            <option value="{{ c.country_id }}"{{ (c.country_id == (fill.payment_country_id|default(modal_cart_country_id|default(0)))) ? ' selected' : '' }}>{{ c.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="modal-cart__error" id="modal-cart-error-payment-country-id" aria-live="polite"></span>
+                </div>
+                {% endif %}
+            {% elseif field_key == 'zone' %}
+                {% if modal_cart_show_field_zone is same as(true) %}
+                <div class="fields-wrapper required">
+                    <label class="label" for="modal-cart-payment-zone">{{ modal_cart_entry_zone|default('Область') }}</label>
+                    <select id="modal-cart-payment-zone" name="payment_zone_id" class="modal-cart-zone" data-country-target="modal-cart-payment-country" data-text-select="{{ modal_cart_text_select|default('---') }}">
+                        <option value="">{{ modal_cart_text_select|default('---') }}</option>
+                        {% for z in modal_cart_zones|default([]) %}
+                            <option value="{{ z.zone_id }}"{{ (z.zone_id == (fill.payment_zone_id|default(0))) ? ' selected' : '' }}>{{ z.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="modal-cart__error" id="modal-cart-error-payment-zone-id" aria-live="polite"></span>
+                </div>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        {% for cf in modal_cart_custom_fields|default([]) %}
+            {% if cf.type == 'select' %}
+            <div class="fields-wrapper{{ cf.required ? ' required' : '' }}">
+                <label class="label" for="modal-cart-payment-cf-{{ cf.custom_field_id }}">{{ cf.name }}</label>
+                <select name="payment_custom_field[{{ cf.custom_field_id }}]" id="modal-cart-payment-cf-{{ cf.custom_field_id }}">
+                    <option value="">{{ modal_cart_text_select|default('---') }}</option>
+                    {% for v in cf.custom_field_value|default([]) %}
+                        <option value="{{ v.custom_field_value_id }}">{{ v.name }}</option>
+                    {% endfor %}
+                </select>
+                <span class="modal-cart__error" id="modal-cart-error-payment-custom-field-{{ cf.custom_field_id }}" aria-live="polite"></span>
+            </div>
+            {% elseif cf.type == 'text' %}
+            <div class="fields-wrapper{{ cf.required ? ' required' : '' }}">
+                <label class="label" for="modal-cart-payment-cf-{{ cf.custom_field_id }}">{{ cf.name }}</label>
+                <input type="text" name="payment_custom_field[{{ cf.custom_field_id }}]" id="modal-cart-payment-cf-{{ cf.custom_field_id }}">
+                <span class="modal-cart__error" id="modal-cart-error-payment-custom-field-{{ cf.custom_field_id }}" aria-live="polite"></span>
+            </div>
+            {% elseif cf.type == 'textarea' %}
+            <div class="fields-wrapper{{ cf.required ? ' required' : '' }}">
+                <label class="label" for="modal-cart-payment-cf-{{ cf.custom_field_id }}">{{ cf.name }}</label>
+                <textarea name="payment_custom_field[{{ cf.custom_field_id }}]" id="modal-cart-payment-cf-{{ cf.custom_field_id }}" rows="3"></textarea>
+                <span class="modal-cart__error" id="modal-cart-error-payment-custom-field-{{ cf.custom_field_id }}" aria-live="polite"></span>
+            </div>
+            {% elseif cf.type == 'radio' %}
+            <div class="fields-wrapper{{ cf.required ? ' required' : '' }}">
+                <span class="label">{{ cf.name }}</span>
+                {% for v in cf.custom_field_value|default([]) %}
+                    <label class="radio-label"><input type="radio" name="payment_custom_field[{{ cf.custom_field_id }}]" value="{{ v.custom_field_value_id }}"> {{ v.name }}</label>
+                {% endfor %}
+                <span class="modal-cart__error" id="modal-cart-error-payment-custom-field-{{ cf.custom_field_id }}" aria-live="polite"></span>
+            </div>
+            {% elseif cf.type == 'checkbox' %}
+            <div class="fields-wrapper{{ cf.required ? ' required' : '' }}">
+                <span class="label">{{ cf.name }}</span>
+                {% for v in cf.custom_field_value|default([]) %}
+                    <label class="radio-label"><input type="checkbox" name="payment_custom_field[{{ cf.custom_field_id }}][]" value="{{ v.custom_field_value_id }}"> {{ v.name }}</label>
+                {% endfor %}
+                <span class="modal-cart__error" id="modal-cart-error-payment-custom-field-{{ cf.custom_field_id }}" aria-live="polite"></span>
+            </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    {% if modal_cart_has_shipping|default(false) %}
+        <h3 class="label" {% if modal_cart_address_match_default|default(false) %} style="display: none"{% endif %}>{{ modal_cart_text_shipping_address|default('Адреса доставки') }}</h3>
+        <div class="fields-wrapper"{% if modal_cart_address_match_default|default(false) %} style="display: none"{% endif %}>
+            <label class="radio-label">
+                <input type="checkbox" name="address_match" id="modal-cart-address-match" value="1"{% if modal_cart_address_match_default|default(false) or fill.address_match|default('') == '1' %} checked{% endif %}>
+                {{ modal_cart_text_same_address|default('Та сама, що й адреса оплати') }}
+            </label>
+        </div>
+        <div id="modal-cart-shipping-fields" class="modal-cart__shipping-fields">
+            {% for field_key in modal_cart_address_field_order|default(['country','zone','city','address_1','address_2','company','postcode']) %}
+                {% if field_key == 'company' %}
+                    {% if modal_cart_show_field_company is same as(true) %}
+                    <div class="fields-wrapper">
+                        <label class="label" for="modal-cart-shipping-company">{{ modal_cart_entry_company|default('Компанія') }}</label>
+                        <input id="modal-cart-shipping-company" name="shipping_company" type="text" value="{{ fill.shipping_company|default('') }}">
+                    </div>
+                    {% endif %}
+                {% elseif field_key == 'address_1' %}
+                    {% if modal_cart_show_field_address_1 is same as(true) %}
+                    <div class="fields-wrapper required">
+                        <label class="label" for="modal-cart-shipping-address-1">{{ modal_cart_entry_address_1|default('Адреса') }}</label>
+                        <input id="modal-cart-shipping-address-1" name="shipping_address_1" type="text" value="{{ fill.shipping_address_1|default('') }}">
+                        <span class="modal-cart__error" id="modal-cart-error-shipping-address-1" aria-live="polite"></span>
+                    </div>
+                    {% endif %}
+                {% elseif field_key == 'address_2' %}
+                    {% if modal_cart_show_field_address_2 is same as(true) %}
+                    <div class="fields-wrapper">
+                        <input name="shipping_address_2" type="text" placeholder="{{ modal_cart_entry_address_2|default('') }}" value="{{ fill.shipping_address_2|default('') }}">
+                    </div>
+                    {% endif %}
+                {% elseif field_key == 'city' %}
+                    {% if modal_cart_show_field_city is same as(true) %}
+                    <div class="fields-wrapper required">
+                        <label class="label" for="modal-cart-shipping-city">{{ modal_cart_entry_city|default('Місто') }}</label>
+                        <input id="modal-cart-shipping-city" name="shipping_city" type="text" placeholder="{{ modal_cart_placeholder_city|default('') }}" value="{{ fill.shipping_city|default('') }}">
+                        <span class="modal-cart__error" id="modal-cart-error-shipping-city" aria-live="polite"></span>
+                    </div>
+                    {% endif %}
+                {% elseif field_key == 'postcode' %}
+                    {% if modal_cart_show_field_postcode is same as(true) %}
+                    <div class="fields-wrapper">
+                        <label class="label" for="modal-cart-shipping-postcode">{{ modal_cart_entry_postcode|default('Індекс') }}</label>
+                        <input id="modal-cart-shipping-postcode" name="shipping_postcode" type="text" value="{{ fill.shipping_postcode|default('') }}">
+                        <span class="modal-cart__error" id="modal-cart-error-shipping-postcode" aria-live="polite"></span>
+                    </div>
+                    {% endif %}
+                {% elseif field_key == 'country' %}
+                    {% if modal_cart_show_field_country is same as(true) %}
+                    <div class="fields-wrapper required">
+                        <label class="label" for="modal-cart-shipping-country">{{ modal_cart_entry_country|default('Країна') }}</label>
+                        <select id="modal-cart-shipping-country" name="shipping_country_id" class="modal-cart-country">
+                            <option value="0">{{ modal_cart_text_select|default('---') }}</option>
+                            {% for c in modal_cart_countries|default([]) %}
+                                <option value="{{ c.country_id }}"{{ (c.country_id == (fill.shipping_country_id|default(modal_cart_country_id|default(0)))) ? ' selected' : '' }}>{{ c.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <span class="modal-cart__error" id="modal-cart-error-shipping-country-id" aria-live="polite"></span>
+                    </div>
+                    {% endif %}
+                {% elseif field_key == 'zone' %}
+                    {% if modal_cart_show_field_zone is same as(true) %}
+                    <div class="fields-wrapper required">
+                        <label class="label" for="modal-cart-shipping-zone">{{ modal_cart_entry_zone|default('Область') }}</label>
+                        <select id="modal-cart-shipping-zone" name="shipping_zone_id" class="modal-cart-zone" data-country-target="modal-cart-shipping-country" data-text-select="{{ modal_cart_text_select|default('---') }}">
+                            <option value="">{{ modal_cart_text_select|default('---') }}</option>
+                            {% for z in modal_cart_zones|default([]) %}
+                                <option value="{{ z.zone_id }}"{{ (z.zone_id == (fill.shipping_zone_id|default(0))) ? ' selected' : '' }}>{{ z.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <span class="modal-cart__error" id="modal-cart-error-shipping-zone-id" aria-live="polite"></span>
+                    </div>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+            {% for cf in modal_cart_custom_fields|default([]) %}
+                {% if cf.type == 'select' %}
+                <div class="fields-wrapper{{ cf.required ? ' required' : '' }}">
+                    <label class="label" for="modal-cart-shipping-cf-{{ cf.custom_field_id }}">{{ cf.name }}</label>
+                    <select name="shipping_custom_field[{{ cf.custom_field_id }}]" id="modal-cart-shipping-cf-{{ cf.custom_field_id }}">
+                        <option value="">{{ modal_cart_text_select|default('---') }}</option>
+                        {% for v in cf.custom_field_value|default([]) %}
+                            <option value="{{ v.custom_field_value_id }}">{{ v.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="modal-cart__error" id="modal-cart-error-shipping-custom-field-{{ cf.custom_field_id }}" aria-live="polite"></span>
+                </div>
+                {% elseif cf.type == 'text' %}
+                <div class="fields-wrapper{{ cf.required ? ' required' : '' }}">
+                    <label class="label" for="modal-cart-shipping-cf-{{ cf.custom_field_id }}">{{ cf.name }}</label>
+                    <input type="text" name="shipping_custom_field[{{ cf.custom_field_id }}]" id="modal-cart-shipping-cf-{{ cf.custom_field_id }}">
+                    <span class="modal-cart__error" id="modal-cart-error-shipping-custom-field-{{ cf.custom_field_id }}" aria-live="polite"></span>
+                </div>
+                {% elseif cf.type == 'textarea' %}
+                <div class="fields-wrapper{{ cf.required ? ' required' : '' }}">
+                    <label class="label" for="modal-cart-shipping-cf-{{ cf.custom_field_id }}">{{ cf.name }}</label>
+                    <textarea name="shipping_custom_field[{{ cf.custom_field_id }}]" id="modal-cart-shipping-cf-{{ cf.custom_field_id }}" rows="3"></textarea>
+                    <span class="modal-cart__error" id="modal-cart-error-shipping-custom-field-{{ cf.custom_field_id }}" aria-live="polite"></span>
+                </div>
+                {% elseif cf.type == 'radio' %}
+                <div class="fields-wrapper{{ cf.required ? ' required' : '' }}">
+                    <span class="label">{{ cf.name }}</span>
+                    {% for v in cf.custom_field_value|default([]) %}
+                        <label class="radio-label"><input type="radio" name="shipping_custom_field[{{ cf.custom_field_id }}]" value="{{ v.custom_field_value_id }}"> {{ v.name }}</label>
+                    {% endfor %}
+                    <span class="modal-cart__error" id="modal-cart-error-shipping-custom-field-{{ cf.custom_field_id }}" aria-live="polite"></span>
+                </div>
+                {% elseif cf.type == 'checkbox' %}
+                <div class="fields-wrapper{{ cf.required ? ' required' : '' }}">
+                    <span class="label">{{ cf.name }}</span>
+                    {% for v in cf.custom_field_value|default([]) %}
+                        <label class="radio-label"><input type="checkbox" name="shipping_custom_field[{{ cf.custom_field_id }}][]" value="{{ v.custom_field_value_id }}"> {{ v.name }}</label>
+                    {% endfor %}
+                    <span class="modal-cart__error" id="modal-cart-error-shipping-custom-field-{{ cf.custom_field_id }}" aria-live="polite"></span>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        {% if modal_cart_shipping_methods|default([])|length > 0 %}
+            <div class="fields-wrapper">
+                <span class="label">{{ modal_cart_label_shipping_method|default('Спосіб доставки') }}</span>
+                {% for sm in modal_cart_shipping_methods %}
+                    <label class="radio-label">
+                        <input type="radio" name="shipping_method" value="{{ sm.code }}"{{ (fill.shipping_method|default('')) == sm.code or (loop.first and not fill.shipping_method|default('')) ? ' checked' : '' }}>
+                        <span class="radio-text">{{ sm.name }}{% if sm.text %} — {{ sm.text }}{% endif %}</span>
+                    </label>
+                {% endfor %}
+                <span class="modal-cart__error" id="modal-cart-error-shipping-method" aria-live="polite"></span>
+            </div>
+        {% endif %}
+    {% endif %}
+
+    {% if modal_cart_payment_methods|default([])|length > 0 %}
+        <div class="fields-wrapper">
+            <span class="label">{{ modal_cart_label_payment }}</span>
+            {% for pm in modal_cart_payment_methods %}
+                <label class="radio-label">
+                    <input type="radio" name="payment_method" value="{{ pm.code }}"{{ (fill.payment_method|default('')) == pm.code or (loop.first and not fill.payment_method|default('')) ? ' checked' : '' }}>
+                    <span class="radio-text">{{ pm.name }}</span>
+                </label>
+            {% endfor %}
+        </div>
+        <div id="modal-cart-payment-extra" class="modal-cart__payment-extra">
+            {% for pm in modal_cart_payment_methods %}
+                {% if pm.html|default('') is not empty %}
+                    <div class="modal-cart__payment-method-content" data-payment-code="{{ pm.code }}" style="display: {{ (fill.payment_method|default('')) == pm.code or (loop.first and not fill.payment_method|default('')) ? 'block' : 'none' }};">
+                        {{ pm.html|raw }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="fields-wrapper">
+            <span class="label">{{ modal_cart_label_payment }}</span>
+            <label class="radio-label">
+                <input type="radio" name="payment_method" value="cashless"{{ (fill.payment_method|default('cashless')) == 'cashless' ? ' checked' : '' }}>
+                <span class="radio-text">{{ modal_cart_payment_cashless }}</span>
+            </label>
+            <label class="radio-label">
+                <input type="radio" name="payment_method" value="cash"{{ (fill.payment_method|default('')) == 'cash' ? ' checked' : '' }}>
+                <span class="radio-text">{{ modal_cart_payment_cash }}</span>
+            </label>
+        </div>
+    {% endif %}
+    <span class="modal-cart__error" id="modal-cart-error-payment-method" aria-live="polite"></span>
+</div>
+<div>
+    <div id="modal-cart-products" class="modal-cart__products" aria-label="Товари в кошику">
+        <p id="modal-cart-products-empty" class="modal-cart__products-empty text-muted" style="display: none;">Кошик порожній</p>
+    </div>
+    <span class="modal-cart__error" id="modal-cart-error-confirm" aria-live="polite"></span>
+    <button type="submit" class="btn btn-primary">
+        {{ modal_cart_button }}
+        <svg class="icon-arrow"><use href="#icon-short-arrow"></use></svg>
+    </button>
+    <hr class="custom">
+    <div class="agreement">
+        <input type="checkbox" id="modal-cart-agreement" name="agreement"{{ fill.agreement|default('') == '1' ? ' checked' : '' }}>
+        <label for="modal-cart-agreement">{{ modal_cart_agreement|raw }}<br><span class="modal-cart__error" id="modal-cart-error-agreement" aria-live="polite"></span></label>
+    </div>
+</div>

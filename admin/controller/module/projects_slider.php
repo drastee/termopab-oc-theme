@@ -41,6 +41,11 @@ class ProjectsSlider extends \Opencart\System\Engine\Controller {
 		$data['status'] = $module_info['status'] ?? 1;
 		$data['module_id'] = $module_id;
 
+		$data['view_type'] = $module_info['view_type'] ?? 'full';
+		if (!in_array($data['view_type'], ['full', 'compact'], true)) {
+			$data['view_type'] = 'full';
+		}
+
 		$data['title'] = $module_info['title'] ?? [];
 		if (!is_array($data['title'])) {
 			$data['title'] = $data['title'] !== '' ? [($this->config->get('config_language_id') ?: 1) => $data['title']] : [];
@@ -111,6 +116,7 @@ class ProjectsSlider extends \Opencart\System\Engine\Controller {
 
 			$post = [
 				'name'       => $name,
+				'view_type'  => in_array($this->request->post['view_type'] ?? '', ['full', 'compact'], true) ? $this->request->post['view_type'] : 'full',
 				'title'      => $title,
 				'link_text'  => $link_text,
 				'project_id' => $project_id,

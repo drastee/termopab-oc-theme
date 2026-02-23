@@ -15,7 +15,13 @@ $_['tab_menu']         = 'Main menu';
 $_['tab_delivery_payment'] = 'Delivery and payment';
 $_['tab_exchange_return']  = 'Exchange and return';
 $_['tab_checkout']     = 'Checkout';
+$_['tab_about']        = 'About us (SEO)';
 $_['tab_status']       = 'Status';
+
+$_['entry_meta_title']       = 'Meta Title';
+$_['entry_meta_description'] = 'Meta Description';
+$_['entry_meta_keyword']     = 'Meta Keywords';
+$_['help_about_seo']         = 'SEO settings for the «About us» page (route: extension/termopab/common/about). If empty, the default title from the language file is used.';
 
 // Entry
 $_['entry_status']     = 'Status';

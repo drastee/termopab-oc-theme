@@ -42,18 +42,27 @@ class ProjectsSlider extends \Opencart\System\Engine\Controller {
 
 		$data['slider_nav'] = true;
 
-		$title = $setting['title'] ?? [];
-		$link_text = $setting['link_text'] ?? [];
-		if (!is_array($title)) {
-			$title = $title !== '' ? [$language_id => $title] : [];
+		$view_type = $setting['view_type'] ?? 'full';
+		if ($view_type === 'compact') {
+			$data['type'] = 'simple';
+			$data['slider_nav'] = false;
+			$data['title'] = '';
+			$data['link_text'] = '';
+			$data['link_href'] = '';
+		} else {
+			$data['type'] = '';
+			$title = $setting['title'] ?? [];
+			$link_text = $setting['link_text'] ?? [];
+			if (!is_array($title)) {
+				$title = $title !== '' ? [$language_id => $title] : [];
+			}
+			if (!is_array($link_text)) {
+				$link_text = $link_text !== '' ? [$language_id => $link_text] : [];
+			}
+			$data['title'] = $title[$language_id] ?? '';
+			$data['link_text'] = $link_text[$language_id] ?? '';
+			$data['link_href'] = $this->url->link('extension/termopab/project', 'language=' . $this->config->get('config_language'));
 		}
-		if (!is_array($link_text)) {
-			$link_text = $link_text !== '' ? [$language_id => $link_text] : [];
-		}
-		$data['title'] = $title[$language_id] ?? '';
-		$data['link_text'] = $link_text[$language_id] ?? '';
-		$data['link_href'] = $this->url->link('extension/termopab/project', 'language=' . $this->config->get('config_language'));
-		$data['type'] = '';
 
 		$this->template->addPath('extension/termopab', DIR_EXTENSION . 'termopab/catalog/view/template/');
 		return $this->load->view('extension/termopab/module/projects_slider', $data);

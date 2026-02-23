@@ -1,0 +1,36 @@
+<section class="our-team">
+    <div class="container">
+        <div class="our-team__owner owner">
+            {% if title %}
+            <h2 class="our-team__title section-title">{{ title }}</h2>
+            {% endif %}
+            {% if owner_photo_url %}
+            <img class="owner__photo" src="{{ owner_photo_url }}" alt="">
+            {% endif %}
+            <div class="owner__content">
+                {% if founder_name or founder_role %}
+                <div class="person">
+                    {% if founder_name %}<p class="person__name">{{ founder_name }}</p>{% endif %}
+                    {% if founder_role %}<p class="person__role">{{ founder_role }}</p>{% endif %}
+                </div>
+                {% endif %}
+                {% if text %}
+                    {{ text|raw }}
+                {% endif %}
+            </div>
+            {% if button_text %}
+            <a href="{{ button_url }}" class="button-play" target="_blank" rel="noopener">
+                <span class="button-play__icon">
+                    <svg class="play-icon">
+                        <use xlink:href="#svg-play"></use>
+                    </svg>
+                </span>
+                <span>{{ button_text }}</span>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+    {% if extra_image_url %}
+    <img class="our-team__all" src="{{ extra_image_url }}" alt="" loading="lazy">
+    {% endif %}
+</section>

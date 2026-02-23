@@ -1,0 +1,36 @@
+{{ header }}
+<main>
+  {% set bc_rest = breadcrumbs|slice(1) %}
+  {% set bc_items = [] %}
+  {% for b in bc_rest %}
+    {% set bc_items = bc_items|merge([{ name: b.text, url: b.href }]) %}
+  {% endfor %}
+  {% set home_url = breadcrumbs|length > 0 ? (breadcrumbs|first).href : '/' %}
+  {% include '@termopab/components/breadcrumbs/_breadcrumbs.twig' with {
+    home: { url: home_url, name: breadcrumb_home_name|default('Головна') },
+    breadcrumbs: bc_items
+  } %}
+  {{ content_top }}
+  <section class="checkout-checkout">
+      <div class="container">
+          <h1>{{ heading_title }}</h1>
+          <div class="modal-cart__container">
+            <form class="modal-cart__inner" action="#" id="modal-cart-form">
+              {% include "@termopab/components/modal-cart/_checkout-form.twig" %}
+            </form>
+          </div>
+      </div>
+    </section>
+    {{ content_bottom }}
+  <script>
+  window.MODAL_CART_MESSAGES = {
+    required: {{ (modal_cart_error_required|default(''))|json_encode|raw }},
+    email: {{ (modal_cart_error_email|default(''))|json_encode|raw }},
+    agreement: {{ (modal_cart_error_agreement|default(''))|json_encode|raw }}
+  };
+  window.MODAL_CART_SAVE_URL = {{ (modal_cart_save_url|default(''))|json_encode|raw }};
+  window.MODAL_CART_ZONES_URL = {{ (modal_cart_zones_url|default(''))|json_encode|raw }};
+  window.MODAL_CART_PRODUCTS_URL = {{ (modal_cart_products_url|default(''))|json_encode|raw }};
+  window.MODAL_CART_REMOVE_URL = {{ (modal_cart_remove_url|default(''))|json_encode|raw }};
+  </script>
+{{ footer }}
