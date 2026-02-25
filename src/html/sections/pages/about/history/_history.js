@@ -94,6 +94,27 @@ export function initHistory(dataInput = null) {
   }
 }
 
+// Данные из OpenCart модуля (script#history-data) или mock для статики
+function getHistoryData() {
+  const el = document.getElementById('history-data');
+  if (el) {
+    if (!el.textContent) return [];
+    try {
+      const data = JSON.parse(el.textContent);
+      return Array.isArray(data) ? data : [];
+    } catch (e) {
+      return [];
+    }
+  }
+  return mockData;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    initHistory(mockData);
+  if (document.querySelector('#history')) {
+    initHistory(getHistoryData());
+  }
 });
+
+if (typeof window !== 'undefined') {
+  window.initHistory = initHistory;
+}

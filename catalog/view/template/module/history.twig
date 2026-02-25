@@ -1,0 +1,27 @@
+<section class="history">
+    <script type="application/json" id="history-data">{{ history|json_encode|raw }}</script>
+    <div class="history__spikelet">
+        <img src="/src/assets/images/spikelet.webp" alt="">
+    </div>
+    <div class="container" id="history">
+        <h2 class="history__title section-title">{{ title|default('НАША ІСТОРІЯ') }}</h2>
+
+        <div class="history__years">
+            <div class="history__years-slider swiper">
+                <div class="swiper-wrapper"></div>
+            </div>
+            <div class="oval-nav history-slider-nav">
+                <button class="oval-nav__prev" type="button">
+                    <svg class="nav-arrow"><use href="#icon-short-arrow"></use></svg>
+                </button>
+                <button class="oval-nav__next" type="button">
+                    <svg class="nav-arrow"><use href="#icon-short-arrow"></use></svg>
+                </button>
+            </div>
+        </div>
+
+        <hr>
+
+        <div id="history-content" class="history__content"></div>
+    </div>
+</section>

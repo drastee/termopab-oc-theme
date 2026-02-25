@@ -1,0 +1,258 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="float-end">
+        <button type="submit" form="form-module" data-bs-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa-solid fa-save"></i></button>
+        <a href="{{ back }}" data-bs-toggle="tooltip" title="{{ button_back }}" class="btn btn-light"><i class="fa-solid fa-reply"></i></a>
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ol class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+          <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-header"><i class="fa-solid fa-pencil"></i> {{ text_edit }}</div>
+      <div class="card-body">
+        <form id="form-module" action="{{ save }}" method="post" data-oc-toggle="ajax">
+          <div class="row mb-3">
+            <label for="input-name" class="col-sm-2 col-form-label">{{ entry_name }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control"/>
+              <div id="error-name" class="invalid-feedback"></div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_title }}</label>
+            <div class="col-sm-10">
+              <ul class="nav nav-tabs" role="tablist">
+                {% for language in languages %}
+                  <li class="nav-item">
+                    <a class="nav-link{% if loop.first %} active{% endif %}" data-bs-toggle="tab" href="#tab-lang-{{ language.language_id }}">{% if language.image %}<img src="{{ language.image }}" alt="{{ language.name }}" title="{{ language.name }}" class="me-1"/>{% endif %}{{ language.name }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+              <div class="tab-content mt-2">
+                {% for language in languages %}
+                  <div id="tab-lang-{{ language.language_id }}" class="tab-pane{% if loop.first %} active{% endif %}">
+                    <input type="text" name="title[{{ language.language_id }}]" value="{{ (title[language.language_id] ?? '') }}" class="form-control" placeholder="{{ entry_title }}"/>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_slides }}</label>
+            <div class="col-sm-10">
+              <div id="history-slides-list" class="border rounded p-3 bg-light" data-no-slides="{{ text_no_slides|e('html_attr') }}">
+                {% for slide in slides %}
+                  <div class="history-slide-row card mb-3" data-row="{{ loop.index0 }}">
+                    <div class="card-header d-flex justify-content-between align-items-center py-2">
+                      <span class="d-flex align-items-center gap-2 flex-grow-1">
+                        <span class="btn-group btn-group-sm">
+                          <button type="button" class="btn btn-outline-secondary btn-slide-up" title="{{ button_up }}"><i class="fa-solid fa-arrow-up"></i></button>
+                          <button type="button" class="btn btn-outline-secondary btn-slide-down" title="{{ button_down }}"><i class="fa-solid fa-arrow-down"></i></button>
+                        </span>
+                        <span class="history-slide-title" data-bs-toggle="collapse" data-bs-target="#slide-body-history-{{ loop.index0 }}" aria-expanded="true" style="cursor: pointer;">{{ entry_slide }} {{ loop.index }}</span>
+                      </span>
+                      <button type="button" class="btn btn-outline-secondary btn-sm btn-slide-toggle" data-bs-toggle="collapse" data-bs-target="#slide-body-history-{{ loop.index0 }}" aria-expanded="true" title="{{ text_collapse }}"><i class="fa-solid fa-chevron-up"></i></button>
+                      <button type="button" class="btn btn-danger btn-sm btn-remove-slide"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                    <div class="collapse show" id="slide-body-history-{{ loop.index0 }}">
+                    <div class="card-body">
+                      <div class="mb-3">
+                        <label class="form-label small">{{ entry_year }}</label>
+                        <input type="text" name="slide[{{ loop.index0 }}][year]" value="{{ (slide.year ?? '') }}" class="form-control form-control-sm" placeholder="2016"/>
+                      </div>
+                      <ul class="nav nav-tabs" role="tablist">
+                        {% for language in languages %}
+                          <li class="nav-item">
+                            <a class="nav-link{% if loop.first %} active{% endif %}" data-bs-toggle="tab" href="#slide-{{ loop.parent.loop.index0 }}-lang-{{ language.language_id }}">{% if language.image %}<img src="{{ language.image }}" alt="{{ language.name }}" class="me-1"/>{% endif %}{{ language.name }}</a>
+                          </li>
+                        {% endfor %}
+                      </ul>
+                      <div class="tab-content mt-2">
+                        {% for language in languages %}
+                          <div id="slide-{{ loop.parent.loop.index0 }}-lang-{{ language.language_id }}" class="tab-pane{% if loop.first %} active{% endif %}">
+                            <label class="form-label small">{{ entry_content }}</label>
+                            <textarea name="slide[{{ loop.parent.loop.index0 }}][content][{{ language.language_id }}]" id="input-history-content-{{ loop.parent.loop.index0 }}-{{ language.language_id }}" class="form-control history-slide-content" rows="6" data-oc-toggle="ckeditor" data-lang="{{ ckeditor }}">{{ (slide.content[language.language_id] ?? '')|raw }}</textarea>
+                          </div>
+                        {% endfor %}
+                      </div>
+                    </div>
+                    </div>
+                  </div>
+                {% else %}
+                  <p class="text-muted mb-0">{{ text_no_slides }}</p>
+                {% endfor %}
+              </div>
+              <div class="mt-2">
+                <button type="button" id="btn-add-slide" class="btn btn-success"><i class="fa-solid fa-plus"></i> {{ button_add_slide }}</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_status }}</label>
+            <div class="col-sm-10">
+              <div class="form-check form-switch form-switch-lg">
+                <input type="hidden" name="status" value="0"/>
+                <input type="checkbox" name="status" value="1" id="input-status" class="form-check-input"{% if status %} checked{% endif %}/>
+              </div>
+            </div>
+          </div>
+          <input type="hidden" name="module_id" value="{{ module_id }}" id="input-module-id"/>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<template id="history-slide-template">
+  <div class="history-slide-row card mb-3" data-row="__ROW__">
+    <div class="card-header d-flex justify-content-between align-items-center py-2">
+      <span class="d-flex align-items-center gap-2 flex-grow-1">
+        <span class="btn-group btn-group-sm">
+          <button type="button" class="btn btn-outline-secondary btn-slide-up" title="{{ button_up }}"><i class="fa-solid fa-arrow-up"></i></button>
+          <button type="button" class="btn btn-outline-secondary btn-slide-down" title="{{ button_down }}"><i class="fa-solid fa-arrow-down"></i></button>
+        </span>
+        <span class="history-slide-title" data-bs-toggle="collapse" data-bs-target="#slide-body-history-__ROW__" aria-expanded="true" style="cursor: pointer;">{{ entry_slide }} __ROW_P1__</span>
+      </span>
+      <button type="button" class="btn btn-outline-secondary btn-sm btn-slide-toggle" data-bs-toggle="collapse" data-bs-target="#slide-body-history-__ROW__" aria-expanded="true" title="{{ text_collapse }}"><i class="fa-solid fa-chevron-up"></i></button>
+      <button type="button" class="btn btn-danger btn-sm btn-remove-slide"><i class="fa-solid fa-trash"></i></button>
+    </div>
+    <div class="collapse show" id="slide-body-history-__ROW__">
+    <div class="card-body">
+      <div class="mb-3">
+        <label class="form-label small">{{ entry_year }}</label>
+        <input type="text" name="slide[__ROW__][year]" value="" class="form-control form-control-sm" placeholder="2016"/>
+      </div>
+      <ul class="nav nav-tabs" role="tablist">
+        {% for language in languages %}
+          <li class="nav-item">
+            <a class="nav-link{% if loop.first %} active{% endif %}" data-bs-toggle="tab" href="#slide-__ROW__-lang-{{ language.language_id }}">{% if language.image %}<img src="{{ language.image }}" alt="{{ language.name }}" class="me-1"/>{% endif %}{{ language.name }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+      <div class="tab-content mt-2">
+        {% for language in languages %}
+          <div id="slide-__ROW__-lang-{{ language.language_id }}" class="tab-pane{% if loop.first %} active{% endif %}">
+            <label class="form-label small">{{ entry_content }}</label>
+            <textarea name="slide[__ROW__][content][{{ language.language_id }}]" id="input-history-content-__ROW__-{{ language.language_id }}" class="form-control history-slide-content" rows="6" data-oc-toggle="ckeditor" data-lang="{{ ckeditor }}"></textarea>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    </div>
+  </div>
+</template>
+
+<script type="text/javascript"><!--
+var historySlideNextRow = {{ slides|length }};
+var historyCkeditorLang = {{ (ckeditor|default('en'))|json_encode }};
+var historyEntrySlide = {{ (entry_slide|default('Slide'))|json_encode }};
+var historyNoSlides = {{ (text_no_slides|default(''))|json_encode }};
+
+function historyInitCkeditor() {
+  if (typeof $ !== 'undefined' && typeof $('textarea[data-oc-toggle="ckeditor"]').ckeditor === 'function') {
+    $('textarea.history-slide-content').not('.ckeditor-applied').ckeditor({ language: historyCkeditorLang }).addClass('ckeditor-applied');
+  }
+}
+
+function historyDestroyCkeditorInRow(row) {
+  if (typeof CKEDITOR === 'undefined') return;
+  var el = row.nodeName ? row : row[0];
+  if (!el) return;
+  el.querySelectorAll('textarea.history-slide-content').forEach(function(ta) {
+    if (ta.id && CKEDITOR.instances[ta.id]) CKEDITOR.instances[ta.id].destroy(true);
+    var nameKey = (ta.getAttribute('name') || '').replace(/[\[\]]/g, '_');
+    if (nameKey && CKEDITOR.instances[nameKey]) CKEDITOR.instances[nameKey].destroy(true);
+  });
+}
+
+function historyRenumberSlides() {
+  $('#history-slides-list .history-slide-row').each(function(i) {
+    var $row = $(this);
+    $row.attr('data-row', i);
+    $row.find('.history-slide-title').text(historyEntrySlide + ' ' + (i + 1));
+    $row.find('[name^="slide["]').each(function() {
+      var name = $(this).attr('name');
+      name = name.replace(/slide\[\d+\]/, 'slide[' + i + ']');
+      $(this).attr('name', name);
+    });
+    $row.find('[id^="input-history-content-"]').each(function() {
+      var id = $(this).attr('id');
+      id = id.replace(/input-history-content-\d+/, 'input-history-content-' + i);
+      $(this).attr('id', id);
+    });
+    $row.find('[id^="slide-"][id*="-lang-"]').each(function() {
+      var id = $(this).attr('id');
+      id = id.replace(/^slide-\d+-/, 'slide-' + i + '-');
+      $(this).attr('id', id);
+    });
+    $row.find('[data-bs-target^="#slide-body-history-"]').attr('data-bs-target', '#slide-body-history-' + i);
+    $row.find('[id^="slide-body-history-"]').attr('id', 'slide-body-history-' + i);
+    $row.find('a[href^="#slide-"][href*="-lang-"]').each(function() {
+      var href = $(this).attr('href');
+      href = href.replace(/#slide-\d+-/, '#slide-' + i + '-');
+      $(this).attr('href', href);
+    });
+  });
+  historySlideNextRow = $('#history-slides-list .history-slide-row').length;
+}
+
+$('#history-slides-list').on('click', '.btn-slide-up', function(e) {
+  e.preventDefault();
+  var $row = $(this).closest('.history-slide-row');
+  var $prev = $row.prev('.history-slide-row');
+  if ($prev.length) { $prev.before($row); historyRenumberSlides(); }
+});
+$('#history-slides-list').on('click', '.btn-slide-down', function(e) {
+  e.preventDefault();
+  var $row = $(this).closest('.history-slide-row');
+  var $next = $row.next('.history-slide-row');
+  if ($next.length) { $next.after($row); historyRenumberSlides(); }
+});
+
+$('#btn-add-slide').on('click', function() {
+  var tpl = document.getElementById('history-slide-template');
+  if (!tpl) return;
+  var html = tpl.innerHTML.replace(/__ROW__/g, historySlideNextRow).replace(/__ROW_P1__/g, historySlideNextRow + 1);
+  var $container = $('#history-slides-list');
+  var noItems = $container.find('.text-muted');
+  if (noItems.length) noItems.remove();
+  $container.append(html);
+  historySlideNextRow++;
+  historyRenumberSlides();
+  $container.find('.history-slide-row:last').find('textarea.history-slide-content').removeClass('ckeditor-applied');
+  historyInitCkeditor();
+});
+
+$('#history-slides-list').on('click', '.btn-remove-slide', function(e) {
+  e.preventDefault();
+  var row = $(this).closest('.history-slide-row');
+  historyDestroyCkeditorInRow(row);
+  row.remove();
+  historyRenumberSlides();
+  if ($('#history-slides-list .history-slide-row').length === 0) {
+    $('#history-slides-list').append('<p class="text-muted mb-0">' + historyNoSlides + '</p>');
+  }
+});
+
+$(document).ready(function() {
+  $('#history-slides-list').on('show.bs.collapse', '[id^="slide-body-history-"]', function() {
+    $(this).closest('.history-slide-row').find('.btn-slide-toggle i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+  });
+  $('#history-slides-list').on('hidden.bs.collapse', '[id^="slide-body-history-"]', function() {
+    $(this).closest('.history-slide-row').find('.btn-slide-toggle i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+  });
+  historyInitCkeditor();
+});
+//--></script>
+{{ footer }}

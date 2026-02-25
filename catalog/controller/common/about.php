@@ -38,7 +38,7 @@ class About extends \Opencart\System\Engine\Controller {
 		];
 
 		$data['header'] = $this->load->controller('common/header');
-		$data['content_top'] = $this->load->controller('common/content_top');
+		$data['content_top'] = $this->load->controller('extension/termopab/common/content_top');
 		$data['content_bottom'] = $this->load->controller('common/content_bottom');
 		$data['footer'] = $this->load->controller('common/footer');
 
