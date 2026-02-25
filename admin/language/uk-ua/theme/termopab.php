@@ -16,6 +16,7 @@ $_['tab_delivery_payment'] = 'Доставка і оплата';
 $_['tab_exchange_return']  = 'Обмін і повернення';
 $_['tab_checkout']     = 'Оформлення замовлення';
 $_['tab_about']        = 'Про нас (SEO)';
+$_['tab_contacts']     = 'Сторінка Контакти';
 $_['tab_status']       = 'Статус';
 
 $_['entry_meta_title']       = 'Meta Title';
@@ -68,6 +69,14 @@ $_['section_modal_blocks']  = 'Які блоки показувати в мод�
 $_['section_modal_blocks_help'] = 'У модальному вікні (кнопка «Купити») можуть показуватись два блоки: адреса оплати та адреса доставки. Увімкніть ті, що потрібні.';
 $_['section_modal_fields']  = 'Поля в блоках «Адреса оплати» та «Адреса доставки»';
 
+$_['entry_contacts_title'] = 'Заголовок';
+$_['entry_contacts_address_1'] = 'Адреса (рядок 1)';
+$_['entry_contacts_address_2'] = 'Адреса (рядок 2)';
+$_['entry_contacts_map_iframe'] = 'Iframe карти';
+
+$_['entry_header_socials'] = 'Соцмережі в шапці';
+$_['entry_footer_socials'] = 'Соцмережі в підвалі';
+
 // Button
 $_['text_install_project_tables'] = 'Створити таблиці проєктів';
 $_['text_install_full_tables']    = 'Створити всі таблиці (проєкти, огляди, category)';
@@ -76,9 +85,10 @@ $_['text_projects_add'] = 'Створити проєкт';
 $_['text_brewery_reviews'] = 'Огляди пивоварень';
 $_['text_brewery_reviews_add'] = 'Додати огляд';
 $_['text_brewery_reviews_add_permission'] = 'Додати права на огляди та категорії';
-$_['text_brewery_reviews_permission_added'] = 'Права на розділ «Огляди пивоварень» додано. Можете створити таблиці, якщо потрібно.';
-$_['text_brewery_review_categories_add_permission'] = 'Додати права на «Категорії оглядів»';
-$_['text_brewery_review_categories_permission_added'] = 'Права на «Категорії оглядів» додано.';
+$_['text_brewery_reviews_permission_added'] = 'Права на «Огляди пивоварень» та «Категорії оглядів» додані. Можете створити таблиці, якщо потрібно.';
+$_['text_callback_requests'] = 'Заявки на дзвінок';
+$_['text_callback_requests_add_permission'] = 'Додати права на заявки';
+$_['text_callback_requests_permission_added'] = 'Права на «Заявки на дзвінок» додані.';
 $_['text_quick_links'] = 'Швидкі дії';
 $_['button_add']       = 'Додати';
 $_['button_up']        = 'Вгору';

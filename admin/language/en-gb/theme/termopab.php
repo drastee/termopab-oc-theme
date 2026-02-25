@@ -16,6 +16,7 @@ $_['tab_delivery_payment'] = 'Delivery and payment';
 $_['tab_exchange_return']  = 'Exchange and return';
 $_['tab_checkout']     = 'Checkout';
 $_['tab_about']        = 'About us (SEO)';
+$_['tab_contacts']     = 'Contacts page';
 $_['tab_status']       = 'Status';
 
 $_['entry_meta_title']       = 'Meta Title';
@@ -68,6 +69,11 @@ $_['section_modal_blocks']  = 'Which blocks to show in the cart modal';
 $_['section_modal_blocks_help'] = 'The modal (Buy button) can show two blocks: payment address and shipping address. Enable the ones you need.';
 $_['section_modal_fields']  = 'Fields in «Payment address» and «Shipping address» blocks';
 
+$_['entry_contacts_title'] = 'Title';
+$_['entry_contacts_address_1'] = 'Address (line 1)';
+$_['entry_contacts_address_2'] = 'Address (line 2)';
+$_['entry_contacts_map_iframe'] = 'Map iframe';
+
 // Button
 $_['text_install_project_tables'] = 'Create project tables';
 $_['text_install_full_tables']    = 'Create all tables (projects, brewery reviews, category)';
@@ -75,9 +81,12 @@ $_['text_projects']    = 'Projects';
 $_['text_projects_add'] = 'Add project';
 $_['text_brewery_reviews'] = 'Brewery reviews';
 $_['text_brewery_reviews_add'] = 'Add review';
-$_['text_brewery_reviews_add_permission'] = 'Add permission for reviews and categories';
-$_['text_brewery_reviews_permission_added'] = 'Permission for «Brewery reviews» and «Review categories» added. You can create tables if needed.';
-$_['text_quick_links'] = 'Quick links';
+$_['text_brewery_reviews_add_permission'] = 'Add permissions for reviews and categories';
+$_['text_brewery_reviews_permission_added'] = 'Permissions for Brewery reviews and Review categories were added. You can create tables if needed.';
+$_['text_callback_requests'] = 'Callback requests';
+$_['text_callback_requests_add_permission'] = 'Add permissions for callback requests';
+$_['text_callback_requests_permission_added'] = 'Permissions for Callback requests were added.';
+$_['text_quick_links'] = 'Quick actions';
 $_['button_add']       = 'Add';
 $_['button_up']        = 'Move up';
 $_['button_down']      = 'Move down';

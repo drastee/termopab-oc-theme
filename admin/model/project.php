@@ -2,6 +2,33 @@
 namespace Opencart\Admin\Model\Extension\Termopab;
 
 class Project extends \Opencart\System\Engine\Model {
+	public function getProjectSeoKeywords(int $project_id): array {
+		$query = $this->db->query("SELECT `language_id`, `keyword` FROM `" . DB_PREFIX . "seo_url` WHERE `store_id` = '0' AND `key` = 'project_id' AND `value` = '" . (int)$project_id . "'");
+		$result = [];
+		foreach ($query->rows as $row) {
+			$result[(int)$row['language_id']] = (string)($row['keyword'] ?? '');
+		}
+		return $result;
+	}
+
+	public function setProjectSeoKeywords(int $project_id, array $seo_keyword): void {
+		$this->db->query("DELETE FROM `" . DB_PREFIX . "seo_url` WHERE `store_id` = '0' AND `key` = 'project_id' AND `value` = '" . (int)$project_id . "'");
+
+		foreach ($seo_keyword as $language_id => $keyword) {
+			$keyword = trim((string)$keyword);
+			if ($keyword === '') {
+				continue;
+			}
+			$this->db->query("INSERT INTO `" . DB_PREFIX . "seo_url` SET
+				`store_id` = '0',
+				`language_id` = '" . (int)$language_id . "',
+				`key` = 'project_id',
+				`value` = '" . (int)$project_id . "',
+				`keyword` = '" . $this->db->escape($keyword) . "',
+				`sort_order` = '1'");
+		}
+	}
+
 	public function getProject(int $project_id): array {
 		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "project` WHERE `project_id` = '" . (int)$project_id . "'");
 		return $query->num_rows ? $query->row : [];
@@ -74,6 +101,8 @@ class Project extends \Opencart\System\Engine\Model {
 				`sort_order` = '" . (int)($idx . '') . "'");
 		}
 
+		$this->setProjectSeoKeywords($project_id, $data['seo_keyword'] ?? []);
+
 		return $project_id;
 	}
 
@@ -110,6 +139,8 @@ class Project extends \Opencart\System\Engine\Model {
 				`image` = '" . $image . "',
 				`sort_order` = '" . (int)($idx . '') . "'");
 		}
+
+		$this->setProjectSeoKeywords($project_id, $data['seo_keyword'] ?? []);
 	}
 
 	/**
@@ -150,6 +181,7 @@ class Project extends \Opencart\System\Engine\Model {
 	}
 
 	public function deleteProject(int $project_id): void {
+		$this->db->query("DELETE FROM `" . DB_PREFIX . "seo_url` WHERE `store_id` = '0' AND `key` = 'project_id' AND `value` = '" . (int)$project_id . "'");
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "project_image` WHERE `project_id` = '" . (int)$project_id . "'");
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "project_description` WHERE `project_id` = '" . (int)$project_id . "'");
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "project` WHERE `project_id` = '" . (int)$project_id . "'");

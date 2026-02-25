@@ -60,6 +60,7 @@ class CallbackForm extends \Opencart\System\Engine\Controller {
 		$data['form_agreement'] = $this->language->get('form_agreement');
 		$data['form_id'] = 'cta2-form';
 		$data['form_class'] = '';
+		$data['form_action'] = $this->url->link('extension/termopab/common/callback.save', 'language=' . $this->config->get('config_language'));
 
 		$base = rtrim((string)$this->config->get('config_url'), '/');
 		$view_base = $base . '/extension/termopab/catalog/view/';

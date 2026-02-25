@@ -23,6 +23,7 @@ $_['entry_status']   = 'Status';
 $_['entry_meta_title'] = 'Meta title';
 $_['entry_meta_description'] = 'Meta description';
 $_['entry_meta_keyword'] = 'Meta keywords';
+$_['entry_seo_keyword'] = 'SEO keyword';
 
 $_['text_no_gallery'] = 'No photos in gallery yet.';
 

@@ -2,6 +2,32 @@
 namespace Opencart\Admin\Model\Extension\Termopab;
 
 class BreweryReviewCategory extends \Opencart\System\Engine\Model {
+	public function getCategorySeoKeywords(int $brewery_review_category_id): array {
+		$query = $this->db->query("SELECT `language_id`, `keyword` FROM `" . DB_PREFIX . "seo_url` WHERE `store_id` = '0' AND `key` = 'brewery_review_category_id' AND `value` = '" . (int)$brewery_review_category_id . "'");
+		$result = [];
+		foreach ($query->rows as $row) {
+			$result[(int)$row['language_id']] = (string)($row['keyword'] ?? '');
+		}
+		return $result;
+	}
+
+	public function setCategorySeoKeywords(int $brewery_review_category_id, array $seo_keyword): void {
+		$this->db->query("DELETE FROM `" . DB_PREFIX . "seo_url` WHERE `store_id` = '0' AND `key` = 'brewery_review_category_id' AND `value` = '" . (int)$brewery_review_category_id . "'");
+
+		foreach ($seo_keyword as $language_id => $keyword) {
+			$keyword = trim((string)$keyword);
+			if ($keyword === '') {
+				continue;
+			}
+			$this->db->query("INSERT INTO `" . DB_PREFIX . "seo_url` SET
+				`store_id` = '0',
+				`language_id` = '" . (int)$language_id . "',
+				`key` = 'brewery_review_category_id',
+				`value` = '" . (int)$brewery_review_category_id . "',
+				`keyword` = '" . $this->db->escape($keyword) . "',
+				`sort_order` = '1'");
+		}
+	}
 
 	public function getCategory(int $brewery_review_category_id): array {
 		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "brewery_review_category` WHERE `brewery_review_category_id` = '" . (int)$brewery_review_category_id . "'");
@@ -44,6 +70,8 @@ class BreweryReviewCategory extends \Opencart\System\Engine\Model {
 				`language_id` = '" . (int)$language_id . "',
 				`title` = '" . $this->db->escape($desc['title'] ?? '') . "'");
 		}
+
+		$this->setCategorySeoKeywords($id, $data['seo_keyword'] ?? []);
 		return $id;
 	}
 
@@ -60,10 +88,13 @@ class BreweryReviewCategory extends \Opencart\System\Engine\Model {
 				`language_id` = '" . (int)$language_id . "',
 				`title` = '" . $this->db->escape($desc['title'] ?? '') . "'");
 		}
+
+		$this->setCategorySeoKeywords($brewery_review_category_id, $data['seo_keyword'] ?? []);
 	}
 
 	public function deleteCategory(int $brewery_review_category_id): void {
 		$this->db->query("UPDATE `" . DB_PREFIX . "brewery_review` SET `brewery_review_category_id` = 0 WHERE `brewery_review_category_id` = '" . (int)$brewery_review_category_id . "'");
+		$this->db->query("DELETE FROM `" . DB_PREFIX . "seo_url` WHERE `store_id` = '0' AND `key` = 'brewery_review_category_id' AND `value` = '" . (int)$brewery_review_category_id . "'");
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "brewery_review_category_description` WHERE `brewery_review_category_id` = '" . (int)$brewery_review_category_id . "'");
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "brewery_review_category` WHERE `brewery_review_category_id` = '" . (int)$brewery_review_category_id . "'");
 	}

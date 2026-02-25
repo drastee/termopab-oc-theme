@@ -2,6 +2,7 @@
 $_['heading_title']   = 'Категория обзоров';
 $_['text_form']       = 'Добавить / Редактировать категорию';
 $_['entry_title']     = 'Название';
+$_['entry_seo_keyword'] = 'SEO keyword (ЧПУ)';
 $_['entry_sort_order'] = 'Порядок';
 $_['entry_status']    = 'Статус';
 $_['button_save']     = 'Сохранить';

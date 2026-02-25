@@ -1,0 +1,88 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="float-end">
+        {% if show_install %}
+          <a href="{{ install }}" class="btn btn-secondary"><i class="fa-solid fa-database"></i> {{ button_install }}</a>
+        {% endif %}
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ol class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+          <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if success %}
+      <div class="alert alert-success alert-dismissible"><i class="fa-solid fa-check-circle"></i> {{ success }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    {% endif %}
+    {% if error_warning %}
+      <div class="alert alert-danger alert-dismissible"><i class="fa-solid fa-exclamation-triangle"></i> {{ error_warning }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    {% endif %}
+
+    <div class="card">
+      <div class="card-header"><i class="fa-solid fa-list"></i> {{ text_list }}</div>
+      <div class="card-body">
+        {% if requests is empty %}
+          <p class="text-muted mb-0">{{ text_no_results }}</p>
+        {% else %}
+          <form id="form-callback-request" action="{{ delete }}" method="post" data-oc-toggle="ajax">
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <td class="text-center" style="width: 1px;"><input type="checkbox" onclick="document.querySelectorAll('#form-callback-request input[name=\'selected[]\']').forEach(el => el.checked = this.checked);"/></td>
+                  <td class="text-center" style="width: 60px;">{{ column_id }}</td>
+                  <td>{{ column_date_added }}</td>
+                  <td>{{ column_name }}</td>
+                  <td>{{ column_phone }}</td>
+                  <td class="text-center">{{ column_status }}</td>
+                  <td class="text-end">{{ column_action }}</td>
+                </tr>
+              </thead>
+              <tbody>
+                {% for r in requests %}
+                  <tr>
+                    <td class="text-center"><input type="checkbox" name="selected[]" value="{{ r.callback_request_id }}"{% if r.callback_request_id in selected %} checked{% endif %}/></td>
+                    <td class="text-center">{{ r.callback_request_id }}</td>
+                    <td>{{ r.date_added }}</td>
+                    <td>{{ r.name }}</td>
+                    <td>{{ r.phone }}</td>
+                    <td class="text-center">
+                      {% if r.status == 2 %}
+                        <span class="badge bg-success">{{ text_status_done }}</span>
+                      {% elseif r.status == 1 %}
+                        <span class="badge bg-warning text-dark">{{ text_status_in_progress }}</span>
+                      {% else %}
+                        <span class="badge bg-secondary">{{ text_status_new }}</span>
+                      {% endif %}
+                    </td>
+                    <td class="text-end">
+                      <a href="{{ r.edit }}" class="btn btn-primary btn-sm" title="{{ button_edit }}"><i class="fa-solid fa-pencil"></i></a>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <div class="d-flex justify-content-end mb-3">
+            <button type="submit" class="btn btn-danger" onclick="return confirm('{{ text_confirm }}');"><i class="fa-solid fa-trash"></i> {{ button_delete }}</button>
+          </div>
+          <div class="row">
+            <div class="col-sm-6 text-start"></div>
+            <div class="col-sm-6 text-end">{{ pagination }}</div>
+          </div>
+          </form>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{{ footer }}

@@ -117,10 +117,12 @@ class Project extends \Opencart\System\Engine\Controller {
 			$project = $this->model_extension_termopab_project->getProject($project_id);
 			$descriptions = $this->model_extension_termopab_project->getProjectDescriptions($project_id);
 			$gallery = $this->model_extension_termopab_project->getProjectImages($project_id);
+			$seo_keywords = $this->model_extension_termopab_project->getProjectSeoKeywords($project_id);
 		} else {
 			$project = ['image' => '', 'logo' => '', 'video' => '', 'sort_order' => 0, 'status' => 1];
 			$descriptions = [];
 			$gallery = [];
+			$seo_keywords = [];
 		}
 
 		$data['image'] = $project['image'] ?? '';
@@ -153,6 +155,11 @@ class Project extends \Opencart\System\Engine\Controller {
 				'meta_description' => $d['meta_description'] ?? '',
 				'meta_keyword'     => $d['meta_keyword'] ?? '',
 			];
+		}
+
+		$data['seo_keyword'] = [];
+		foreach ($data['languages'] as $language) {
+			$data['seo_keyword'][$language['language_id']] = (string)($seo_keywords[$language['language_id']] ?? '');
 		}
 
 		$data['header'] = $this->load->controller('common/header');
@@ -201,12 +208,14 @@ class Project extends \Opencart\System\Engine\Controller {
 					}
 				}
 			}
+			$seo_keyword = $this->request->post['seo_keyword'] ?? [];
 			$data = [
 				'image'       => trim((string)($this->request->post['image'] ?? '')),
 				'logo'        => trim((string)($this->request->post['logo'] ?? '')),
 				'video'       => trim((string)($this->request->post['video'] ?? '')),
 				'sort_order'  => (int)($this->request->post['sort_order'] ?? 0),
 				'status'      => (int)($this->request->post['status'] ?? 0),
+				'seo_keyword' => is_array($seo_keyword) ? $seo_keyword : [],
 				'project_description' => [],
 				'project_image' => $project_image,
 			];

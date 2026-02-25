@@ -55,6 +55,14 @@
                     <div id="error-title-{{ language.language_id }}" class="invalid-feedback"></div>
                   </div>
                 </div>
+
+				<hr/>
+				<div class="row mb-3">
+				  <label class="col-sm-2 col-form-label">{{ entry_seo_keyword }}</label>
+				  <div class="col-sm-10">
+					<input type="text" name="seo_keyword[{{ language.language_id }}]" value="{{ seo_keyword[language.language_id] }}" class="form-control"/>
+				  </div>
+				</div>
                 <div class="row mb-3">
                   <label class="col-sm-2 col-form-label">{{ entry_description }}</label>
                   <div class="col-sm-10">

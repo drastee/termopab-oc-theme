@@ -3,6 +3,61 @@ namespace Opencart\Catalog\Controller\Extension\Termopab\Startup;
 
 class Termopab extends \Opencart\System\Engine\Controller {
 	public function index(): void {
+		// Global URL link tweak: do not include language in URLs for the store default language.
+		// This prevents default language prefix (e.g. /ua/) while keeping prefixes for other languages.
+		$original_url = $this->registry->get('url');
+		if (is_object($original_url)) {
+			$config = $this->config;
+			$this->registry->set('url', new class($original_url, $config) {
+				private object $url;
+				private object $config;
+				private ?string $default_language = null;
+
+				public function __construct(object $url, object $config) {
+					$this->url = $url;
+					$this->config = $config;
+				}
+
+				private function getDefaultLanguage(): string {
+					if ($this->default_language !== null) {
+						return $this->default_language;
+					}
+
+					$default = (string)($this->config->get('config_language_catalog') ?? '');
+					if ($default === '') {
+						$default = (string)($this->config->get('config_language') ?? '');
+					}
+					$this->default_language = $default;
+					return $this->default_language;
+				}
+
+				public function link(string $route, $args = '', bool $secure = false): string {
+					$default = $this->getDefaultLanguage();
+					if ($default !== '' && $args) {
+						if (is_array($args)) {
+							if (isset($args['language']) && (string)$args['language'] === $default) {
+								unset($args['language']);
+							}
+						} else {
+							$args_str = (string)$args;
+							parse_str(str_replace('&amp;', '&', $args_str), $query);
+							if (isset($query['language']) && (string)$query['language'] === $default) {
+								unset($query['language']);
+								$args = http_build_query($query);
+								$args = str_replace('%2F', '/', $args);
+							}
+						}
+					}
+
+					return $this->url->link($route, $args, $secure);
+				}
+
+				public function __call(string $name, array $arguments) {
+					return $this->url->{$name}(...$arguments);
+				}
+			});
+		}
+
 		if ($this->config->get('theme_termopab_status')) {
 			$this->addDesignPath();
 			$this->template->addPath('extension/termopab', DIR_EXTENSION . 'termopab/catalog/view/template/');

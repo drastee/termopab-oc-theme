@@ -131,6 +131,25 @@ class Menu extends \Opencart\System\Engine\Controller {
 			];
 		}
 
+		$callback_request_file = $termopab_dir . '/controller/callback_request.php';
+		if (is_file($callback_request_file)) {
+			if (!isset($this->template) || !$this->template->getPath('extension/termopab')) {
+				$this->template->addPath('extension/termopab', $termopab_dir . '/view/template/');
+			}
+			if (method_exists($this->language, 'addPath')) {
+				$this->language->addPath('extension/termopab', $termopab_dir . '/language/');
+			}
+			$this->load->language('extension/termopab/callback_request/list');
+
+			$items[] = [
+				'id'       => 'menu-termopab-callback-requests',
+				'icon'     => 'fa-solid fa-phone',
+				'name'     => $this->language->get('heading_title'),
+				'href'     => $this->url->link('extension/termopab/callback_request', 'user_token=' . $this->session->data['user_token']),
+				'children' => [],
+			];
+		}
+
 		return $items;
 	}
 }

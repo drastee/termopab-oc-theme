@@ -2,32 +2,40 @@
     <div class="container">
         <div class="contacts__inner">
             <div class="contacts__start">
-                <h1 class="contacts__title section-title">Контакти</h1>
+                <h1 class="contacts__title section-title">{{ contacts_title|default('') }}</h1>
                 <div class="address">
-                    <p class="address__title">Україна, м. Київ, вул. Миколи Василенка,&nbsp;1.</p>
-                    <p class="address__note">(територія заводу КАРЗ)</p>
+                    {% if contacts_address_1|default('') %}
+                    <p class="address__title">{{ contacts_address_1 }}</p>
+                    {% endif %}
+                    {% if contacts_address_2|default('') %}
+                    <p class="address__note">{{ contacts_address_2 }}</p>
+                    {% endif %}
                 </div>
                 <div class="contacts__columns">
                     <div class="contacts__phones-wrapper">            
                         {% include "@components/phones-styled/_phones-styled.twig" with {
-                            telephones: ['+30 (067) 409-91-61', '+30 (067) 409-91-61']
+                            telephones: telephones|default([])
                         } %}
                         {% include "@components/shedule-styled/_shedule-styled.twig" with {
-                            schedule: 'Пн — Пт з 10:00 до 18:00<br>Сб з 9:00 до 16:00'
+                            schedule: schedule|default('')
                         } %}
                     </div>
                     <div class="contacts__social-wrapper">
-                        <a href="mailto:info@termopab.com" class="contacts__email">
-                            INFO@TERMOPAB.COM
+                        {% if email|default('') %}
+                        <a href="mailto:{{ email }}" class="contacts__email">
+                            {{ email|upper }}
                         </a>
-                        {% include "@components/social-buttons/_social-buttons.twig" %}
+                        {% endif %}
+                        {% include "@components/social-buttons/_social-buttons.twig" with {
+                            social_links: footer_social_links|default({})
+                        } %}
                     </div>
                 </div>
             </div>
             <div class="contacts__end">
                 <div class="contacts__badge">
-                    <img src="/src/assets/images/logo-large.webp" class="logo-large js-rotate-item" alt="Termopab badge">
-                    <img src="/src/assets/images/logo-large-shadow.webp" class="logo-shadow" alt="Termopab badge">
+                    <img src="{{ base }}extension/termopab/catalog/view/image/logo-large.webp" class="logo-large js-rotate-item" alt="Termopab badge">
+                    <img src="{{ base }}extension/termopab/catalog/view/image/logo-large-shadow.webp" class="logo-shadow" alt="Termopab badge">
                 </div>
             </div>
         </div>

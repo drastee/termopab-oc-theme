@@ -41,25 +41,30 @@
         } %}
       {% endif %}
 
-      {% if logo and not video_url %}
-        <figure class="mb-4">
-          <img src="{{ logo }}" alt="{{ title }}" class="project-logo img-fluid"/>
-        </figure>
-      {% endif %}
-      {% if image and not video_url and project_images is empty %}
-        <figure class="mb-4">
-          <img src="{{ image }}" alt="{{ title }}" class="img-fluid rounded"/>
-        </figure>
-      {% endif %}
-      {% if description %}
-        <p class="lead text-muted">{{ description }}</p>
-      {% endif %}
-      {% if article %}
-        <div class="project-article">{{ article }}</div>
-      {% endif %}
 
     </div>
   </section>
+
+  {% if article %}
+    <section class="text-content">
+      <div class="container">
+          <div class="text-content__inner">
+              <div class="text-content__main typography">{{ article }}</div>
+              <button 
+                  class="link expand-btn js-expand-btn" 
+                  data-text-expand="{{ text_expand|default('Розгорнути') }}" 
+                  data-text-collapse="{{ text_collapse|default('Згорнути') }}"
+                  aria-expanded="false" 
+              >
+                  <span>{{ text_expand|default('Розгорнути') }}</span>
+                  <svg class="link-arrow">
+                      <use href="#icon-short-arrow"></use>
+                  </svg>
+              </button>
+          </div>
+      </div>
+  </section>
+  {% endif %}
   {{ content_bottom }}
 </main>
 {{ footer }}

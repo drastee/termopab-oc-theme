@@ -126,10 +126,12 @@ class BreweryReview extends \Opencart\System\Engine\Controller {
 			$brewery_review = $this->model_extension_termopab_brewery_review->getBreweryReview($brewery_review_id);
 			$descriptions = $this->model_extension_termopab_brewery_review->getBreweryReviewDescriptions($brewery_review_id);
 			$gallery = $this->model_extension_termopab_brewery_review->getBreweryReviewImages($brewery_review_id);
+			$seo_keywords = $this->model_extension_termopab_brewery_review->getBreweryReviewSeoKeywords($brewery_review_id);
 		} else {
 			$brewery_review = ['brewery_review_category_id' => 0, 'image' => '', 'logo' => '', 'video' => '', 'sort_order' => 0, 'status' => 1];
 			$descriptions = [];
 			$gallery = [];
+			$seo_keywords = [];
 		}
 
 		$data['brewery_review_category_id'] = (int)($brewery_review['brewery_review_category_id'] ?? 0);
@@ -163,6 +165,11 @@ class BreweryReview extends \Opencart\System\Engine\Controller {
 				'meta_description'  => $d['meta_description'] ?? '',
 				'meta_keyword'      => $d['meta_keyword'] ?? '',
 			];
+		}
+
+		$data['seo_keyword'] = [];
+		foreach ($data['languages'] as $language) {
+			$data['seo_keyword'][$language['language_id']] = (string)($seo_keywords[$language['language_id']] ?? '');
 		}
 
 		$data['header'] = $this->load->controller('common/header');
@@ -211,6 +218,7 @@ class BreweryReview extends \Opencart\System\Engine\Controller {
 					}
 				}
 			}
+			$seo_keyword = $this->request->post['seo_keyword'] ?? [];
 			$data = [
 				'brewery_review_category_id' => (int)($this->request->post['brewery_review_category_id'] ?? 0),
 				'image'                      => trim((string)($this->request->post['image'] ?? '')),
@@ -218,6 +226,7 @@ class BreweryReview extends \Opencart\System\Engine\Controller {
 				'video'                      => trim((string)($this->request->post['video'] ?? '')),
 				'sort_order'                  => (int)($this->request->post['sort_order'] ?? 0),
 				'status'                     => (int)($this->request->post['status'] ?? 0),
+				'seo_keyword'                 => is_array($seo_keyword) ? $seo_keyword : [],
 				'brewery_review_description' => [],
 				'brewery_review_image'       => $brewery_review_image,
 			];

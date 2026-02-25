@@ -48,6 +48,8 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		$data['brewery_reviews_list'] = $this->url->link('extension/termopab/brewery_review', 'user_token=' . $this->session->data['user_token']);
 		$data['brewery_reviews_add'] = $this->url->link('extension/termopab/brewery_review.form', 'user_token=' . $this->session->data['user_token']);
 		$data['brewery_reviews_add_permission'] = $this->url->link('extension/termopab/theme/termopab.addBreweryReviewPermission', 'user_token=' . $this->session->data['user_token']);
+		$data['callback_requests_list'] = $this->url->link('extension/termopab/callback_request', 'user_token=' . $this->session->data['user_token']);
+		$data['callback_requests_add_permission'] = $this->url->link('extension/termopab/theme/termopab.addCallbackRequestPermission', 'user_token=' . $this->session->data['user_token']);
 		$data['install_full_tables'] = $this->url->link('extension/termopab/theme/termopab.runFullInstall', 'user_token=' . $this->session->data['user_token']);
 		$data['sync_events'] = $this->url->link('extension/termopab/theme/termopab.syncEvents', 'user_token=' . $this->session->data['user_token']);
 
@@ -87,6 +89,10 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		$data['theme_termopab_about_meta_title'] = isset($setting_info['theme_termopab_about_meta_title']) ? $setting_info['theme_termopab_about_meta_title'] : [];
 		$data['theme_termopab_about_meta_description'] = isset($setting_info['theme_termopab_about_meta_description']) ? $setting_info['theme_termopab_about_meta_description'] : [];
 		$data['theme_termopab_about_meta_keyword'] = isset($setting_info['theme_termopab_about_meta_keyword']) ? $setting_info['theme_termopab_about_meta_keyword'] : [];
+		$data['theme_termopab_contacts_title'] = isset($setting_info['theme_termopab_contacts_title']) ? $setting_info['theme_termopab_contacts_title'] : [];
+		$data['theme_termopab_contacts_address_1'] = isset($setting_info['theme_termopab_contacts_address_1']) ? $setting_info['theme_termopab_contacts_address_1'] : [];
+		$data['theme_termopab_contacts_address_2'] = isset($setting_info['theme_termopab_contacts_address_2']) ? $setting_info['theme_termopab_contacts_address_2'] : [];
+		$data['theme_termopab_contacts_map_iframe'] = isset($setting_info['theme_termopab_contacts_map_iframe']) ? (string)$setting_info['theme_termopab_contacts_map_iframe'] : '';
 
 		$this->document->addScript('view/javascript/ckeditor/ckeditor.js');
 		$this->document->addScript('view/javascript/ckeditor/adapters/jquery.js');
@@ -200,6 +206,24 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		$this->response->redirect($this->url->link('extension/termopab/brewery_review', 'user_token=' . $this->session->data['user_token']));
 	}
 
+	public function addCallbackRequestPermission(): void {
+		$this->load->language('extension/termopab/theme/termopab');
+
+		if (!$this->user->hasPermission('modify', 'extension/termopab/theme/termopab')) {
+			$this->session->data['error'] = $this->language->get('error_permission');
+			$this->response->redirect($this->url->link('extension/termopab/theme/termopab', 'user_token=' . $this->session->data['user_token']));
+			return;
+		}
+
+		$this->load->model('user/user_group');
+		$group_id = $this->user->getGroupId();
+		$this->model_user_user_group->addPermission($group_id, 'access', 'extension/termopab/callback_request');
+		$this->model_user_user_group->addPermission($group_id, 'modify', 'extension/termopab/callback_request');
+
+		$this->session->data['success'] = $this->language->get('text_callback_requests_permission_added');
+		$this->response->redirect($this->url->link('extension/termopab/callback_request', 'user_token=' . $this->session->data['user_token']));
+	}
+
 	/**
 	 * Sync events — register Termopab events without reinstalling.
 	 * Use when events were added in code but theme was not reinstalled.
@@ -309,6 +333,10 @@ class Termopab extends \Opencart\System\Engine\Controller {
 				'theme_termopab_about_meta_title' => [],
 				'theme_termopab_about_meta_description' => [],
 				'theme_termopab_about_meta_keyword' => [],
+				'theme_termopab_contacts_title' => [],
+				'theme_termopab_contacts_address_1' => [],
+				'theme_termopab_contacts_address_2' => [],
+				'theme_termopab_contacts_map_iframe' => '',
 			], $social_defaults, $this->request->post);
 
 			if (isset($post['theme_termopab_footer_menu_use_main'])) {
@@ -428,6 +456,7 @@ class Termopab extends \Opencart\System\Engine\Controller {
 			$this->load->model('user/user_group');
 			$routes = [
 				'extension/termopab/theme/termopab', 'extension/termopab/project', 'extension/termopab/brewery_review', 'extension/termopab/brewery_review_category',
+				'extension/termopab/callback_request',
 				'extension/termopab/install',
 				'extension/termopab/module/projects_slider',
 				'extension/termopab/module/brewery_reviews_slider',

@@ -2,6 +2,7 @@
 $_['heading_title']   = 'Review category';
 $_['text_form']       = 'Add / Edit category';
 $_['entry_title']     = 'Title';
+$_['entry_seo_keyword'] = 'SEO keyword';
 $_['entry_sort_order'] = 'Sort order';
 $_['entry_status']    = 'Status';
 $_['button_save']     = 'Save';

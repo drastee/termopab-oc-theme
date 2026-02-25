@@ -22,6 +22,7 @@ $_['entry_status']   = 'Статус';
 $_['entry_meta_title'] = 'Мета заголовок';
 $_['entry_meta_description'] = 'Мета описание';
 $_['entry_meta_keyword'] = 'Мета ключевые слова';
+$_['entry_seo_keyword'] = 'SEO keyword (ЧПУ)';
 
 // Text
 $_['text_no_gallery'] = 'Фото в галерею пока не добавлены.';

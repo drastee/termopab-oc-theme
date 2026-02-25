@@ -23,6 +23,7 @@ $_['entry_status']   = 'Статус';
 $_['entry_meta_title'] = 'Мета заголовок';
 $_['entry_meta_description'] = 'Мета опис';
 $_['entry_meta_keyword'] = 'Мета ключові слова';
+$_['entry_seo_keyword'] = 'SEO keyword (ЧПУ)';
 
 $_['text_no_gallery'] = 'Фото в галерею поки не додано.';
 

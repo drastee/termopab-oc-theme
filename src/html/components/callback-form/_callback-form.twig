@@ -3,7 +3,7 @@
   Pass form_id, form_label_name, form_placeholder_name, form_label_phone, form_placeholder_phone, form_button_text, form_agreement (optional).
   Used by CTA Hop and Form section (questions) modules.
 #}
-<form class="callback-form {{ form_class|default('') }}" action="" id="{{ form_id|default('callback-form') }}" method="post">
+<form class="callback-form {{ form_class|default('') }}" action="{{ form_action|default('') }}" id="{{ form_id|default('callback-form') }}" method="post" data-oc-toggle="ajax">
     <label class="label" for="{{ form_id|default('callback-form') }}-name">{{ form_label_name|default('Ваше імʼя') }}</label>
     <input id="{{ form_id|default('callback-form') }}-name" name="name" type="text" placeholder="{{ form_placeholder_name|default('Імʼя') }}">
 

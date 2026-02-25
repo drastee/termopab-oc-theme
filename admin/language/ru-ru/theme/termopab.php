@@ -16,6 +16,7 @@ $_['tab_delivery_payment'] = 'Доставка и оплата';
 $_['tab_exchange_return']  = 'Обмен и возврат';
 $_['tab_checkout']     = 'Оформление заказа';
 $_['tab_about']        = 'О нас (SEO)';
+$_['tab_contacts']     = 'Страница Контакты';
 $_['tab_status']       = 'Статус';
 
 $_['entry_meta_title']       = 'Meta Title';
@@ -68,6 +69,11 @@ $_['section_modal_blocks']  = 'Какие блоки показывать в м�
 $_['section_modal_blocks_help'] = 'В модальном окне (кнопка «Купить») могут показываться два блока: адрес оплаты и адрес доставки. Включите нужные.';
 $_['section_modal_fields']  = 'Поля в блоках «Адрес оплаты» и «Адрес доставки»';
 
+$_['entry_contacts_title'] = 'Заголовок';
+$_['entry_contacts_address_1'] = 'Адрес (строка 1)';
+$_['entry_contacts_address_2'] = 'Адрес (строка 2)';
+$_['entry_contacts_map_iframe'] = 'Iframe карты';
+
 // Button
 $_['button_add']       = 'Добавить';
 $_['button_up']        = 'Вверх';
@@ -82,6 +88,9 @@ $_['text_brewery_reviews'] = 'Обзоры пивоварень';
 $_['text_brewery_reviews_add'] = 'Добавить обзор';
 $_['text_brewery_reviews_add_permission'] = 'Добавить права на обзоры и категории';
 $_['text_brewery_reviews_permission_added'] = 'Права на «Обзоры пивоварень» и «Категории обзоров» добавлены. Можете создать таблицы, если нужно.';
+$_['text_callback_requests'] = 'Заявки на звонок';
+$_['text_callback_requests_add_permission'] = 'Добавить права на заявки';
+$_['text_callback_requests_permission_added'] = 'Права на «Заявки на звонок» добавлены.';
 $_['text_quick_links'] = 'Быстрые действия';
 
 // Text

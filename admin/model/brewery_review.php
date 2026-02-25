@@ -2,6 +2,33 @@
 namespace Opencart\Admin\Model\Extension\Termopab;
 
 class BreweryReview extends \Opencart\System\Engine\Model {
+	public function getBreweryReviewSeoKeywords(int $brewery_review_id): array {
+		$query = $this->db->query("SELECT `language_id`, `keyword` FROM `" . DB_PREFIX . "seo_url` WHERE `store_id` = '0' AND `key` = 'brewery_review_id' AND `value` = '" . (int)$brewery_review_id . "'");
+		$result = [];
+		foreach ($query->rows as $row) {
+			$result[(int)$row['language_id']] = (string)($row['keyword'] ?? '');
+		}
+		return $result;
+	}
+
+	public function setBreweryReviewSeoKeywords(int $brewery_review_id, array $seo_keyword): void {
+		$this->db->query("DELETE FROM `" . DB_PREFIX . "seo_url` WHERE `store_id` = '0' AND `key` = 'brewery_review_id' AND `value` = '" . (int)$brewery_review_id . "'");
+
+		foreach ($seo_keyword as $language_id => $keyword) {
+			$keyword = trim((string)$keyword);
+			if ($keyword === '') {
+				continue;
+			}
+			$this->db->query("INSERT INTO `" . DB_PREFIX . "seo_url` SET
+				`store_id` = '0',
+				`language_id` = '" . (int)$language_id . "',
+				`key` = 'brewery_review_id',
+				`value` = '" . (int)$brewery_review_id . "',
+				`keyword` = '" . $this->db->escape($keyword) . "',
+				`sort_order` = '1'");
+		}
+	}
+
 	public function getBreweryReview(int $brewery_review_id): array {
 		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "brewery_review` WHERE `brewery_review_id` = '" . (int)$brewery_review_id . "'");
 		return $query->num_rows ? $query->row : [];
@@ -76,6 +103,8 @@ class BreweryReview extends \Opencart\System\Engine\Model {
 				`sort_order` = '" . (int)($idx . '') . "'");
 		}
 
+		$this->setBreweryReviewSeoKeywords($brewery_review_id, $data['seo_keyword'] ?? []);
+
 		return $brewery_review_id;
 	}
 
@@ -113,6 +142,8 @@ class BreweryReview extends \Opencart\System\Engine\Model {
 				`image` = '" . $image . "',
 				`sort_order` = '" . (int)($idx . '') . "'");
 		}
+
+		$this->setBreweryReviewSeoKeywords($brewery_review_id, $data['seo_keyword'] ?? []);
 	}
 
 	public function copyBreweryReview(int $brewery_review_id): int {
@@ -150,6 +181,7 @@ class BreweryReview extends \Opencart\System\Engine\Model {
 	}
 
 	public function deleteBreweryReview(int $brewery_review_id): void {
+		$this->db->query("DELETE FROM `" . DB_PREFIX . "seo_url` WHERE `store_id` = '0' AND `key` = 'brewery_review_id' AND `value` = '" . (int)$brewery_review_id . "'");
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "brewery_review_image` WHERE `brewery_review_id` = '" . (int)$brewery_review_id . "'");
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "brewery_review_description` WHERE `brewery_review_id` = '" . (int)$brewery_review_id . "'");
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "brewery_review` WHERE `brewery_review_id` = '" . (int)$brewery_review_id . "'");

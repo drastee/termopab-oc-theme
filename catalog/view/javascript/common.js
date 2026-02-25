@@ -102,6 +102,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const method = (button?.getAttribute('formmethod') || form.getAttribute('method') || 'POST').toUpperCase();
             const enctype = button?.getAttribute('formenctype') || form.getAttribute('enctype') || 'application/x-www-form-urlencoded';
 
+            if (!action) {
+                console.error('AJAX form submit: missing form action', form);
+                return;
+            }
+
             // Обновляем CKEditor, если есть
             if (typeof CKEDITOR !== 'undefined') {
                 for (const instance in CKEDITOR.instances) {
@@ -132,8 +137,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const json = await response.json();
 
+                // Контейнер для алертов: глобальный (#alert) или локальный возле формы
+                const ensureAlertContainer = () => {
+                    let container = document.getElementById('alert');
+                    if (container) return container;
+
+                    container = form.querySelector('.oc-ajax-alert');
+                    if (!container) {
+                        container = document.createElement('div');
+                        container.className = 'oc-ajax-alert';
+                        form.insertAdjacentElement('afterbegin', container);
+                    }
+
+                    return container;
+                };
+
+                const alertContainer = ensureAlertContainer();
+
                 // Очистка старых алертов и классов ошибок
-                document.querySelectorAll('.alert-dismissible').forEach(el => el.remove());
+                alertContainer.querySelectorAll('.alert-dismissible').forEach(el => el.remove());
                 form.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
                 form.querySelectorAll('.invalid-feedback').forEach(el => el.classList.remove('d-block'));
 
@@ -143,14 +165,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 if (typeof json['error'] === 'string') {
-                    document.getElementById('alert').insertAdjacentHTML('afterbegin', 
+                    alertContainer.insertAdjacentHTML('afterbegin', 
                         `<div class="alert alert-danger alert-dismissible"><i class="fa-solid fa-circle-exclamation"></i> ${json['error']} <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>`
                     );
                 }
 
                 if (typeof json['error'] === 'object') {
                     if (json['error']['warning']) {
-                        document.getElementById('alert').insertAdjacentHTML('afterbegin', 
+                        alertContainer.insertAdjacentHTML('afterbegin', 
                             `<div class="alert alert-danger alert-dismissible"><i class="fa-solid fa-circle-exclamation"></i> ${json['error']['warning']} <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>`
                         );
                     }
@@ -175,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 if (json['success']) {
-                    document.getElementById('alert').insertAdjacentHTML('afterbegin', 
+                    alertContainer.insertAdjacentHTML('afterbegin', 
                         `<div class="alert alert-success alert-dismissible"><i class="fa-solid fa-circle-check"></i> ${json['success']} <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>`
                     );
 

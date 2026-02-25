@@ -89,9 +89,11 @@ class BreweryReviewCategory extends \Opencart\System\Engine\Controller {
 		if ($brewery_review_category_id) {
 			$category = $this->model_extension_termopab_brewery_review_category->getCategory($brewery_review_category_id);
 			$descriptions = $this->model_extension_termopab_brewery_review_category->getCategoryDescriptions($brewery_review_category_id);
+			$seo_keywords = $this->model_extension_termopab_brewery_review_category->getCategorySeoKeywords($brewery_review_category_id);
 		} else {
 			$category = ['sort_order' => 0, 'status' => 1];
 			$descriptions = [];
+			$seo_keywords = [];
 		}
 
 		$data['sort_order'] = $category['sort_order'] ?? 0;
@@ -100,6 +102,11 @@ class BreweryReviewCategory extends \Opencart\System\Engine\Controller {
 		foreach ($data['languages'] as $lang) {
 			$d = $descriptions[$lang['language_id']] ?? [];
 			$data['category_description'][$lang['language_id']] = ['title' => $d['title'] ?? ''];
+		}
+
+		$data['seo_keyword'] = [];
+		foreach ($data['languages'] as $lang) {
+			$data['seo_keyword'][$lang['language_id']] = (string)($seo_keywords[$lang['language_id']] ?? '');
 		}
 
 		$data['header'] = $this->load->controller('common/header');
@@ -135,9 +142,11 @@ class BreweryReviewCategory extends \Opencart\System\Engine\Controller {
 		}
 
 		if (empty($json['error'])) {
+			$seo_keyword = $this->request->post['seo_keyword'] ?? [];
 			$data = [
 				'sort_order'          => (int)($this->request->post['sort_order'] ?? 0),
 				'status'              => (int)($this->request->post['status'] ?? 1),
+				'seo_keyword'          => is_array($seo_keyword) ? $seo_keyword : [],
 				'category_description' => [],
 			];
 			foreach ($category_description as $language_id => $desc) {
