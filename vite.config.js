@@ -12,6 +12,7 @@ export default {
       root: './src',
       namespaces: {
         '@': './src/html',
+        'termopab': './src/html',
         'components': './src/html/components',
         "sections": 'src/html/sections',
         "assets": 'src/assets'

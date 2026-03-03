@@ -56,6 +56,12 @@
 main > .breadcrumbs:first-child{
     padding-block: 20px 20px;
     @include md-up{
-        padding-block: 60px 30px;
+        padding-block: 20px 30px;
     }
 }
+
+// .text-page main > .breadcrumbs{
+//     @include md-up{
+//         padding-block: 22px 30px;
+//     }
+// }

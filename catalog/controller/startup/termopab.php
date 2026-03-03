@@ -252,6 +252,34 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		$data['modal_cart_remove_url']   = $this->url->link('common/cart.remove', 'language=' . $this->config->get('config_language'));
 	}
 
+	public function addModalCallbackData(array &$data): void {
+		// Keep same pattern as modal_cart: try extension path first.
+		$this->load->language('extension/termopab/common/modal_callback');
+		if ($this->language->get('modal_callback_title') === 'modal_callback_title') {
+			$this->load->language('common/modal_callback');
+		}
+		$data['modal_callback_title'] = $this->language->get('modal_callback_title');
+		$data['modal_callback_label_name'] = $this->language->get('modal_callback_label_name');
+		$data['modal_callback_placeholder_name'] = $this->language->get('modal_callback_placeholder_name');
+		$data['modal_callback_label_phone'] = $this->language->get('modal_callback_label_phone');
+		$data['modal_callback_placeholder_phone'] = $this->language->get('modal_callback_placeholder_phone');
+		$data['modal_callback_button'] = $this->language->get('modal_callback_button');
+		$data['modal_callback_agreement'] = $this->language->get('modal_callback_agreement');
+		$data['modal_callback_form_action'] = $this->url->link('extension/termopab/common/callback.save', 'language=' . $this->config->get('config_language'));
+		$data['modal_callback_form_id'] = 'callback-form';
+		$data['modal_callback_form_class'] = '';
+	}
+
+	public function addModalSuccessData(array &$data): void {
+		// Keep same pattern as modal_cart: try extension path first.
+		$this->load->language('extension/termopab/common/modal_success');
+		if ($this->language->get('modal_success_title') === 'modal_success_title') {
+			$this->load->language('common/modal_success');
+		}
+		$data['modal_success_title'] = $this->language->get('modal_success_title');
+		$data['modal_success_text'] = $this->language->get('modal_success_text');
+	}
+
 	/**
 	 * Add theme settings to view data for header/footer
 	 */
@@ -262,6 +290,8 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		$data['pageClass'] = $this->getPageClassFromRoute($route);
 
 		$this->addModalCartFormData($data);
+		$this->addModalCallbackData($data);
+		$this->addModalSuccessData($data);
 
 		$brand = $this->config->get('theme_termopab_brand');
 		$data['brand'] = (is_array($brand) && isset($brand[$language_id])) ? $brand[$language_id] : '';

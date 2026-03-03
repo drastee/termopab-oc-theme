@@ -1,0 +1,50 @@
+@use "src/styles/mixins" as *;
+.not-found{
+    padding-block: 80px;
+    .container{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    @include md-up{
+        padding-block: 60px;
+    }
+    &__inner{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-weight: 700;
+        font-size: 18px;
+        font-family: var(--font-alt);
+        text-align: center;
+        @include md-up{
+            font-size: 22px;
+            max-width: 780px;
+        }
+        @include xl-up{
+            font-size: 26px;
+            max-width: 883px;
+        }
+        a{
+            font-size: inherit;
+            font-weight: inherit;
+            font-family: inherit;
+            color: var(--color-accent);
+            &.link{
+                gap: 5px;
+                &:hover{
+                    text-decoration: underline;
+                }
+            }
+            .link-arrow{
+                width: 1em;
+                height: 1em;
+            }
+        }
+    }
+    img{
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+}

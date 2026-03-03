@@ -1,0 +1,56 @@
+@use "src/styles/mixins" as *;
+.text-classic {
+    background-color: var(--color-light);
+    padding-block: 20px 32px;
+    color: var(--color-gray-dark);
+    padding-inline: 12px;
+    @include md-up{
+        padding-inline: unset;
+        padding-block: 30px 80px;
+    }
+    &__title, h1{
+        font-size: 18px;
+        font-family: var(--font-alt);
+        font-weight: 500;
+        @include md-up{
+            font-size: 28px;
+        }
+    }
+    h2, h3{
+        font-size: 16px;
+        font-weight: 700;
+        @include md-up{
+            font-size: 18px;
+        }
+    }
+    &__inner {
+        max-width: 855px;
+        @include lg-up{
+            padding-left: 75px;
+        }
+        @include xl-up{
+            padding-left: 124px;
+        }
+    }
+    &__content {
+        font-size: 14px;
+        line-height: 1.7;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding-block: 20px 12px;
+        @include lg-up{
+            padding-block: 56px 0;
+            font-size: 16px;
+        }
+        ul{
+            list-style: disc;
+            padding-left: 1.2em;
+        }
+        ol{
+            list-style: decimal;
+            padding-left: 1.2em;
+        }
+        b, strong{font-weight: 600;}
+    }
+}

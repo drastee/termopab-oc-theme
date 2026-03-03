@@ -28,9 +28,11 @@
     </div>
 
     {% include "@components/modal-cart/_modal-cart.twig" %}
-    
-    <script type="module" src="/src/scripts/main.js"></script>
+    {% include "@components/modal-callback/_modal-callback.twig" %}
+    {% include "@components/modal-order-success/_modal-order-success.twig" %}
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.5.6/dialog-polyfill.min.js"></script>
+    <script type="module" src="/src/scripts/main.js"></script>
     
     
     {# Sprites #}
@@ -40,6 +42,7 @@
     {% include "../../assets/icons/location.svg" %}
     {% include "../../assets/icons/360.svg" %}
     {% include "../../assets/icons/play.svg" %}
+    {% include "../../assets/icons/icons.svg" %}
     {# {% include "../../assets/icons/play2.svg" %} #}
 </body>
 </html>

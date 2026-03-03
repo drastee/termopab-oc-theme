@@ -63,7 +63,9 @@
                         {% set header_links = header_social_links|default(social_links|default({})) %}
                         {% for key in ['instagram', 'whatsapp', 'telegram', 'facebook', 'youtube'] %}
                             {% if header_links[key] is defined and header_links[key] is not same as('') %}
-                                <li><a href="{{ header_links[key] }}" target="_blank" rel="noopener noreferrer" class="social-icon"><svg class="icon"><use href="{{ base }}extension/termopab/catalog/view/image/icons/icons.svg#icon-{{ key }}"></use></svg></a></li>
+                                <li><a href="{{ header_links[key] }}" target="_blank" rel="noopener noreferrer" class="social-icon">
+                                <svg class="icon"><use href="{{ base }}extension/termopab/catalog/view/image/icons/icons.svg#icon-{{ key }}"></use></svg>
+                                </a></li>
                             {% endif %}
                         {% endfor %}
                     </ul>
@@ -84,4 +86,4 @@
             </div>
         </header>
 
- {% include '@termopab/components/menu/_menu.twig' %} 
+        {% include "@termopab/components/menu/_menu.twig" with { menu_columns: menu_columns } %}

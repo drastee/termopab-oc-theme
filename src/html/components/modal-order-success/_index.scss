@@ -1,0 +1,53 @@
+@use "src/styles/mixins" as *;
+.modal-success{
+    background-color: var(--color-white);
+    border-radius: 15px;
+    padding-inline: 55px;
+    padding-block: 26px 32px;
+    color: var(--color-white);
+    border: none;
+    width: 100%;
+    max-width: 522px;
+    position: relative;
+    overflow: visible;
+    
+    &__title{
+        color: var(--color-accent);
+        font-size: 24px;
+        font-weight: 600;
+        line-height: 1.2;
+        margin-bottom: 32px;
+        font-family: var(--font-alt);
+        text-align: center;
+        @include md-up {
+            font-size: 32px;
+        }
+    }
+    p{
+        color: #737373;
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 1.2;
+        text-align: center;
+    }
+    &__close{
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        display: block;
+        right: -40px;
+        top: 0;
+        background: transparent;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        color: var(--color-gray-mid);
+        &:hover{
+            color: var(--color-accent);
+        }
+        svg{
+            width: inherit;
+            height: inherit;
+        }
+    }
+}

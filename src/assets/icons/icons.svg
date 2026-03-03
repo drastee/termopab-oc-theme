@@ -18,4 +18,10 @@
         <path d="M5.99924 7.55277L9.93858 5.3106L5.99924 3.06944V7.55277Z" fill="black"/>
     </symbol>
 
+    <!-- CLOSE -->
+    <symbol fill="none" viewBox="0 0 20 20" id="icon-close" xmlns="http://www.w3.org/2000/svg">
+        <path fill="currentColor" d="M0 2.07 2.069 0l17.93 17.93L17.932 20z"/>
+        <path fill="currentColor" d="M17.931 0 20 2.069 2.07 19.999 0 17.932z"/>
+    </symbol>
+
 </svg>

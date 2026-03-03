@@ -1,0 +1,13 @@
+<dialog id="success-modal" class="modal-success">
+
+    <button type="button" class="modal-success__close" aria-label="Закрити">
+        <svg class="modal-success__close-icon" aria-hidden="true" focusable="false">
+            <use href="#icon-close"></use>
+        </svg>
+    </button>
+
+    <div class="modal-success__inner">
+        <h3 class="modal-success__title">{{ modal_success_title|default('') }}</h3>
+        <p>{{ modal_success_text|default('')|raw }}</p>
+    </div>
+</dialog>

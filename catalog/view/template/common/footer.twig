@@ -10,7 +10,7 @@
 
                 {% set first_phone = (telephones|default([]))|first|default(telephone) %}
                 {% if first_phone %}
-                <a href="tel:{{ first_phone|replace({' ': '', '-': '', '(': '', ')': ''}) }}" class="footer__button btn btn-transparent">{{ text_call_me }}</a>
+                <button type="button" class="footer__button btn btn-transparent open-callback-btn">{{ text_call_me }}</button>
                 {% endif %}
                 <hr>
                 {% if email %}
@@ -120,6 +120,24 @@
         modal_cart_fill: modal_cart_fill|default([])
     } %}
 
+    {% include "@termopab/components/modal-callback/_modal-callback.twig" with {
+        modal_callback_title: modal_callback_title|default(''),
+        form_action: modal_callback_form_action|default(''),
+        form_id: modal_callback_form_id|default('callback-form'),
+        form_class: modal_callback_form_class|default(''),
+        form_label_name: modal_callback_label_name|default(''),
+        form_placeholder_name: modal_callback_placeholder_name|default(''),
+        form_label_phone: modal_callback_label_phone|default(''),
+        form_placeholder_phone: modal_callback_placeholder_phone|default(''),
+        form_button_text: modal_callback_button|default(''),
+        form_agreement: modal_callback_agreement|default('')
+    } %}
+
+    {% include "@termopab/components/modal-order-success/_modal-order-success.twig" with {
+        modal_success_title: modal_success_title|default(''),
+        modal_success_text: modal_success_text|default('')
+    } %}
+
     <script>
     window.MODAL_CART_MESSAGES = {
         required: {{ (modal_cart_error_required|default(''))|json_encode|raw }},
@@ -144,5 +162,6 @@
     {% include "@assets/icons/location.svg" %}
     {% include "@assets/icons/360.svg" %}
     {% include "@assets/icons/play.svg" %}
+    {% include "@assets/icons/icons.svg" %}
 </body>
 </html>

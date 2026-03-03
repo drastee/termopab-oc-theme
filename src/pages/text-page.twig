@@ -1,0 +1,17 @@
+{% extends "html/layouts/_html.twig" %}
+{% set pageTitle = "Політика конфіденційності" %}
+{% set pageClass = "text-page" %}
+{% block main %}
+<main>
+
+    {% include "@components/breadcrumbs/_breadcrumbs.twig" with {
+        "background": "white",
+        "breadcrumbs": [
+            {"name": "Політика конфіденційності"}
+        ]
+    }%}
+
+    {% include "@sections/shared/text-classic/_text-classic.twig" %}
+
+</main>
+{% endblock %}

@@ -17,4 +17,6 @@ import '../html/sections/pages/product/main-media/_main-media.js';
 import '../html/sections/pages/product/video-block/_video-block.js';
 import '../html/sections/pages/product/characteristics/_characteristics.js';
 import '../html/sections/pages/about/history/_history.js';
+import '../html/components/modal-callback/_modal-callback.js';
+import '../html/components/modal-order-success/_modal-order-success.js';
 import './animations/rotate-item.js';

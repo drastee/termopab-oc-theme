@@ -309,6 +309,25 @@ if (form) {
           if (firstErrorEl) firstErrorEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
           return;
         }
+
+        if (json.success) {
+          clearDraft();
+          const cartInfoUrl = document.querySelector('.open-order-btn')?.dataset.cartInfo || '';
+
+          closeModal();
+          refreshCartHeader(cartInfoUrl);
+          loadAndRenderCartProducts();
+
+          if (typeof window.termopabOpenSuccessModal === 'function') {
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                window.termopabOpenSuccessModal();
+              });
+            });
+          }
+          return;
+        }
+
         if (json.redirect) {
           clearDraft();
           window.location.href = json.redirect;

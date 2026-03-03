@@ -1,0 +1,24 @@
+<dialog id="callback-modal" class="modal-callback">
+
+    <button type="button" class="modal-callback__close" aria-label="Закрити">
+        <svg class="modal-callback__close-icon" aria-hidden="true" focusable="false">
+            <use href="#icon-close"></use>
+        </svg>
+    </button>
+
+    <div class="modal-callback__inner">
+        <h3 class="modal-callback__title">{{ modal_callback_title|default('') }}</h3>
+                
+        {% include '@components/callback-form/_callback-form.twig' with {
+            form_action: form_action|default(''),
+            form_id: form_id|default('callback-form'),
+            form_class: form_class|default(''),
+            form_label_name: form_label_name,
+            form_placeholder_name: form_placeholder_name,
+            form_label_phone: form_label_phone,
+            form_placeholder_phone: form_placeholder_phone,
+            form_button_text: form_button_text,
+            form_agreement: form_agreement|default('')
+        } %}
+    </div>
+</dialog>

@@ -14,11 +14,16 @@ function setButtonState(button, state) {
     if (!button) return;
 
     if (state === 'loading') {
-        button.dataset.originalHtml = button.innerHTML;
+        if (!button.dataset.originalHtml) {
+            button.dataset.originalHtml = button.innerHTML;
+        }
         button.disabled = true;
         // Сохраняем ширину, чтобы кнопка не "прыгала"
         button.style.width = `${button.offsetWidth}px`;
-        button.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin text-light"></i>';
+        button.innerHTML = `<span style="display:inline-flex;align-items:center;gap:8px;">
+            <span>${button.dataset.originalHtml}</span>
+            <i class="fa-solid fa-circle-notch fa-spin text-light"></i>
+        </span>`;
     } else if (state === 'reset') {
         button.disabled = false;
         button.style.width = '';
@@ -200,6 +205,31 @@ document.addEventListener('DOMContentLoaded', () => {
                     alertContainer.insertAdjacentHTML('afterbegin', 
                         `<div class="alert alert-success alert-dismissible"><i class="fa-solid fa-circle-check"></i> ${json['success']} <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>`
                     );
+
+					// Callback form UX: reset + close callback modal + open success modal (if present)
+					if (form && (form.id === 'callback-form' || form.classList.contains('callback-form'))) {
+						try {
+							form.reset();
+						} catch (e) {}
+
+						const openSuccessAfterScrollRestore = () => {
+							if (typeof window.termopabOpenSuccessModal === 'function') {
+								// Wait for modal close/unlock scroll + requestAnimationFrame(scrollTo)
+								requestAnimationFrame(() => {
+									requestAnimationFrame(() => {
+										window.termopabOpenSuccessModal();
+									});
+								});
+							}
+						};
+
+						if (typeof window.termopabCloseCallbackModal === 'function') {
+							window.termopabCloseCallbackModal();
+							openSuccessAfterScrollRestore();
+						} else {
+							openSuccessAfterScrollRestore();
+						}
+					}
 
                     // Refresh части контента (аналог $(target).load(url))
                     const loadUrl = form.getAttribute('data-oc-load');
