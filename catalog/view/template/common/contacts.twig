@@ -11,7 +11,7 @@
     {% endfor %}
 
     {% include '@termopab/components/breadcrumbs/_breadcrumbs.twig' with {
-      home: { url: bc_home.href, name: bc_home.text },
+      home: { url: bc_home.href|default('/'), name: bc_home.text|default(text_home)|striptags|trim },
       breadcrumbs: bc_items,
       background: "black"
     } %}

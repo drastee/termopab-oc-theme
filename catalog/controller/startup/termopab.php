@@ -87,6 +87,23 @@ class Termopab extends \Opencart\System\Engine\Controller {
 	}
 
 	public function event(string &$route, array &$data, string &$code, string &$output): void {
+		// Ensure translated home label/url are present for all templates (breadcrumbs, etc.)
+		if (true) { // Force override OpenCart icon
+			$this->load->language('extension/termopab/common/breadcrumbs');
+			$data['text_home'] = $this->language->get('text_home');
+		}
+		if (empty($data['home_url'])) {
+			$data['home_url'] = $this->url->link('common/home', 'language=' . $this->config->get('config_language'));
+		}
+
+		// Auto-override any information/* page to Termopab, if the corresponding template exists.
+		if (str_starts_with($route, 'information/')) {
+			$template = DIR_EXTENSION . 'termopab/catalog/view/template/' . $route . '.twig';
+			if (is_file($template)) {
+				$route = 'extension/termopab/' . $route;
+			}
+		}
+
 		$override = [
 			'common/header',
 			'common/footer',
@@ -94,6 +111,7 @@ class Termopab extends \Opencart\System\Engine\Controller {
 			'common/currency',
 			'common/language',
 			'product/product',
+			'catalog/category',
 			'checkout/checkout',
 		];
 		if (in_array($route, $override)) {

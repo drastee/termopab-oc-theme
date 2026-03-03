@@ -4,11 +4,20 @@
 <nav class="breadcrumbs {{ background|default('') }}" aria-label="Breadcrumb">
     <div class="container">
         <ul class="breadcrumbs__list">
-            {% set home_item = home|default({ url: '/', name: 'Головна' }) %}
+            {% set home_item = home|default({ url: '/', name: text_home|default('Home', true) }) %}
+            {% if home_item.name is not defined or home_item.name == '' %}
+                {% set home_item = home_item|merge({ name: text_home|default('Home', true) }) %}
+            {% endif %}
             <li class="breadcrumbs__item">
                 <a href="{{ home_item.url }}" class="breadcrumbs__link">{{ home_item.name }}</a>
             </li>
-            {% for item in breadcrumbs %}
+
+            {% set items = breadcrumbs|default([]) %}
+            {% if items|length and (items|first).url is defined and (items|first).url == home_item.url %}
+                {% set items = items|slice(1) %}
+            {% endif %}
+
+            {% for item in items %}
                 <li class="breadcrumbs__item">
                     {% if item.url is defined and item.url and not loop.last %}
                         <a href="{{ item.url }}" class="breadcrumbs__link">{{ item.name }}</a>

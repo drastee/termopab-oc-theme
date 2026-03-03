@@ -7,7 +7,7 @@
   {% endfor %}
   {% set home_url = breadcrumbs|length > 0 ? (breadcrumbs|first).href : '/' %}
   {% include '@termopab/components/breadcrumbs/_breadcrumbs.twig' with {
-    home: { url: home_url, name: breadcrumb_home_name|default('Головна') },
+    home: { url: home_url, name: breadcrumb_home_name|default(text_home)|striptags|trim },
     breadcrumbs: bc_items
   } %}
   {{ content_top }}

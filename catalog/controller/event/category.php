@@ -39,7 +39,7 @@ class Category extends \Opencart\System\Engine\Controller {
 		}
 
 		$this->load->language('extension/termopab/theme/termopab');
-		$this->load->language('default');
+		$this->load->language('extension/termopab/common/breadcrumbs');
 		$home_raw = $this->language->get('text_home');
 		$data['text_home'] = trim(strip_tags($home_raw ?? '')) ?: 'Головна';
 		$data['home_url'] = $this->url->link('common/home', 'language=' . $this->config->get('config_language'));
