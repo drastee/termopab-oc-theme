@@ -253,6 +253,41 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		$this->model_setting_event->addEvent(['code' => 'termopab_admin_product', 'description' => 'Termopab: product_form view override (360-view tab)', 'trigger' => 'admin/view/catalog/product_form/before', 'action' => 'extension/termopab/event/product.onProductFormViewBefore', 'status' => 1, 'sort_order' => -100]);
 		$this->model_setting_event->addEvent(['code' => 'termopab_admin_product', 'description' => 'Termopab: save view_360 (addProduct)', 'trigger' => 'admin/model/catalog/product.addProduct/after', 'action' => 'extension/termopab/event/product.onAddProductAfter', 'status' => 1, 'sort_order' => 0]);
 		$this->model_setting_event->addEvent(['code' => 'termopab_admin_product', 'description' => 'Termopab: save view_360 (editProduct)', 'trigger' => 'admin/model/catalog/product.editProduct/after', 'action' => 'extension/termopab/event/product.onEditProductAfter', 'status' => 1, 'sort_order' => 0]);
+		
+		// Cleanup old events
+		$this->model_setting_event->deleteEventByCode('termopab_admin_information');
+		$this->model_setting_event->deleteEventByCode('termopab_admin_information_before');
+		$this->model_setting_event->deleteEventByCode('termopab_admin_information_after');
+
+		// Event: admin links (View on site button)
+		$this->model_setting_event->deleteEventByCode('termopab_admin_links_product');
+		$this->model_setting_event->addEvent([
+			'code'        => 'termopab_admin_links_product',
+			'description' => 'Termopab: Add View button to product list',
+			'trigger'     => 'admin/view/catalog/product_list/after',
+			'action'      => 'extension/termopab/event/admin_links.onProductListAfter',
+			'status'      => 1,
+			'sort_order'  => 0,
+		]);
+		$this->model_setting_event->deleteEventByCode('termopab_admin_links_category');
+		$this->model_setting_event->addEvent([
+			'code'        => 'termopab_admin_links_category',
+			'description' => 'Termopab: Add View button to category list',
+			'trigger'     => 'admin/view/catalog/category_list/after',
+			'action'      => 'extension/termopab/event/admin_links.onCategoryListAfter',
+			'status'      => 1,
+			'sort_order'  => 0,
+		]);
+		$this->model_setting_event->deleteEventByCode('termopab_admin_links_information');
+		$this->model_setting_event->addEvent([
+			'code'        => 'termopab_admin_links_information',
+			'description' => 'Termopab: Add View button to information list',
+			'trigger'     => 'admin/view/catalog/information_list/after',
+			'action'      => 'extension/termopab/event/admin_links.onInformationListAfter',
+			'status'      => 1,
+			'sort_order'  => 0,
+		]);
+
 		$this->model_setting_event->deleteEventByCode('termopab_catalog_product');
 		$this->model_setting_event->addEvent(['code' => 'termopab_catalog_product', 'description' => 'Termopab: product view view_360 + button_cart', 'trigger' => 'catalog/view/product/product/before', 'action' => 'extension/termopab/event/product_view.onProductViewBefore', 'status' => 1, 'sort_order' => 0]);
 		$this->addGlbToAllowedUploads();
@@ -566,8 +601,44 @@ class Termopab extends \Opencart\System\Engine\Controller {
 				'status'      => 1,
 				'sort_order'  => -100,
 			]);
-			$this->model_setting_event->addEvent(['code' => 'termopab_admin_product', 'description' => 'Termopab: save view_360 (addProduct)', 'trigger' => 'admin/model/catalog/product.addProduct/after', 'action' => 'extension/termopab/event/product.onAddProductAfter', 'status' => 1, 'sort_order' => 0]);
-			$this->model_setting_event->addEvent(['code' => 'termopab_admin_product', 'description' => 'Termopab: save view_360 (editProduct)', 'trigger' => 'admin/model/catalog/product.editProduct/after', 'action' => 'extension/termopab/event/product.onEditProductAfter', 'status' => 1, 'sort_order' => 0]);
+			$this->model_setting_event->addEvent(['code' => 'termopab_admin_product_before', 'description' => 'Termopab: save view_360 (addProduct)', 'trigger' => 'admin/model/catalog/product.addProduct/before', 'action' => 'extension/termopab/event/product.onAddProductBefore', 'status' => 1, 'sort_order' => 0]);
+			$this->model_setting_event->addEvent(['code' => 'termopab_admin_product_after', 'description' => 'Termopab: save view_360 (addProduct)', 'trigger' => 'admin/model/catalog/product.addProduct/after', 'action' => 'extension/termopab/event/product.onAddProductAfter', 'status' => 1, 'sort_order' => 0]);
+			$this->model_setting_event->addEvent(['code' => 'termopab_admin_product_before', 'description' => 'Termopab: save view_360 (editProduct)', 'trigger' => 'admin/model/catalog/product.editProduct/before', 'action' => 'extension/termopab/event/product.onEditProductBefore', 'status' => 1, 'sort_order' => 0]);
+			$this->model_setting_event->addEvent(['code' => 'termopab_admin_product_after', 'description' => 'Termopab: save view_360 (editProduct)', 'trigger' => 'admin/model/catalog/product.editProduct/after', 'action' => 'extension/termopab/event/product.onEditProductAfter', 'status' => 1, 'sort_order' => 0]);
+			
+			// Cleanup old events
+			$this->model_setting_event->deleteEventByCode('termopab_admin_information');
+			$this->model_setting_event->deleteEventByCode('termopab_admin_information_before');
+			$this->model_setting_event->deleteEventByCode('termopab_admin_information_after');
+
+			// Event: admin links (View on site button)
+			$this->model_setting_event->deleteEventByCode('termopab_admin_links_product');
+			$this->model_setting_event->addEvent([
+				'code'        => 'termopab_admin_links_product',
+				'description' => 'Termopab: Add View button to product list',
+				'trigger'     => 'admin/view/catalog/product_list/after',
+				'action'      => 'extension/termopab/event/admin_links.onProductListAfter',
+				'status'      => 1,
+				'sort_order'  => 0,
+			]);
+			$this->model_setting_event->deleteEventByCode('termopab_admin_links_category');
+			$this->model_setting_event->addEvent([
+				'code'        => 'termopab_admin_links_category',
+				'description' => 'Termopab: Add View button to category list',
+				'trigger'     => 'admin/view/catalog/category_list/after',
+				'action'      => 'extension/termopab/event/admin_links.onCategoryListAfter',
+				'status'      => 1,
+				'sort_order'  => 0,
+			]);
+			$this->model_setting_event->deleteEventByCode('termopab_admin_links_information');
+			$this->model_setting_event->addEvent([
+				'code'        => 'termopab_admin_links_information',
+				'description' => 'Termopab: Add View button to information list',
+				'trigger'     => 'admin/view/catalog/information_list/after',
+				'action'      => 'extension/termopab/event/admin_links.onInformationListAfter',
+				'status'      => 1,
+				'sort_order'  => 0,
+			]);
 			$this->model_setting_event->deleteEventByCode('termopab_catalog_product');
 			$this->model_setting_event->addEvent(['code' => 'termopab_catalog_product', 'description' => 'Termopab: product view view_360 + button_cart', 'trigger' => 'catalog/view/product/product/before', 'action' => 'extension/termopab/event/product_view.onProductViewBefore', 'status' => 1, 'sort_order' => 0]);
 			$this->addGlbToAllowedUploads();
@@ -650,6 +721,9 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		$this->model_setting_event->deleteEventByCode('termopab_admin_category_builder');
 		$this->model_setting_event->deleteEventByCode('termopab_catalog_category');
 		$this->model_setting_event->deleteEventByCode('termopab_admin_product');
+		$this->model_setting_event->deleteEventByCode('termopab_admin_links_product');
+		$this->model_setting_event->deleteEventByCode('termopab_admin_links_category');
+		$this->model_setting_event->deleteEventByCode('termopab_admin_links_information');
 		$this->model_setting_event->deleteEventByCode('termopab_catalog_product');
 	}
 
