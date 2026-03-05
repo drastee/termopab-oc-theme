@@ -391,6 +391,12 @@ class Termopab extends \Opencart\System\Engine\Controller {
 			'name' => $this->language->get('heading_title'),
 			'href' => $this->url->link('extension/termopab/brewery_review', 'language=' . $this->config->get('config_language')),
 		];
+		// Append Testimonials link (extension/termopab/testimonial)
+		$this->load->language('extension/termopab/testimonial/list');
+		$data['footer_menu'][] = [
+			'name' => $this->language->get('heading_title'),
+			'href' => $this->url->link('extension/termopab/testimonial', 'language=' . $this->config->get('config_language')),
+		];
 	}
 
 	/**
@@ -401,6 +407,7 @@ class Termopab extends \Opencart\System\Engine\Controller {
 			'common/home'                         => 'home-page',
 			'extension/termopab/common/about'     => 'about-us',
 			'extension/termopab/project'          => 'project-page',
+			'extension/termopab/testimonial'      => 'testimonials-page',
 			'extension/termopab/brewery_review'   => 'testimonials-page',
 			'information/contact'                 => 'contacts-page',
 			'product/product'                     => 'product-page',

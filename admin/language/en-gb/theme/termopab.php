@@ -76,13 +76,21 @@ $_['entry_contacts_map_iframe'] = 'Map iframe';
 
 // Button
 $_['text_install_project_tables'] = 'Create project tables';
+$_['text_install_news_tables'] = 'Create news tables';
 $_['text_install_full_tables']    = 'Create all tables (projects, brewery reviews, category)';
+$_['text_install_testimonial_tables'] = 'Create testimonial tables';
 $_['text_projects']    = 'Projects';
 $_['text_projects_add'] = 'Add project';
+$_['text_testimonials'] = 'Testimonials';
+$_['text_testimonials_add'] = 'Add testimonial';
+$_['text_testimonials_add_permission'] = 'Add permissions for testimonials';
+$_['text_testimonials_permission_added'] = 'Permissions for Testimonials were added.';
 $_['text_brewery_reviews'] = 'Brewery reviews';
 $_['text_brewery_reviews_add'] = 'Add review';
 $_['text_brewery_reviews_add_permission'] = 'Add permissions for reviews and categories';
 $_['text_brewery_reviews_permission_added'] = 'Permissions for Brewery reviews and Review categories were added. You can create tables if needed.';
+$_['text_news_add_permission'] = 'Add permissions for news';
+$_['text_news_permission_added'] = 'Permissions for News were added.';
 $_['text_callback_requests'] = 'Callback requests';
 $_['text_callback_requests_add_permission'] = 'Add permissions for callback requests';
 $_['text_callback_requests_permission_added'] = 'Permissions for Callback requests were added.';

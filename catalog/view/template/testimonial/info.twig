@@ -1,0 +1,59 @@
+{{ header }}
+<main id="content">
+  {{ content_top }}
+  {% set bc_home = breadcrumbs|first %}
+  {% set bc_rest = breadcrumbs|slice(1) %}
+  {% set bc_items = [] %}
+  {% for b in bc_rest %}
+    {% set bc_items = bc_items|merge([{ name: b.text, url: b.href }]) %}
+  {% endfor %}
+
+  {% include '@termopab/components/breadcrumbs/_breadcrumbs.twig' with {
+    home: { url: bc_home.href|default('/'), name: bc_home.text|default(text_home)|striptags|trim },
+    breadcrumbs: bc_items,
+    background: "black"
+  } %}
+
+  <section class="project-single">
+    <div class="container">
+
+      {% include '@termopab/components/post-header/_post-header.twig' with {
+        title: (heading and name and heading != name) ? name : null,
+        subtitle: heading|default(name),
+        linkText: text_back_list,
+        href: back_list
+      } %}
+
+      {% if video_url %}
+        {% include '@termopab/components/video-md/_video-md.twig' with {
+          video_src: video_url,
+          poster_src: image|default(testimonial_images[0].thumb|default(''))
+        } %}
+      {% endif %}
+
+      {% if testimonial_images is not empty %}
+        {% set gallery_images = [] %}
+        {% for img in testimonial_images %}
+          {% set gallery_images = gallery_images|merge([{ href: img.image, src: img.thumb }]) %}
+        {% endfor %}
+        {% include '@termopab/components/gallery-grid/_gallery-grid.twig' with {
+          images: gallery_images
+        } %}
+      {% endif %}
+      {% if image and not video_url and testimonial_images is empty %}
+        <figure class="mb-4">
+          <img src="{{ image }}" alt="{{ name }}" class="img-fluid rounded"/>
+        </figure>
+      {% endif %}
+
+    </div>
+  </section>
+      {% if article %}
+        {% include '@termopab/sections/shared/text-classic/_text-classic.twig' with {
+        title: heading|default(''),
+        content: article|default('')
+      } %}
+      {% endif %}
+  {{ content_bottom }}
+</main>
+{{ footer }}

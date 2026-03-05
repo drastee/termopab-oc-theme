@@ -43,6 +43,37 @@ class Install extends \Opencart\System\Engine\Controller {
 				PRIMARY KEY (`project_image_id`),
 				KEY `project_id` (`project_id`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+			"CREATE TABLE IF NOT EXISTS `" . $prefix . "testimonial` (
+				`testimonial_id` int(11) NOT NULL AUTO_INCREMENT,
+				`image` varchar(255) DEFAULT NULL,
+				`video` varchar(512) DEFAULT NULL,
+				`sort_order` int(11) NOT NULL DEFAULT 0,
+				`status` tinyint(1) NOT NULL DEFAULT 1,
+				`date_added` datetime NOT NULL,
+				`date_modified` datetime NOT NULL,
+				PRIMARY KEY (`testimonial_id`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+			"CREATE TABLE IF NOT EXISTS `" . $prefix . "testimonial_description` (
+				`testimonial_id` int(11) NOT NULL,
+				`language_id` int(11) NOT NULL,
+				`heading` varchar(255) DEFAULT NULL,
+				`name` varchar(255) NOT NULL,
+				`description` text DEFAULT NULL,
+				`article` mediumtext DEFAULT NULL,
+				`meta_title` varchar(255) DEFAULT NULL,
+				`meta_description` varchar(255) DEFAULT NULL,
+				`meta_keyword` varchar(255) DEFAULT NULL,
+				PRIMARY KEY (`testimonial_id`,`language_id`),
+				KEY `language_id` (`language_id`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+			"CREATE TABLE IF NOT EXISTS `" . $prefix . "testimonial_image` (
+				`testimonial_image_id` int(11) NOT NULL AUTO_INCREMENT,
+				`testimonial_id` int(11) NOT NULL,
+				`image` varchar(255) NOT NULL,
+				`sort_order` int(11) NOT NULL DEFAULT 0,
+				PRIMARY KEY (`testimonial_image_id`),
+				KEY `testimonial_id` (`testimonial_id`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
 			"CREATE TABLE IF NOT EXISTS `" . $prefix . "brewery_review` (
 				`brewery_review_id` int(11) NOT NULL AUTO_INCREMENT,
 				`brewery_review_category_id` int(11) NOT NULL DEFAULT 0,
@@ -116,6 +147,8 @@ class Install extends \Opencart\System\Engine\Controller {
 			"ALTER TABLE `" . $prefix . "project` ADD COLUMN `logo` varchar(255) DEFAULT NULL AFTER `image`",
 			"ALTER TABLE `" . $prefix . "project` ADD COLUMN `video` varchar(512) DEFAULT NULL AFTER `logo`",
 			"ALTER TABLE `" . $prefix . "project_description` ADD COLUMN `heading` varchar(255) DEFAULT NULL AFTER `language_id`",
+			"ALTER TABLE `" . $prefix . "testimonial` ADD COLUMN `video` varchar(512) DEFAULT NULL AFTER `image`",
+			"ALTER TABLE `" . $prefix . "testimonial_description` ADD COLUMN `heading` varchar(255) DEFAULT NULL AFTER `language_id`",
 			"ALTER TABLE `" . $prefix . "brewery_review` ADD COLUMN `brewery_review_category_id` int(11) NOT NULL DEFAULT 0 AFTER `brewery_review_id`",
 			"ALTER TABLE `" . $prefix . "category` ADD COLUMN `hero_image` varchar(255) DEFAULT NULL",
 			"ALTER TABLE `" . $prefix . "category` ADD COLUMN `hero_image_mobile` varchar(255) DEFAULT NULL",

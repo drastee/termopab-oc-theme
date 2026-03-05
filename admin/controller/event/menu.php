@@ -60,6 +60,66 @@ class Menu extends \Opencart\System\Engine\Controller {
 			];
 		}
 
+		$testimonial_file = $termopab_dir . '/controller/testimonial.php';
+		if (is_file($testimonial_file)) {
+			$this->template->addPath('extension/termopab', $termopab_dir . '/view/template/');
+			$this->language->addPath('extension/termopab', $termopab_dir . '/language/');
+			$this->load->language('extension/termopab/testimonial/list');
+
+			$items[] = [
+				'id'       => 'menu-termopab-testimonials',
+				'icon'     => 'fa-solid fa-comments',
+				'name'     => $this->language->get('heading_title'),
+				'href'     => '',
+				'children' => [
+					[
+						'id'       => 'menu-termopab-testimonials-list',
+						'icon'     => '',
+						'name'     => $this->language->get('text_menu_catalog') ?: $this->language->get('text_list'),
+						'href'     => $this->url->link('extension/termopab/testimonial', 'user_token=' . $this->session->data['user_token']),
+						'children' => [],
+					],
+					[
+						'id'       => 'menu-termopab-testimonials-add',
+						'icon'     => '',
+						'name'     => $this->language->get('button_add'),
+						'href'     => $this->url->link('extension/termopab/testimonial.form', 'user_token=' . $this->session->data['user_token']),
+						'children' => [],
+					],
+				],
+			];
+		}
+
+		$news_file = $termopab_dir . '/controller/news.php';
+		if (is_file($news_file)) {
+			$this->template->addPath('extension/termopab', $termopab_dir . '/view/template/');
+			$this->language->addPath('extension/termopab', $termopab_dir . '/language/');
+			$this->load->language('extension/termopab/news/list');
+
+			$items[] = [
+				'id'       => 'menu-termopab-news',
+				'icon'     => 'fa-solid fa-newspaper',
+				'name'     => $this->language->get('heading_title'),
+				'href'     => '',
+				'children' => [
+					[
+						'id'       => 'menu-termopab-news-list',
+						'icon'     => '',
+						'name'     => $this->language->get('text_menu_catalog') ?: $this->language->get('text_list'),
+						'href'     => $this->url->link('extension/termopab/news', 'user_token=' . $this->session->data['user_token']),
+						'children' => [],
+					],
+					[
+						'id'       => 'menu-termopab-news-add',
+						'icon'     => '',
+						'name'     => $this->language->get('button_add'),
+						'href'     => $this->url->link('extension/termopab/news.form', 'user_token=' . $this->session->data['user_token']),
+						'children' => [],
+					],
+				],
+			];
+		}
+
 		$project_file = $termopab_dir . '/controller/project.php';
 		if (is_file($project_file)) {
 			$this->template->addPath('extension/termopab', $termopab_dir . '/view/template/');

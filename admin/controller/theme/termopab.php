@@ -43,8 +43,14 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		$data['save'] = $this->url->link('extension/termopab/theme/termopab.save', 'user_token=' . $this->session->data['user_token'] . '&store_id=' . $store_id);
 		$data['back'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=theme');
 		$data['install_project_tables'] = $this->url->link('extension/termopab/project', 'user_token=' . $this->session->data['user_token'] . '&install_tables=1');
+		$data['install_news_tables'] = $this->url->link('extension/termopab/news', 'user_token=' . $this->session->data['user_token'] . '&install_tables=1');
+		$data['install_testimonial_tables'] = $this->url->link('extension/termopab/testimonial', 'user_token=' . $this->session->data['user_token'] . '&install_tables=1');
 		$data['projects_list'] = $this->url->link('extension/termopab/project', 'user_token=' . $this->session->data['user_token']);
 		$data['projects_add'] = $this->url->link('extension/termopab/project.form', 'user_token=' . $this->session->data['user_token']);
+		$data['testimonials_list'] = $this->url->link('extension/termopab/testimonial', 'user_token=' . $this->session->data['user_token']);
+		$data['testimonials_add'] = $this->url->link('extension/termopab/testimonial.form', 'user_token=' . $this->session->data['user_token']);
+		$data['testimonials_add_permission'] = $this->url->link('extension/termopab/theme/termopab.addTestimonialPermission', 'user_token=' . $this->session->data['user_token']);
+		$data['news_add_permission'] = $this->url->link('extension/termopab/theme/termopab.addNewsPermission', 'user_token=' . $this->session->data['user_token']);
 		$data['brewery_reviews_list'] = $this->url->link('extension/termopab/brewery_review', 'user_token=' . $this->session->data['user_token']);
 		$data['brewery_reviews_add'] = $this->url->link('extension/termopab/brewery_review.form', 'user_token=' . $this->session->data['user_token']);
 		$data['brewery_reviews_add_permission'] = $this->url->link('extension/termopab/theme/termopab.addBreweryReviewPermission', 'user_token=' . $this->session->data['user_token']);
@@ -206,6 +212,24 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		$this->response->redirect($this->url->link('extension/termopab/brewery_review', 'user_token=' . $this->session->data['user_token']));
 	}
 
+	public function addTestimonialPermission(): void {
+		$this->load->language('extension/termopab/theme/termopab');
+
+		if (!$this->user->hasPermission('modify', 'extension/termopab/theme/termopab')) {
+			$this->session->data['error'] = $this->language->get('error_permission');
+			$this->response->redirect($this->url->link('extension/termopab/theme/termopab', 'user_token=' . $this->session->data['user_token']));
+			return;
+		}
+
+		$this->load->model('user/user_group');
+		$group_id = $this->user->getGroupId();
+		$this->model_user_user_group->addPermission($group_id, 'access', 'extension/termopab/testimonial');
+		$this->model_user_user_group->addPermission($group_id, 'modify', 'extension/termopab/testimonial');
+
+		$this->session->data['success'] = $this->language->get('text_testimonials_permission_added');
+		$this->response->redirect($this->url->link('extension/termopab/testimonial', 'user_token=' . $this->session->data['user_token']));
+	}
+
 	public function addCallbackRequestPermission(): void {
 		$this->load->language('extension/termopab/theme/termopab');
 
@@ -222,6 +246,24 @@ class Termopab extends \Opencart\System\Engine\Controller {
 
 		$this->session->data['success'] = $this->language->get('text_callback_requests_permission_added');
 		$this->response->redirect($this->url->link('extension/termopab/callback_request', 'user_token=' . $this->session->data['user_token']));
+	}
+
+	public function addNewsPermission(): void {
+		$this->load->language('extension/termopab/theme/termopab');
+
+		if (!$this->user->hasPermission('modify', 'extension/termopab/theme/termopab')) {
+			$this->session->data['error'] = $this->language->get('error_permission');
+			$this->response->redirect($this->url->link('extension/termopab/theme/termopab', 'user_token=' . $this->session->data['user_token']));
+			return;
+		}
+
+		$this->load->model('user/user_group');
+		$group_id = $this->user->getGroupId();
+		$this->model_user_user_group->addPermission($group_id, 'access', 'extension/termopab/news');
+		$this->model_user_user_group->addPermission($group_id, 'modify', 'extension/termopab/news');
+
+		$this->session->data['success'] = $this->language->get('text_news_permission_added');
+		$this->response->redirect($this->url->link('extension/termopab/theme/termopab', 'user_token=' . $this->session->data['user_token']));
 	}
 
 	/**
@@ -490,7 +532,7 @@ class Termopab extends \Opencart\System\Engine\Controller {
 			// Add permissions for all user groups (whoever can manage themes gets termopab access)
 			$this->load->model('user/user_group');
 			$routes = [
-				'extension/termopab/theme/termopab', 'extension/termopab/project', 'extension/termopab/brewery_review', 'extension/termopab/brewery_review_category',
+				'extension/termopab/theme/termopab', 'extension/termopab/project', 'extension/termopab/testimonial', 'extension/termopab/brewery_review', 'extension/termopab/brewery_review_category',
 				'extension/termopab/callback_request',
 				'extension/termopab/install',
 				'extension/termopab/module/projects_slider',

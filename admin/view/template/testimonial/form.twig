@@ -1,0 +1,266 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="float-end">
+        <button type="submit" form="form-testimonial" data-bs-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa-solid fa-save"></i></button>
+        <a href="{{ cancel }}" data-bs-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-light"><i class="fa-solid fa-reply"></i></a>
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ol class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+          <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if success %}
+      <div class="alert alert-success alert-dismissible"><i class="fa-solid fa-check-circle"></i> {{ success }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    {% endif %}
+    {% if error_warning %}
+      <div class="alert alert-danger alert-dismissible"><i class="fa-solid fa-exclamation-triangle"></i> {{ error_warning }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    {% endif %}
+    <div class="card">
+      <div class="card-header"><i class="fa-solid fa-pencil"></i> {{ text_form }}</div>
+      <div class="card-body">
+        <form id="form-testimonial" action="{{ save }}" method="post">
+          <input type="hidden" name="testimonial_id" value="{{ testimonial_id }}"/>
+
+          <ul class="nav nav-tabs" role="tablist">
+            {% for language in languages %}
+              <li class="nav-item">
+                <a class="nav-link{% if loop.first %} active{% endif %}" data-bs-toggle="tab" href="#language-{{ language.language_id }}">{% if language.image %}<img src="{{ language.image }}" alt="" class="me-1"/>{% endif %}{{ language.name }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+
+          <div class="tab-content">
+            {% for language in languages %}
+              <div id="language-{{ language.language_id }}" class="tab-pane{% if loop.first %} active{% endif %}">
+                <div class="row mb-3">
+                  <label class="col-sm-2 col-form-label">{{ entry_heading }}</label>
+                  <div class="col-sm-10">
+                    <input type="text" name="testimonial_description[{{ language.language_id }}][heading]" value="{{ testimonial_description[language.language_id].heading }}" placeholder="{{ entry_heading }}" class="form-control"/>
+                  </div>
+                </div>
+                <div class="row mb-3 required">
+                  <label class="col-sm-2 col-form-label">{{ entry_name }}</label>
+                  <div class="col-sm-10">
+                    <input type="text" name="testimonial_description[{{ language.language_id }}][name]" value="{{ testimonial_description[language.language_id].name }}" placeholder="{{ entry_name }}" class="form-control"/>
+                    <div id="error-name-{{ language.language_id }}" class="invalid-feedback"></div>
+                  </div>
+                </div>
+
+				<hr/>
+				<div class="row mb-3">
+				  <label class="col-sm-2 col-form-label">{{ entry_seo_keyword }}</label>
+				  <div class="col-sm-10">
+					<input type="text" name="seo_keyword[{{ language.language_id }}]" value="{{ seo_keyword[language.language_id] }}" class="form-control"/>
+				  </div>
+				</div>
+
+                <div class="row mb-3">
+                  <label class="col-sm-2 col-form-label">{{ entry_description }}</label>
+                  <div class="col-sm-10">
+                    <textarea name="testimonial_description[{{ language.language_id }}][description]" rows="3" placeholder="{{ entry_description }}" class="form-control">{{ testimonial_description[language.language_id].description }}</textarea>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label class="col-sm-2 col-form-label">{{ entry_article }}</label>
+                  <div class="col-sm-10">
+                    <textarea name="testimonial_description[{{ language.language_id }}][article]" rows="12" placeholder="{{ entry_article }}" class="form-control" data-oc-toggle="ckeditor" data-lang="{{ ckeditor }}">{{ testimonial_description[language.language_id].article }}</textarea>
+                  </div>
+                </div>
+                <hr/>
+                <h5>{{ entry_meta_title }}</h5>
+                <div class="row mb-3">
+                  <label class="col-sm-2 col-form-label">{{ entry_meta_title }}</label>
+                  <div class="col-sm-10">
+                    <input type="text" name="testimonial_description[{{ language.language_id }}][meta_title]" value="{{ testimonial_description[language.language_id].meta_title }}" class="form-control"/>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label class="col-sm-2 col-form-label">{{ entry_meta_description }}</label>
+                  <div class="col-sm-10">
+                    <textarea name="testimonial_description[{{ language.language_id }}][meta_description]" rows="2" class="form-control">{{ testimonial_description[language.language_id].meta_description }}</textarea>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label class="col-sm-2 col-form-label">{{ entry_meta_keyword }}</label>
+                  <div class="col-sm-10">
+                    <input type="text" name="testimonial_description[{{ language.language_id }}][meta_keyword]" value="{{ testimonial_description[language.language_id].meta_keyword }}" class="form-control"/>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+
+          <hr/>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_image }}</label>
+            <div class="col-sm-10">
+              <div class="border rounded d-inline-block mb-2" style="max-width: 100px;">
+                <img src="{{ image_thumb }}" alt="" id="thumb-image" data-oc-placeholder="{{ placeholder }}" class="img-fluid"/>
+                <input type="hidden" name="image" value="{{ image }}" id="input-image"/>
+                <div class="d-grid p-1">
+                  <button type="button" data-oc-toggle="image" data-oc-target="#input-image" data-oc-thumb="#thumb-image" class="btn btn-primary btn-sm"><i class="fa-solid fa-pencil"></i></button>
+                  <button type="button" data-oc-toggle="clear" data-oc-target="#input-image" data-oc-thumb="#thumb-image" class="btn btn-warning btn-sm"><i class="fa-regular fa-trash-can"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_video }}</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <input type="text" name="video" value="{{ video }}" placeholder="catalog/testimonial/video.mp4" id="input-video" class="form-control"/>
+                <input type="file" id="input-video-file" accept="video/mp4,.mp4" class="d-none"/>
+                <button type="button" id="btn-upload-video" class="btn btn-primary"><i class="fa-solid fa-upload"></i> {{ button_upload }}</button>
+              </div>
+              <div id="testimonial-video-error" class="invalid-feedback d-none"></div>
+              <div class="form-text">{{ help_video }}</div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_gallery }}</label>
+            <div class="col-sm-10">
+              <div id="testimonial-gallery" class="border rounded p-3 bg-light" data-empty-text="{{ text_no_gallery|e('html_attr') }}">
+                {% for img in testimonial_image %}
+                  <div class="testimonial-gallery-row mb-3 d-flex align-items-center gap-2" data-index="{{ loop.index0 }}">
+                    <div class="border rounded" style="width: 60px; height: 60px; overflow: hidden;">
+                      <img src="{{ img.image_thumb }}" alt="" id="thumb-gallery-{{ loop.index0 }}" class="testimonial-gallery-thumb img-fluid" data-oc-placeholder="{{ placeholder }}"/>
+                    </div>
+                    <input type="hidden" name="testimonial_image[{{ loop.index0 }}][image]" value="{{ img.image }}" id="input-gallery-{{ loop.index0 }}" class="testimonial-gallery-input"/>
+                    <button type="button" class="btn btn-sm btn-outline-secondary testimonial-gallery-pick" data-oc-toggle="image" data-oc-target="#input-gallery-{{ loop.index0 }}" data-oc-thumb="#thumb-gallery-{{ loop.index0 }}"><i class="fa-solid fa-pencil"></i></button>
+                    <button type="button" class="btn btn-sm btn-danger testimonial-gallery-remove"><i class="fa-solid fa-trash"></i></button>
+                  </div>
+                {% else %}
+                  <p class="text-muted mb-0" id="testimonial-gallery-empty">{{ text_no_gallery }}</p>
+                {% endfor %}
+              </div>
+              <button type="button" id="btn-add-gallery-image" class="btn btn-success btn-sm mt-2"><i class="fa-solid fa-plus"></i> {{ button_add_image }}</button>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_sort_order }}</label>
+            <div class="col-sm-10">
+              <input type="number" name="sort_order" value="{{ sort_order }}" class="form-control" style="max-width: 100px;"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_status }}</label>
+            <div class="col-sm-10">
+              <div class="form-check form-switch form-switch-lg">
+                <input type="hidden" name="status" value="0"/>
+                <input type="checkbox" name="status" value="1" id="input-status" class="form-check-input"{% if status %} checked{% endif %}/>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<template id="testimonial-gallery-row-tpl">
+  <div class="testimonial-gallery-row mb-3 d-flex align-items-center gap-2" data-index="__IDX__">
+    <div class="border rounded" style="width: 60px; height: 60px; overflow: hidden;">
+      <img src="{{ placeholder }}" alt="" id="thumb-gallery-__IDX__" class="testimonial-gallery-thumb img-fluid" data-oc-placeholder="{{ placeholder }}"/>
+    </div>
+    <input type="hidden" name="testimonial_image[__IDX__][image]" value="" id="input-gallery-__IDX__" class="testimonial-gallery-input"/>
+    <button type="button" class="btn btn-sm btn-outline-secondary testimonial-gallery-pick" data-oc-toggle="image" data-oc-target="#input-gallery-__IDX__" data-oc-thumb="#thumb-gallery-__IDX__"><i class="fa-solid fa-pencil"></i></button>
+    <button type="button" class="btn btn-sm btn-danger testimonial-gallery-remove"><i class="fa-solid fa-trash"></i></button>
+  </div>
+</template>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var gallery = document.getElementById('testimonial-gallery');
+  var emptyEl = document.getElementById('testimonial-gallery-empty');
+  var tpl = document.getElementById('testimonial-gallery-row-tpl');
+
+  var ckeditorLang = {{ (ckeditor|default('en'))|json_encode|raw }};
+  if (typeof $ !== 'undefined' && typeof $('textarea[data-oc-toggle="ckeditor"]').ckeditor === 'function') {
+    $('textarea[data-oc-toggle="ckeditor"]').not('.ckeditor-applied').ckeditor({ language: ckeditorLang }).addClass('ckeditor-applied');
+  }
+
+  function renumberGallery() {
+    if (!gallery) return;
+    var rows = gallery.querySelectorAll('.testimonial-gallery-row');
+    rows.forEach(function(row, i) {
+      row.setAttribute('data-index', i);
+      var inp = row.querySelector('.testimonial-gallery-input');
+      var thumb = row.querySelector('.testimonial-gallery-thumb');
+      var pick = row.querySelector('.testimonial-gallery-pick');
+      if (inp) { inp.name = 'testimonial_image[' + i + '][image]'; inp.id = 'input-gallery-' + i; }
+      if (thumb) thumb.id = 'thumb-gallery-' + i;
+      if (pick) { pick.setAttribute('data-oc-target', '#input-gallery-' + i); pick.setAttribute('data-oc-thumb', '#thumb-gallery-' + i); }
+    });
+    if (rows.length === 0 && gallery.getAttribute('data-empty-text')) {
+      gallery.innerHTML = '<p class="text-muted mb-0" id="testimonial-gallery-empty">' + gallery.getAttribute('data-empty-text') + '</p>';
+    }
+    if (emptyEl) emptyEl.style.display = rows.length ? 'none' : '';
+  }
+
+  document.getElementById('btn-add-gallery-image').addEventListener('click', function() {
+    if (!gallery || !tpl) return;
+    var idx = gallery.querySelectorAll('.testimonial-gallery-row').length;
+    if (gallery.querySelector('#testimonial-gallery-empty')) {
+      gallery.innerHTML = '';
+    }
+    var html = tpl.innerHTML.replace(/__IDX__/g, String(idx));
+    var tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    gallery.appendChild(tmp.firstElementChild);
+    renumberGallery();
+  });
+
+  if (gallery) {
+    gallery.addEventListener('click', function(e) {
+      var target = e.target;
+      if (!target) return;
+      var btn = target.closest('.testimonial-gallery-remove');
+      if (btn) {
+        var row = btn.closest('.testimonial-gallery-row');
+        if (row) row.remove();
+        renumberGallery();
+      }
+    });
+  }
+
+  var uploadBtn = document.getElementById('btn-upload-video');
+  var fileInput = document.getElementById('input-video-file');
+  var videoInput = document.getElementById('input-video');
+  var err = document.getElementById('testimonial-video-error');
+
+  if (uploadBtn && fileInput && videoInput) {
+    uploadBtn.addEventListener('click', function() {
+      fileInput.click();
+    });
+    fileInput.addEventListener('change', function() {
+      if (!fileInput.files || !fileInput.files[0]) return;
+      var formData = new FormData();
+      formData.append('video', fileInput.files[0]);
+
+      fetch('index.php?route=extension/termopab/testimonial.upload&user_token={{ user_token }}', {
+        method: 'POST',
+        body: formData
+      }).then(function(r) { return r.json(); }).then(function(json) {
+        if (json.error) {
+          if (err) { err.textContent = json.error; err.classList.remove('d-none'); }
+        } else if (json.path) {
+          videoInput.value = json.path;
+          if (err) { err.textContent = ''; err.classList.add('d-none'); }
+        }
+      }).catch(function() {
+        if (err) { err.textContent = 'Upload failed.'; err.classList.remove('d-none'); }
+      });
+    });
+  }
+});
+</script>
+
+{{ footer }}

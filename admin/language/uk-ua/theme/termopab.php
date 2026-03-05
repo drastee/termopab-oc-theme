@@ -79,13 +79,21 @@ $_['entry_footer_socials'] = 'Соцмережі в підвалі';
 
 // Button
 $_['text_install_project_tables'] = 'Створити таблиці проєктів';
+$_['text_install_news_tables'] = 'Створити таблиці новин';
 $_['text_install_full_tables']    = 'Створити всі таблиці (проєкти, огляди, category)';
+$_['text_install_testimonial_tables'] = 'Створити таблиці відгуків';
 $_['text_projects']    = 'Проєкти';
 $_['text_projects_add'] = 'Створити проєкт';
+$_['text_testimonials'] = 'Відгуки';
+$_['text_testimonials_add'] = 'Додати відгук';
+$_['text_testimonials_add_permission'] = 'Додати права на відгуки';
+$_['text_testimonials_permission_added'] = 'Права на «Відгуки» додані.';
 $_['text_brewery_reviews'] = 'Огляди пивоварень';
 $_['text_brewery_reviews_add'] = 'Додати огляд';
 $_['text_brewery_reviews_add_permission'] = 'Додати права на огляди та категорії';
 $_['text_brewery_reviews_permission_added'] = 'Права на «Огляди пивоварень» та «Категорії оглядів» додані. Можете створити таблиці, якщо потрібно.';
+$_['text_news_add_permission'] = 'Додати права на новини';
+$_['text_news_permission_added'] = 'Права на «Новини» додані.';
 $_['text_callback_requests'] = 'Заявки на дзвінок';
 $_['text_callback_requests_add_permission'] = 'Додати права на заявки';
 $_['text_callback_requests_permission_added'] = 'Права на «Заявки на дзвінок» додані.';
