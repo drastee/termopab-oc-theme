@@ -2,14 +2,14 @@
 namespace Opencart\Catalog\Controller\Extension\Termopab;
 
 /**
- * Проекти (каталог). Маршрут: extension/termopab/project
+ * Проекти (каталог). Маршрут: extension/termopab/news
  * index() — список, info() — картка одного проєкту.
  */
-class Project extends \Opencart\System\Engine\Controller {
+class News extends \Opencart\System\Engine\Controller {
 
 	public function index(): void {
 		$this->template->addPath('extension/termopab', DIR_EXTENSION . 'termopab/catalog/view/template/');
-		$this->load->language('extension/termopab/project/list');
+		$this->load->language('extension/termopab/news/list');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
@@ -20,11 +20,11 @@ class Project extends \Opencart\System\Engine\Controller {
 		];
 		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('extension/termopab/project', 'language=' . $this->config->get('config_language'))
+			'href' => $this->url->link('extension/termopab/news', 'language=' . $this->config->get('config_language'))
 		];
 
 		$data['heading_title'] = $this->language->get('heading_title');
-		$data['text_projects'] = $this->language->get('text_projects');
+		$data['text_newss'] = $this->language->get('text_newss');
 		$data['text_read_more'] = $this->language->get('text_read_more');
 		$data['text_back_list'] = $this->language->get('text_back_list');
 		$data['text_empty'] = $this->language->get('text_empty');
@@ -33,28 +33,28 @@ class Project extends \Opencart\System\Engine\Controller {
 		$limit = (int)($this->config->get('config_pagination') ?: 12);
 		$start = ($page - 1) * $limit;
 
-		$this->load->model('extension/termopab/project');
+		$this->load->model('extension/termopab/news');
 
-		$total = $this->model_extension_termopab_project->getTotalProjects();
-		$results = $this->model_extension_termopab_project->getProjects(['start' => $start, 'limit' => $limit]);
+		$total = $this->model_extension_termopab_news->getTotalNewss();
+		$results = $this->model_extension_termopab_news->getNewss(['start' => $start, 'limit' => $limit]);
 
-		$data['projects'] = [];
+		$data['newss'] = [];
 		$image_base = rtrim((string)$this->config->get('config_url'), '/') . '/image/';
 		$placeholder = $image_base . 'placeholder.png';
 
 		foreach ($results as $row) {
 			$image_path = html_entity_decode((string)($row['image'] ?? ''), ENT_QUOTES, 'UTF-8');
 			$img = $image_path && is_file(DIR_IMAGE . $image_path) ? $image_base . ltrim($image_path, '/') : $placeholder;
-			$data['projects'][] = [
-				'project_id'   => $row['project_id'],
-				'title'        => $row['title'] ?: ('Project #' . $row['project_id']),
+			$data['newss'][] = [
+				'news_id'   => $row['news_id'],
+				'title'        => $row['title'] ?: ('News #' . $row['news_id']),
 				'description'  => $row['description'] ?: '',
 				'image'        => $img,
-				'href'         => $this->url->link('extension/termopab/project.info', 'language=' . $this->config->get('config_language') . '&project_id=' . $row['project_id']),
+				'href'         => $this->url->link('extension/termopab/news.info', 'language=' . $this->config->get('config_language') . '&news_id=' . $row['news_id']),
 			];
 		}
 
-		$pagination_url = $this->url->link('extension/termopab/project', 'language=' . $this->config->get('config_language') . '&page={page}');
+		$pagination_url = $this->url->link('extension/termopab/news', 'language=' . $this->config->get('config_language') . '&page={page}');
 		$data['pagination_data'] = $this->buildPaginationData($total, $page, $limit, $pagination_url);
 
 		$data['header'] = $this->load->controller('common/header');
@@ -62,33 +62,33 @@ class Project extends \Opencart\System\Engine\Controller {
 		$data['content_bottom'] = $this->load->controller('common/content_bottom');
 		$data['footer'] = $this->load->controller('common/footer');
 
-		$this->response->setOutput($this->load->view('extension/termopab/project/list', $data));
+		$this->response->setOutput($this->load->view('extension/termopab/news/list', $data));
 	}
 
 	public function info(): void {
 		$this->template->addPath('extension/termopab', DIR_EXTENSION . 'termopab/catalog/view/template/');
-		$this->load->language('extension/termopab/project/info');
+		$this->load->language('extension/termopab/news/info');
 
-		$project_id = (int)($this->request->get['project_id'] ?? 0);
-		if (!$project_id) {
-			$this->response->redirect($this->url->link('extension/termopab/project', 'language=' . $this->config->get('config_language')));
+		$news_id = (int)($this->request->get['news_id'] ?? 0);
+		if (!$news_id) {
+			$this->response->redirect($this->url->link('extension/termopab/news', 'language=' . $this->config->get('config_language')));
 			return;
 		}
 
-		$this->load->model('extension/termopab/project');
+		$this->load->model('extension/termopab/news');
 
-		$project = $this->model_extension_termopab_project->getProject($project_id);
-		if (!$project) {
-			$this->response->redirect($this->url->link('extension/termopab/project', 'language=' . $this->config->get('config_language')));
+		$news = $this->model_extension_termopab_news->getNews($news_id);
+		if (!$news) {
+			$this->response->redirect($this->url->link('extension/termopab/news', 'language=' . $this->config->get('config_language')));
 			return;
 		}
 
-		$this->document->setTitle($project['meta_title'] ?: $project['title']);
-		if ($project['meta_description']) {
-			$this->document->setDescription($project['meta_description']);
+		$this->document->setTitle($news['meta_title'] ?: $news['title']);
+		if ($news['meta_description']) {
+			$this->document->setDescription($news['meta_description']);
 		}
-		if ($project['meta_keyword']) {
-			$this->document->setKeywords($project['meta_keyword']);
+		if ($news['meta_keyword']) {
+			$this->document->setKeywords($news['meta_keyword']);
 		}
 
 		$data['breadcrumbs'] = [];
@@ -96,50 +96,51 @@ class Project extends \Opencart\System\Engine\Controller {
 			'text' => $this->language->get('text_home'),
 			'href' => $this->url->link('common/home', 'language=' . $this->config->get('config_language'))
 		];
-		$this->load->language('extension/termopab/project/list');
+		$this->load->language('extension/termopab/news/list');
 		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('extension/termopab/project', 'language=' . $this->config->get('config_language'))
+			'href' => $this->url->link('extension/termopab/news', 'language=' . $this->config->get('config_language'))
 		];
 		$data['breadcrumbs'][] = [
-			'text' => $project['title'],
-			'href' => $this->url->link('extension/termopab/project.info', 'language=' . $this->config->get('config_language') . '&project_id=' . $project_id)
+			'text' => $news['title'],
+			'href' => $this->url->link('extension/termopab/news.info', 'language=' . $this->config->get('config_language') . '&news_id=' . $news_id)
 		];
 
-		$data['heading'] = $project['heading'] ?? '';
-		$data['title'] = $project['title'];
-		$data['description'] = $project['description'];
-		$data['article'] = html_entity_decode($project['article'], ENT_QUOTES, 'UTF-8');
-		$data['back_list'] = $this->url->link('extension/termopab/project', 'language=' . $this->config->get('config_language'));
+		$data['heading'] = $news['heading'] ?? '';
+		$data['title'] = $news['title'];
+		$data['description'] = $news['description'];
+		$data['article'] = html_entity_decode($news['article'], ENT_QUOTES, 'UTF-8');
+
+		$data['back_list'] = $this->url->link('extension/termopab/news', 'language=' . $this->config->get('config_language'));
 		$data['text_back_list'] = $this->language->get('text_back_list');
 		$data['text_gallery'] = $this->language->get('text_gallery');
 
 		$image_base = rtrim((string)$this->config->get('config_url'), '/') . '/image/';
 
-		$main_image_path = html_entity_decode((string)($project['image'] ?? ''), ENT_QUOTES, 'UTF-8');
+		$main_image_path = html_entity_decode((string)($news['image'] ?? ''), ENT_QUOTES, 'UTF-8');
 		if ($main_image_path && is_file(DIR_IMAGE . $main_image_path)) {
 			$data['image'] = $image_base . ltrim($main_image_path, '/');
 		} else {
 			$data['image'] = '';
 		}
-		$logo_path = html_entity_decode((string)($project['logo'] ?? ''), ENT_QUOTES, 'UTF-8');
+		$logo_path = html_entity_decode((string)($news['logo'] ?? ''), ENT_QUOTES, 'UTF-8');
 		if ($logo_path && is_file(DIR_IMAGE . $logo_path)) {
 			$data['logo'] = $image_base . ltrim($logo_path, '/');
 		} else {
 			$data['logo'] = '';
 		}
 		$data['video_url'] = '';
-		if (!empty($project['video'])) {
-			$video_path = str_starts_with($project['video'], 'catalog/') ? $project['video'] : 'catalog/' . ltrim($project['video'], '/');
+		if (!empty($news['video'])) {
+			$video_path = str_starts_with($news['video'], 'catalog/') ? $news['video'] : 'catalog/' . ltrim($news['video'], '/');
 			$data['video_url'] = $image_base . $video_path;
 		}
-		$data['project_images'] = [];
-		$gallery = $this->model_extension_termopab_project->getProjectImages($project_id);
+		$data['news_images'] = [];
+		$gallery = $this->model_extension_termopab_news->getNewsImages($news_id);
 		foreach ($gallery as $row) {
 			$img = $row['image'] ?? '';
 			$img_path = html_entity_decode((string)$img, ENT_QUOTES, 'UTF-8');
 			if ($img_path && is_file(DIR_IMAGE . $img_path)) {
-				$data['project_images'][] = [
+				$data['news_images'][] = [
 					'image' => $image_base . ltrim($img_path, '/'),
 					'thumb' => $image_base . ltrim($img_path, '/'),
 				];
@@ -151,7 +152,7 @@ class Project extends \Opencart\System\Engine\Controller {
 		$data['content_bottom'] = $this->load->controller('common/content_bottom');
 		$data['footer'] = $this->load->controller('common/footer');
 
-		$this->response->setOutput($this->load->view('extension/termopab/project/info', $data));
+		$this->response->setOutput($this->load->view('extension/termopab/news/info', $data));
 	}
 
 	/**

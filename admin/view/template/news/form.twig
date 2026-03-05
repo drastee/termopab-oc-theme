@@ -3,7 +3,7 @@
   <div class="page-header">
     <div class="container-fluid">
       <div class="float-end">
-        <button type="submit" form="form-brewery-review" data-bs-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa-solid fa-save"></i></button>
+        <button type="submit" form="form-news" data-bs-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa-solid fa-save"></i></button>
         <a href="{{ cancel }}" data-bs-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-light"><i class="fa-solid fa-reply"></i></a>
       </div>
       <h1>{{ heading_title }}</h1>
@@ -28,8 +28,8 @@
     <div class="card">
       <div class="card-header"><i class="fa-solid fa-pencil"></i> {{ text_form }}</div>
       <div class="card-body">
-        <form id="form-brewery-review" action="{{ save }}" method="post">
-          <input type="hidden" name="brewery_review_id" value="{{ brewery_review_id }}"/>
+        <form id="form-news" action="{{ save }}" method="post">
+          <input type="hidden" name="news_id" value="{{ news_id }}"/>
 
           <ul class="nav nav-tabs" role="tablist">
             {% for language in languages %}
@@ -42,49 +42,11 @@
           <div class="tab-content">
             {% for language in languages %}
               <div id="language-{{ language.language_id }}" class="tab-pane{% if loop.first %} active{% endif %}">
-                <div class="row mb-3">
-                  <label class="col-sm-2 col-form-label">{{ entry_heading }}</label>
-                  <div class="col-sm-10">
-                    <input type="text" name="brewery_review_description[{{ language.language_id }}][heading]" value="{{ brewery_review_description[language.language_id].heading }}" placeholder="{{ entry_heading }}" class="form-control"/>
-                  </div>
-                </div>
                 <div class="row mb-3 required">
                   <label class="col-sm-2 col-form-label">{{ entry_title }}</label>
                   <div class="col-sm-10">
-                    <input type="text" name="brewery_review_description[{{ language.language_id }}][title]" value="{{ brewery_review_description[language.language_id].title }}" placeholder="{{ entry_title }}" class="form-control"/>
+                    <input type="text" name="news_description[{{ language.language_id }}][title]" value="{{ news_description[language.language_id].title }}" placeholder="{{ entry_title }}" class="form-control"/>
                     <div id="error-title-{{ language.language_id }}" class="invalid-feedback"></div>
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label class="col-sm-2 col-form-label">{{ entry_description }}</label>
-                  <div class="col-sm-10">
-                    <textarea name="brewery_review_description[{{ language.language_id }}][description]" rows="3" placeholder="{{ entry_description }}" class="form-control">{{ brewery_review_description[language.language_id].description }}</textarea>
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label class="col-sm-2 col-form-label">{{ entry_article }}</label>
-                  <div class="col-sm-10">
-                    <textarea name="brewery_review_description[{{ language.language_id }}][article]" rows="12" placeholder="{{ entry_article }}" class="form-control" data-oc-toggle="ckeditor" data-lang="{{ ckeditor }}">{{ brewery_review_description[language.language_id].article }}</textarea>
-                  </div>
-                </div>
-                <hr/>
-                <h5>{{ entry_meta_title }}</h5>
-                <div class="row mb-3">
-                  <label class="col-sm-2 col-form-label">{{ entry_meta_title }}</label>
-                  <div class="col-sm-10">
-                    <input type="text" name="brewery_review_description[{{ language.language_id }}][meta_title]" value="{{ brewery_review_description[language.language_id].meta_title }}" class="form-control"/>
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label class="col-sm-2 col-form-label">{{ entry_meta_description }}</label>
-                  <div class="col-sm-10">
-                    <textarea name="brewery_review_description[{{ language.language_id }}][meta_description]" rows="2" class="form-control">{{ brewery_review_description[language.language_id].meta_description }}</textarea>
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label class="col-sm-2 col-form-label">{{ entry_meta_keyword }}</label>
-                  <div class="col-sm-10">
-                    <input type="text" name="brewery_review_description[{{ language.language_id }}][meta_keyword]" value="{{ brewery_review_description[language.language_id].meta_keyword }}" class="form-control"/>
                   </div>
                 </div>
 
@@ -95,22 +57,43 @@
 					<input type="text" name="seo_keyword[{{ language.language_id }}]" value="{{ seo_keyword[language.language_id] }}" class="form-control"/>
 				  </div>
 				</div>
+                <div class="row mb-3">
+                  <label class="col-sm-2 col-form-label">{{ entry_description }}</label>
+                  <div class="col-sm-10">
+                    <textarea name="news_description[{{ language.language_id }}][description]" rows="3" placeholder="{{ entry_description }}" class="form-control">{{ news_description[language.language_id].description }}</textarea>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label class="col-sm-2 col-form-label">{{ entry_article }}</label>
+                  <div class="col-sm-10">
+                    <textarea name="news_description[{{ language.language_id }}][article]" rows="12" placeholder="{{ entry_article }}" class="form-control" data-oc-toggle="ckeditor" data-lang="{{ ckeditor }}">{{ news_description[language.language_id].article }}</textarea>
+                  </div>
+                </div>
+                <hr/>
+                <h5>{{ entry_meta_title }}</h5>
+                <div class="row mb-3">
+                  <label class="col-sm-2 col-form-label">{{ entry_meta_title }}</label>
+                  <div class="col-sm-10">
+                    <input type="text" name="news_description[{{ language.language_id }}][meta_title]" value="{{ news_description[language.language_id].meta_title }}" class="form-control"/>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label class="col-sm-2 col-form-label">{{ entry_meta_description }}</label>
+                  <div class="col-sm-10">
+                    <textarea name="news_description[{{ language.language_id }}][meta_description]" rows="2" class="form-control">{{ news_description[language.language_id].meta_description }}</textarea>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label class="col-sm-2 col-form-label">{{ entry_meta_keyword }}</label>
+                  <div class="col-sm-10">
+                    <input type="text" name="news_description[{{ language.language_id }}][meta_keyword]" value="{{ news_description[language.language_id].meta_keyword }}" class="form-control"/>
+                  </div>
+                </div>
               </div>
             {% endfor %}
           </div>
 
           <hr/>
-          <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">{{ entry_category }}</label>
-            <div class="col-sm-10">
-              <select name="brewery_review_category_id" class="form-select" style="max-width: 300px;">
-                <option value="0">{{ text_none }}</option>
-                {% for cat in categories %}
-                  <option value="{{ cat.brewery_review_category_id }}"{% if cat.brewery_review_category_id == brewery_review_category_id %} selected{% endif %}>{{ cat.title }}</option>
-                {% endfor %}
-              </select>
-            </div>
-          </div>
           <div class="row mb-3">
             <label class="col-sm-2 col-form-label">{{ entry_image }}</label>
             <div class="col-sm-10">
@@ -128,29 +111,29 @@
             <label class="col-sm-2 col-form-label">{{ entry_video }}</label>
             <div class="col-sm-10">
               <div class="input-group">
-                <input type="text" name="video" value="{{ video }}" placeholder="catalog/brewery_review/video.mp4" id="input-video" class="form-control"/>
+                <input type="text" name="video" value="{{ video }}" placeholder="catalog/news/video.mp4" id="input-video" class="form-control"/>
                 <input type="file" id="input-video-file" accept="video/mp4,.mp4" class="d-none"/>
                 <button type="button" id="btn-upload-video" class="btn btn-primary"><i class="fa-solid fa-upload"></i> {{ button_upload }}</button>
               </div>
-              <div id="brewery-review-video-error" class="invalid-feedback d-none"></div>
+              <div id="news-video-error" class="invalid-feedback d-none"></div>
               <div class="form-text">{{ help_video }}</div>
             </div>
           </div>
           <div class="row mb-3">
             <label class="col-sm-2 col-form-label">{{ entry_gallery }}</label>
             <div class="col-sm-10">
-              <div id="brewery-review-gallery" class="border rounded p-3 bg-light" data-empty-text="{{ text_no_gallery|e('html_attr') }}">
-                {% for img in brewery_review_image %}
-                  <div class="brewery-review-gallery-row mb-3 d-flex align-items-center gap-2" data-index="{{ loop.index0 }}">
+              <div id="news-gallery" class="border rounded p-3 bg-light" data-empty-text="{{ text_no_gallery|e('html_attr') }}">
+                {% for img in news_image %}
+                  <div class="news-gallery-row mb-3 d-flex align-items-center gap-2" data-index="{{ loop.index0 }}">
                     <div class="border rounded" style="width: 60px; height: 60px; overflow: hidden;">
-                      <img src="{{ img.image_thumb }}" alt="" id="thumb-gallery-{{ loop.index0 }}" class="brewery-review-gallery-thumb img-fluid" data-oc-placeholder="{{ placeholder }}"/>
+                      <img src="{{ img.image_thumb }}" alt="" id="thumb-gallery-{{ loop.index0 }}" class="news-gallery-thumb img-fluid" data-oc-placeholder="{{ placeholder }}"/>
                     </div>
-                    <input type="hidden" name="brewery_review_image[{{ loop.index0 }}][image]" value="{{ img.image }}" id="input-gallery-{{ loop.index0 }}" class="brewery-review-gallery-input"/>
-                    <button type="button" class="btn btn-sm btn-outline-secondary brewery-review-gallery-pick" data-oc-toggle="image" data-oc-target="#input-gallery-{{ loop.index0 }}" data-oc-thumb="#thumb-gallery-{{ loop.index0 }}"><i class="fa-solid fa-pencil"></i></button>
-                    <button type="button" class="btn btn-sm btn-danger brewery-review-gallery-remove"><i class="fa-solid fa-trash"></i></button>
+                    <input type="hidden" name="news_image[{{ loop.index0 }}][image]" value="{{ img.image }}" id="input-gallery-{{ loop.index0 }}" class="news-gallery-input"/>
+                    <button type="button" class="btn btn-sm btn-outline-secondary news-gallery-pick" data-oc-toggle="image" data-oc-target="#input-gallery-{{ loop.index0 }}" data-oc-thumb="#thumb-gallery-{{ loop.index0 }}"><i class="fa-solid fa-pencil"></i></button>
+                    <button type="button" class="btn btn-sm btn-danger news-gallery-remove"><i class="fa-solid fa-trash"></i></button>
                   </div>
                 {% else %}
-                  <p class="text-muted mb-0" id="brewery-review-gallery-empty">{{ text_no_gallery }}</p>
+                  <p class="text-muted mb-0" id="news-gallery-empty">{{ text_no_gallery }}</p>
                 {% endfor %}
               </div>
               <button type="button" id="btn-add-gallery-image" class="btn btn-success btn-sm mt-2"><i class="fa-solid fa-plus"></i> {{ button_add_image }}</button>
@@ -176,21 +159,21 @@
     </div>
   </div>
 </div>
-<template id="brewery-review-gallery-row-tpl">
-  <div class="brewery-review-gallery-row mb-3 d-flex align-items-center gap-2" data-index="__IDX__">
+<template id="news-gallery-row-tpl">
+  <div class="news-gallery-row mb-3 d-flex align-items-center gap-2" data-index="__IDX__">
     <div class="border rounded" style="width: 60px; height: 60px; overflow: hidden;">
-      <img src="{{ placeholder }}" alt="" id="thumb-gallery-__IDX__" class="brewery-review-gallery-thumb img-fluid" data-oc-placeholder="{{ placeholder }}"/>
+      <img src="{{ placeholder }}" alt="" id="thumb-gallery-__IDX__" class="news-gallery-thumb img-fluid" data-oc-placeholder="{{ placeholder }}"/>
     </div>
-    <input type="hidden" name="brewery_review_image[__IDX__][image]" value="" id="input-gallery-__IDX__" class="brewery-review-gallery-input"/>
-    <button type="button" class="btn btn-sm btn-outline-secondary brewery-review-gallery-pick" data-oc-toggle="image" data-oc-target="#input-gallery-__IDX__" data-oc-thumb="#thumb-gallery-__IDX__"><i class="fa-solid fa-pencil"></i></button>
-    <button type="button" class="btn btn-sm btn-danger brewery-review-gallery-remove"><i class="fa-solid fa-trash"></i></button>
+    <input type="hidden" name="news_image[__IDX__][image]" value="" id="input-gallery-__IDX__" class="news-gallery-input"/>
+    <button type="button" class="btn btn-sm btn-outline-secondary news-gallery-pick" data-oc-toggle="image" data-oc-target="#input-gallery-__IDX__" data-oc-thumb="#thumb-gallery-__IDX__"><i class="fa-solid fa-pencil"></i></button>
+    <button type="button" class="btn btn-sm btn-danger news-gallery-remove"><i class="fa-solid fa-trash"></i></button>
   </div>
 </template>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  var gallery = document.getElementById('brewery-review-gallery');
-  var emptyEl = document.getElementById('brewery-review-gallery-empty');
-  var tpl = document.getElementById('brewery-review-gallery-row-tpl');
+  var gallery = document.getElementById('news-gallery');
+  var emptyEl = document.getElementById('news-gallery-empty');
+  var tpl = document.getElementById('news-gallery-row-tpl');
 
   var ckeditorLang = {{ (ckeditor|default('en'))|json_encode|raw }};
   if (typeof $ !== 'undefined' && typeof $('textarea[data-oc-toggle="ckeditor"]').ckeditor === 'function') {
@@ -198,22 +181,22 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function galleryCount() {
-    return gallery ? gallery.querySelectorAll('.brewery-review-gallery-row').length : 0;
+    return gallery ? gallery.querySelectorAll('.news-gallery-row').length : 0;
   }
   function renumberGallery() {
     if (!gallery) return;
-    var rows = gallery.querySelectorAll('.brewery-review-gallery-row');
+    var rows = gallery.querySelectorAll('.news-gallery-row');
     rows.forEach(function(row, i) {
       row.setAttribute('data-index', i);
-      var inp = row.querySelector('.brewery-review-gallery-input');
-      var thumb = row.querySelector('.brewery-review-gallery-thumb');
-      var pick = row.querySelector('.brewery-review-gallery-pick');
-      if (inp) { inp.name = 'brewery_review_image[' + i + '][image]'; inp.id = 'input-gallery-' + i; }
+      var inp = row.querySelector('.news-gallery-input');
+      var thumb = row.querySelector('.news-gallery-thumb');
+      var pick = row.querySelector('.news-gallery-pick');
+      if (inp) { inp.name = 'news_image[' + i + '][image]'; inp.id = 'input-gallery-' + i; }
       if (thumb) thumb.id = 'thumb-gallery-' + i;
       if (pick) { pick.setAttribute('data-oc-target', '#input-gallery-' + i); pick.setAttribute('data-oc-thumb', '#thumb-gallery-' + i); }
     });
     if (rows.length === 0 && gallery.getAttribute('data-empty-text')) {
-      gallery.innerHTML = '<p class="text-muted mb-0" id="brewery-review-gallery-empty">' + gallery.getAttribute('data-empty-text') + '</p>';
+      gallery.innerHTML = '<p class="text-muted mb-0" id="news-gallery-empty">' + gallery.getAttribute('data-empty-text') + '</p>';
     }
     if (emptyEl) emptyEl.style.display = rows.length ? 'none' : '';
   }
@@ -226,11 +209,12 @@ document.addEventListener('DOMContentLoaded', function() {
     renumberGallery();
   });
   gallery?.addEventListener('click', function(e) {
-    if (e.target.closest('.brewery-review-gallery-remove')) {
-      e.target.closest('.brewery-review-gallery-row')?.remove();
+    if (e.target.closest('.news-gallery-remove')) {
+      e.target.closest('.news-gallery-row')?.remove();
       renumberGallery();
     }
   });
+  // Video upload
   document.getElementById('btn-upload-video')?.addEventListener('click', function() {
     document.getElementById('input-video-file')?.click();
   });
@@ -241,11 +225,11 @@ document.addEventListener('DOMContentLoaded', function() {
     var fd = new FormData();
     fd.append('video', file);
     var btn = document.getElementById('btn-upload-video');
-    var err = document.getElementById('brewery-review-video-error');
+    var err = document.getElementById('news-video-error');
     var input = document.getElementById('input-video');
     if (btn) btn.disabled = true;
     if (err) { err.classList.add('d-none'); err.textContent = ''; }
-    fetch('index.php?route=extension/termopab/brewery_review.upload&user_token={{ user_token }}', { method: 'POST', body: fd })
+    fetch('index.php?route=extension/termopab/news.upload&user_token={{ user_token }}', { method: 'POST', body: fd })
       .then(function(r) { return r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)); })
       .then(function(json) {
         if (json.error && err) { err.textContent = json.error; err.classList.remove('d-none'); }

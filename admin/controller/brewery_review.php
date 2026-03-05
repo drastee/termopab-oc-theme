@@ -92,6 +92,10 @@ class BreweryReview extends \Opencart\System\Engine\Controller {
 		$this->load->language('extension/termopab/brewery_review/form');
 		$this->document->setTitle($this->language->get('heading_title'));
 
+		$this->document->addScript('view/javascript/ckeditor/ckeditor.js');
+		$this->document->addScript('view/javascript/ckeditor/adapters/jquery.js');
+		$this->load->language('default');
+
 		$data['breadcrumbs'] = [];
 		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_home'),
@@ -112,6 +116,7 @@ class BreweryReview extends \Opencart\System\Engine\Controller {
 
 		$data['brewery_review_id'] = $brewery_review_id;
 		$data['user_token'] = $this->session->data['user_token'];
+		$data['ckeditor'] = $this->language->get('ckeditor') ?: 'en';
 
 		$this->load->model('extension/termopab/brewery_review');
 		$this->load->model('extension/termopab/brewery_review_category');

@@ -1,0 +1,27 @@
+<section class="news-single">
+    <div class="container">
+    
+        {% include "@components/post-header/_post-header.twig" with {
+            "title": "Броварня Brewmasque",
+            "linkText": "Усі проєкти"
+        }%}
+
+        {% include "@components/video-md/_video-md.twig" %}
+
+        {% include "@components/gallery-grid/_gallery-grid.twig" with {
+            images: [
+                '/src/assets/images/news/1.webp',
+                '/src/assets/images/news/2.webp',
+                '/src/assets/images/news/3.webp',
+                '/src/assets/images/news/4.webp',
+                '/src/assets/images/news/5.webp',
+                '/src/assets/images/news/6.webp',
+                '/src/assets/images/news/7.webp',
+                '/src/assets/images/news/8.webp',
+                '/src/assets/images/news/9.webp'
+            ]
+        }%}
+
+    </div>
+
+</section>

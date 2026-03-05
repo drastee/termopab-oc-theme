@@ -1,14 +1,26 @@
 @use "src/styles/mixins" as *;
 .post-header{
-    font-family: var(--font-alt);
+
     --primary-color: var(--color-black);
     --secondary-color: var(--color-gray-dark);
+    font-family: var(--font-alt);
     margin-bottom: 40px;
+    
     @include md-up{
         --primary-color: var(--color-white);
         --secondary-color: var(--color-white);
         margin-bottom: 60px;
     }
+
+    &.white{
+        --primary-color: var(--color-black);
+        --secondary-color: var(--color-black);
+        @include md-up{
+            --primary-color: var(--color-black);
+            --secondary-color: var(--color-black);
+        }
+    }
+
     &__link{
         margin-bottom: 40px;
         color: var(--secondary-color);

@@ -72,7 +72,7 @@
                 <div class="row mb-3">
                   <label class="col-sm-2 col-form-label">{{ entry_article }}</label>
                   <div class="col-sm-10">
-                    <textarea name="project_description[{{ language.language_id }}][article]" rows="12" placeholder="{{ entry_article }}" class="form-control">{{ project_description[language.language_id].article }}</textarea>
+                    <textarea name="project_description[{{ language.language_id }}][article]" rows="12" placeholder="{{ entry_article }}" class="form-control" data-oc-toggle="ckeditor" data-lang="{{ ckeditor }}">{{ project_description[language.language_id].article }}</textarea>
                   </div>
                 </div>
                 <hr/>
@@ -193,6 +193,11 @@ document.addEventListener('DOMContentLoaded', function() {
   var gallery = document.getElementById('project-gallery');
   var emptyEl = document.getElementById('project-gallery-empty');
   var tpl = document.getElementById('project-gallery-row-tpl');
+
+  var ckeditorLang = {{ (ckeditor|default('en'))|json_encode|raw }};
+  if (typeof $ !== 'undefined' && typeof $('textarea[data-oc-toggle="ckeditor"]').ckeditor === 'function') {
+    $('textarea[data-oc-toggle="ckeditor"]').not('.ckeditor-applied').ckeditor({ language: ckeditorLang }).addClass('ckeditor-applied');
+  }
 
   function galleryCount() {
     return gallery ? gallery.querySelectorAll('.project-gallery-row').length : 0;

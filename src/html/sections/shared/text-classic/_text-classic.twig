@@ -2,7 +2,7 @@
     <div class="container">
         <div class="text-classic__inner">
             <h1 class="text-classic__title">{{ title|default('') }}</h1>
-            <div class="text-classic__content">{{ content|default('') }}</div>
+            <div class="text-classic__content">{{ content|default('')|raw }}</div>
         </div>
     </div>
 </section>

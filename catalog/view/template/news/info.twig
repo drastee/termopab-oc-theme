@@ -11,29 +11,31 @@
   {% include '@termopab/components/breadcrumbs/_breadcrumbs.twig' with {
     home: { url: bc_home.href|default('/'), name: bc_home.text|default(text_home)|striptags|trim },
     breadcrumbs: bc_items,
-    background: "black"
+    background: "white"
   } %}
 
-  <section class="project-single">
+{% if video_url or news_images %}
+  <section class="news-single">
     <div class="container">
 
       {% include '@termopab/components/post-header/_post-header.twig' with {
         title: heading|default(title),
         subtitle: (heading and title and heading != title) ? title : null,
         linkText: text_back_list,
-        href: back_list
+        href: back_list,
+        className: "white"
       } %}
 
       {% if video_url %}
         {% include '@termopab/components/video-md/_video-md.twig' with {
           video_src: video_url,
-          poster_src: image|default(project_images[0].thumb|default(''))
+          poster_src: image|default(news_images[0].thumb|default(''))
         } %}
       {% endif %}
 
-      {% if project_images is not empty %}
+      {% if news_images is not empty %}
         {% set gallery_images = [] %}
-        {% for img in project_images %}
+        {% for img in news_images %}
           {% set gallery_images = gallery_images|merge([{ href: img.image, src: img.thumb }]) %}
         {% endfor %}
         {% include '@termopab/components/gallery-grid/_gallery-grid.twig' with {
@@ -41,25 +43,15 @@
         } %}
       {% endif %}
 
-      {% if logo and not video_url %}
-        <figure class="mb-4">
-          <img src="{{ logo }}" alt="{{ title }}" class="project-logo img-fluid"/>
-        </figure>
-      {% endif %}
-      {% if image and not video_url and project_images is empty %}
-        <figure class="mb-4">
-          <img src="{{ image }}" alt="{{ title }}" class="img-fluid rounded"/>
-        </figure>
-      {% endif %}
-
     </div>
   </section>
-      {% if article %}
-        {% include '@termopab/sections/shared/text-classic/_text-classic.twig' with {
-        title: heading|default(''),
-        content: article|default('')
-      } %}
-      {% endif %}
+{% endif %}
+{% if article %}
+    {% include '@termopab/sections/shared/text-classic/_text-classic.twig' with {
+    title: title|default(''),
+    content: article|default('')
+  } %}
+{% endif %}
   {{ content_bottom }}
 </main>
 {{ footer }}

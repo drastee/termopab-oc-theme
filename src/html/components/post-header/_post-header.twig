@@ -1,4 +1,4 @@
-<div class="post-header">
+<div class="post-header {{ className|default('') }}">
     <a class="post-header__link link" href="{{ href|default('#') }}">{{ linkText }} <svg class="link-arrow"><use href="#icon-short-arrow"></use></svg></a>
     <h1 class="post-header__title">{{ title }}</h1>
     {% if subtitle %}

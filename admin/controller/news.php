@@ -2,20 +2,20 @@
 namespace Opencart\Admin\Controller\Extension\Termopab;
 
 /**
- * Проекти (CRUD). Маршрут: extension/termopab/project
+ * Проекти (CRUD). Маршрут: extension/termopab/news
  * Канонічна структура OpenCart: один контролер = одна сутність, всі методи в одному файлі.
  */
-class Project extends \Opencart\System\Engine\Controller {
+class News extends \Opencart\System\Engine\Controller {
 
 	public function index(): void {
-		if (!empty($this->request->get['install_tables']) && $this->user->hasPermission('modify', 'extension/termopab/project')) {
+		if (!empty($this->request->get['install_tables']) && $this->user->hasPermission('modify', 'extension/termopab/news')) {
 			$this->runInstallTables();
-			$this->response->redirect($this->url->link('extension/termopab/project', 'user_token=' . $this->session->data['user_token']));
+			$this->response->redirect($this->url->link('extension/termopab/news', 'user_token=' . $this->session->data['user_token']));
 			return;
 		}
 
 		$this->addPaths();
-		$this->load->language('extension/termopab/project/list');
+		$this->load->language('extension/termopab/news/list');
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		$data['breadcrumbs'] = [];
@@ -25,11 +25,11 @@ class Project extends \Opencart\System\Engine\Controller {
 		];
 		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('extension/termopab/project', 'user_token=' . $this->session->data['user_token'])
+			'href' => $this->url->link('extension/termopab/news', 'user_token=' . $this->session->data['user_token'])
 		];
 
-		$data['add'] = $this->url->link('extension/termopab/project.form', 'user_token=' . $this->session->data['user_token']);
-		$data['install'] = $this->url->link('extension/termopab/project', 'user_token=' . $this->session->data['user_token'] . '&install_tables=1');
+		$data['add'] = $this->url->link('extension/termopab/news.form', 'user_token=' . $this->session->data['user_token']);
+		$data['install'] = $this->url->link('extension/termopab/news', 'user_token=' . $this->session->data['user_token'] . '&install_tables=1');
 
 		$data['success'] = $this->session->data['success'] ?? '';
 		$data['error_warning'] = $this->session->data['error'] ?? '';
@@ -41,28 +41,28 @@ class Project extends \Opencart\System\Engine\Controller {
 		$limit = (int)($this->config->get('config_pagination_admin') ?: 20);
 		$start = ($page - 1) * $limit;
 
-		$this->load->model('extension/termopab/project');
+		$this->load->model('extension/termopab/news');
 		$this->load->model('tool/image');
 
-		$total = $this->model_extension_termopab_project->getTotalProjects();
-		$results = $this->model_extension_termopab_project->getProjects(['start' => $start, 'limit' => $limit, 'sort' => 'p.sort_order', 'order' => 'ASC']);
+		$total = $this->model_extension_termopab_news->getTotalNewss();
+		$results = $this->model_extension_termopab_news->getNewss(['start' => $start, 'limit' => $limit, 'sort' => 'p.sort_order', 'order' => 'ASC']);
 
 		$store_url = rtrim((string)$this->config->get('config_url'), '/');
-		$data['projects'] = [];
+		$data['newss'] = [];
 		$placeholder = $this->model_tool_image->resize('no_image.png', 40, 40);
 		foreach ($results as $row) {
 			$img = $row['image'] && is_file(DIR_IMAGE . html_entity_decode($row['image'], ENT_QUOTES, 'UTF-8'))
 				? $this->model_tool_image->resize($row['image'], 40, 40) : $placeholder;
-			$data['projects'][] = [
-				'project_id'  => $row['project_id'],
-				'title'       => $row['title'] ?: ('(ID ' . $row['project_id'] . ')'),
+			$data['newss'][] = [
+				'news_id'  => $row['news_id'],
+				'title'       => $row['title'] ?: ('(ID ' . $row['news_id'] . ')'),
 				'image'       => $img,
 				'sort_order'  => $row['sort_order'],
 				'status'      => $row['status'],
-				'view'        => $store_url . '/index.php?route=extension/termopab/project.info' . '&project_id=' . $row['project_id'],
-				'edit'        => $this->url->link('extension/termopab/project.form', 'user_token=' . $this->session->data['user_token'] . '&project_id=' . $row['project_id']),
-				'copy'        => $this->url->link('extension/termopab/project.copy', 'user_token=' . $this->session->data['user_token'] . '&project_id=' . $row['project_id']),
-				'delete'      => $this->url->link('extension/termopab/project.delete', 'user_token=' . $this->session->data['user_token'] . '&project_id=' . $row['project_id']),
+				'view'        => $store_url . '/index.php?route=extension/termopab/news.info' . '&news_id=' . $row['news_id'],
+				'edit'        => $this->url->link('extension/termopab/news.form', 'user_token=' . $this->session->data['user_token'] . '&news_id=' . $row['news_id']),
+				'copy'        => $this->url->link('extension/termopab/news.copy', 'user_token=' . $this->session->data['user_token'] . '&news_id=' . $row['news_id']),
+				'delete'      => $this->url->link('extension/termopab/news.delete', 'user_token=' . $this->session->data['user_token'] . '&news_id=' . $row['news_id']),
 			];
 		}
 
@@ -70,19 +70,19 @@ class Project extends \Opencart\System\Engine\Controller {
 			'total' => $total,
 			'page'  => $page,
 			'limit' => $limit,
-			'url'   => $this->url->link('extension/termopab/project', 'user_token=' . $this->session->data['user_token'] . '&page={page}')
+			'url'   => $this->url->link('extension/termopab/news', 'user_token=' . $this->session->data['user_token'] . '&page={page}')
 		]);
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
 
-		$this->response->setOutput($this->load->view('extension/termopab/project/list', $data));
+		$this->response->setOutput($this->load->view('extension/termopab/news/list', $data));
 	}
 
 	public function form(): void {
 		$this->addPaths();
-		$this->load->language('extension/termopab/project/form');
+		$this->load->language('extension/termopab/news/form');
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		$this->document->addScript('view/javascript/ckeditor/ckeditor.js');
@@ -96,62 +96,62 @@ class Project extends \Opencart\System\Engine\Controller {
 		];
 		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('extension/termopab/project', 'user_token=' . $this->session->data['user_token'])
+			'href' => $this->url->link('extension/termopab/news', 'user_token=' . $this->session->data['user_token'])
 		];
 
-		$project_id = (int)($this->request->get['project_id'] ?? 0);
-		$data['save'] = $this->url->link('extension/termopab/project.save', 'user_token=' . $this->session->data['user_token'] . ($project_id ? '&project_id=' . $project_id : ''));
-		$data['cancel'] = $this->url->link('extension/termopab/project', 'user_token=' . $this->session->data['user_token']);
+		$news_id = (int)($this->request->get['news_id'] ?? 0);
+		$data['save'] = $this->url->link('extension/termopab/news.save', 'user_token=' . $this->session->data['user_token'] . ($news_id ? '&news_id=' . $news_id : ''));
+		$data['cancel'] = $this->url->link('extension/termopab/news', 'user_token=' . $this->session->data['user_token']);
 
 		$data['success'] = $this->session->data['success'] ?? '';
 		$data['error_warning'] = $this->session->data['error_warning'] ?? '';
 		unset($this->session->data['success'], $this->session->data['error_warning']);
 
-		$data['project_id'] = $project_id;
+		$data['news_id'] = $news_id;
 		$data['user_token'] = $this->session->data['user_token'];
 		$data['ckeditor'] = $this->language->get('ckeditor') ?: 'en';
 
-		$this->load->model('extension/termopab/project');
+		$this->load->model('extension/termopab/news');
 		$this->load->model('localisation/language');
 		$this->load->model('tool/image');
 
 		$data['languages'] = $this->model_localisation_language->getLanguages();
 		$data['placeholder'] = $this->model_tool_image->resize('no_image.png', 100, 100);
 
-		if ($project_id) {
-			$project = $this->model_extension_termopab_project->getProject($project_id);
-			$descriptions = $this->model_extension_termopab_project->getProjectDescriptions($project_id);
-			$gallery = $this->model_extension_termopab_project->getProjectImages($project_id);
-			$seo_keywords = $this->model_extension_termopab_project->getProjectSeoKeywords($project_id);
+		if ($news_id) {
+			$news = $this->model_extension_termopab_news->getNews($news_id);
+			$descriptions = $this->model_extension_termopab_news->getNewsDescriptions($news_id);
+			$gallery = $this->model_extension_termopab_news->getNewsImages($news_id);
+			$seo_keywords = $this->model_extension_termopab_news->getNewsSeoKeywords($news_id);
 		} else {
-			$project = ['image' => '', 'logo' => '', 'video' => '', 'sort_order' => 0, 'status' => 1];
+			$news = ['image' => '', 'logo' => '', 'video' => '', 'sort_order' => 0, 'status' => 1];
 			$descriptions = [];
 			$gallery = [];
 			$seo_keywords = [];
 		}
 
-		$data['image'] = $project['image'] ?? '';
+		$data['image'] = $news['image'] ?? '';
 		$data['image_thumb'] = ($data['image'] && is_file(DIR_IMAGE . html_entity_decode($data['image'], ENT_QUOTES, 'UTF-8')))
 			? $this->model_tool_image->resize($data['image'], 100, 100) : $data['placeholder'];
-		$data['logo'] = $project['logo'] ?? '';
+		$data['logo'] = $news['logo'] ?? '';
 		$data['logo_thumb'] = (!empty($data['logo']) && is_file(DIR_IMAGE . html_entity_decode($data['logo'], ENT_QUOTES, 'UTF-8')))
 			? $this->model_tool_image->resize($data['logo'], 100, 100) : $data['placeholder'];
-		$data['video'] = $project['video'] ?? '';
-		$data['sort_order'] = $project['sort_order'] ?? 0;
-		$data['status'] = $project['status'] ?? 1;
+		$data['video'] = $news['video'] ?? '';
+		$data['sort_order'] = $news['sort_order'] ?? 0;
+		$data['status'] = $news['status'] ?? 1;
 
-		$data['project_image'] = [];
+		$data['news_image'] = [];
 		foreach ($gallery as $row) {
 			$img = $row['image'] ?? '';
 			$thumb = ($img && is_file(DIR_IMAGE . html_entity_decode($img, ENT_QUOTES, 'UTF-8')))
 				? $this->model_tool_image->resize($img, 100, 100) : $data['placeholder'];
-			$data['project_image'][] = ['image' => $img, 'image_thumb' => $thumb, 'sort_order' => $row['sort_order']];
+			$data['news_image'][] = ['image' => $img, 'image_thumb' => $thumb, 'sort_order' => $row['sort_order']];
 		}
 
-		$data['project_description'] = [];
+		$data['news_description'] = [];
 		foreach ($data['languages'] as $language) {
 			$d = $descriptions[$language['language_id']] ?? [];
-			$data['project_description'][$language['language_id']] = [
+			$data['news_description'][$language['language_id']] = [
 				'heading'          => $d['heading'] ?? '',
 				'title'            => $d['title'] ?? '',
 				'description'      => $d['description'] ?? '',
@@ -171,45 +171,45 @@ class Project extends \Opencart\System\Engine\Controller {
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
 
-		$this->response->setOutput($this->load->view('extension/termopab/project/form', $data));
+		$this->response->setOutput($this->load->view('extension/termopab/news/form', $data));
 	}
 
 	public function save(): void {
 		$this->addPaths();
-		$this->load->language('extension/termopab/project/form');
+		$this->load->language('extension/termopab/news/form');
 
 		$json = [];
 
-		if (!$this->user->hasPermission('modify', 'extension/termopab/project')) {
+		if (!$this->user->hasPermission('modify', 'extension/termopab/news')) {
 			$json['error']['warning'] = $this->language->get('error_permission');
 		}
 
-		$project_id = (int)($this->request->post['project_id'] ?? 0);
-		$project_description = $this->request->post['project_description'] ?? [];
+		$news_id = (int)($this->request->post['news_id'] ?? 0);
+		$news_description = $this->request->post['news_description'] ?? [];
 		$first_title = '';
-		foreach ($project_description as $lid => $d) {
+		foreach ($news_description as $lid => $d) {
 			$t = trim((string)($d['title'] ?? ''));
 			if ($t !== '' && $first_title === '') {
 				$first_title = $t;
 			}
 		}
-		if ($first_title === '' && !empty($project_description)) {
-			$first_title = trim((string)reset($project_description)['title'] ?? '');
+		if ($first_title === '' && !empty($news_description)) {
+			$first_title = trim((string)reset($news_description)['title'] ?? '');
 		}
 		if (oc_strlen($first_title) < 1 || oc_strlen($first_title) > 255) {
 			$json['error']['title'] = $this->language->get('error_title');
 		}
 
 		if (empty($json['error'])) {
-			$project_image = [];
-			$raw = $this->request->post['project_image'] ?? [];
+			$news_image = [];
+			$raw = $this->request->post['news_image'] ?? [];
 			if (is_array($raw)) {
 				$keys = array_filter(array_keys($raw), 'is_numeric');
 				sort($keys, SORT_NUMERIC);
 				foreach ($keys as $idx) {
 					$img = trim((string)($raw[$idx]['image'] ?? ''));
 					if ($img !== '') {
-						$project_image[] = ['image' => $img];
+						$news_image[] = ['image' => $img];
 					}
 				}
 			}
@@ -221,11 +221,11 @@ class Project extends \Opencart\System\Engine\Controller {
 				'sort_order'  => (int)($this->request->post['sort_order'] ?? 0),
 				'status'      => (int)($this->request->post['status'] ?? 0),
 				'seo_keyword' => is_array($seo_keyword) ? $seo_keyword : [],
-				'project_description' => [],
-				'project_image' => $project_image,
+				'news_description' => [],
+				'news_image' => $news_image,
 			];
-			foreach ($project_description as $language_id => $desc) {
-				$data['project_description'][(int)$language_id] = [
+			foreach ($news_description as $language_id => $desc) {
+				$data['news_description'][(int)$language_id] = [
 					'heading'          => trim((string)($desc['heading'] ?? '')),
 					'title'            => trim((string)($desc['title'] ?? '')),
 					'description'      => trim((string)($desc['description'] ?? '')),
@@ -236,13 +236,13 @@ class Project extends \Opencart\System\Engine\Controller {
 				];
 			}
 
-			$this->load->model('extension/termopab/project');
-			if (!$project_id) {
-				$project_id = $this->model_extension_termopab_project->addProject($data);
-				$json['redirect'] = $this->url->link('extension/termopab/project.form', 'user_token=' . $this->session->data['user_token'] . '&project_id=' . $project_id);
+			$this->load->model('extension/termopab/news');
+			if (!$news_id) {
+				$news_id = $this->model_extension_termopab_news->addNews($data);
+				$json['redirect'] = $this->url->link('extension/termopab/news.form', 'user_token=' . $this->session->data['user_token'] . '&news_id=' . $news_id);
 			} else {
-				$this->model_extension_termopab_project->editProject($project_id, $data);
-				$json['redirect'] = $this->url->link('extension/termopab/project', 'user_token=' . $this->session->data['user_token']);
+				$this->model_extension_termopab_news->editNews($news_id, $data);
+				$json['redirect'] = $this->url->link('extension/termopab/news', 'user_token=' . $this->session->data['user_token']);
 			}
 			$json['success'] = $this->language->get('text_success');
 		}
@@ -257,9 +257,9 @@ class Project extends \Opencart\System\Engine\Controller {
 			}
 			if (!empty($json['error'])) {
 				$this->session->data['error_warning'] = $json['error']['warning'] ?? implode(' ', $json['error']);
-				$back = $project_id
-					? $this->url->link('extension/termopab/project.form', 'user_token=' . $this->session->data['user_token'] . '&project_id=' . $project_id)
-					: $this->url->link('extension/termopab/project.form', 'user_token=' . $this->session->data['user_token']);
+				$back = $news_id
+					? $this->url->link('extension/termopab/news.form', 'user_token=' . $this->session->data['user_token'] . '&news_id=' . $news_id)
+					: $this->url->link('extension/termopab/news.form', 'user_token=' . $this->session->data['user_token']);
 				$this->response->redirect($back);
 				return;
 			}
@@ -271,55 +271,55 @@ class Project extends \Opencart\System\Engine\Controller {
 
 	public function delete(): void {
 		$this->addPaths();
-		$this->load->language('extension/termopab/project/list');
+		$this->load->language('extension/termopab/news/list');
 
-		if (!$this->user->hasPermission('modify', 'extension/termopab/project')) {
+		if (!$this->user->hasPermission('modify', 'extension/termopab/news')) {
 			$this->session->data['error'] = $this->language->get('error_permission');
 		} else {
-			$project_id = (int)($this->request->get['project_id'] ?? 0);
-			if ($project_id) {
-				$this->load->model('extension/termopab/project');
-				$this->model_extension_termopab_project->deleteProject($project_id);
+			$news_id = (int)($this->request->get['news_id'] ?? 0);
+			if ($news_id) {
+				$this->load->model('extension/termopab/news');
+				$this->model_extension_termopab_news->deleteNews($news_id);
 				$this->session->data['success'] = $this->language->get('text_success');
 			}
 		}
 
-		$this->response->redirect($this->url->link('extension/termopab/project', 'user_token=' . $this->session->data['user_token']));
+		$this->response->redirect($this->url->link('extension/termopab/news', 'user_token=' . $this->session->data['user_token']));
 	}
 
 	public function copy(): void {
 		$this->addPaths();
-		$this->load->language('extension/termopab/project/list');
+		$this->load->language('extension/termopab/news/list');
 
-		if (!$this->user->hasPermission('modify', 'extension/termopab/project')) {
+		if (!$this->user->hasPermission('modify', 'extension/termopab/news')) {
 			$this->session->data['error'] = $this->language->get('error_permission');
 		} else {
-			$project_id = (int)($this->request->get['project_id'] ?? 0);
-			if ($project_id) {
-				$this->load->model('extension/termopab/project');
-				$new_id = $this->model_extension_termopab_project->copyProject($project_id);
+			$news_id = (int)($this->request->get['news_id'] ?? 0);
+			if ($news_id) {
+				$this->load->model('extension/termopab/news');
+				$new_id = $this->model_extension_termopab_news->copyNews($news_id);
 				if ($new_id) {
 					$this->session->data['success'] = $this->language->get('text_copy_success');
-					$this->response->redirect($this->url->link('extension/termopab/project.form', 'user_token=' . $this->session->data['user_token'] . '&project_id=' . $new_id));
+					$this->response->redirect($this->url->link('extension/termopab/news.form', 'user_token=' . $this->session->data['user_token'] . '&news_id=' . $new_id));
 					return;
 				}
 			}
 			$this->session->data['error'] = $this->language->get('error_copy');
 		}
 
-		$this->response->redirect($this->url->link('extension/termopab/project', 'user_token=' . $this->session->data['user_token']));
+		$this->response->redirect($this->url->link('extension/termopab/news', 'user_token=' . $this->session->data['user_token']));
 	}
 
 	/**
-	 * Upload video (mp4). Saves to image/catalog/project/
+	 * Upload video (mp4). Saves to image/catalog/news/
 	 */
 	public function upload(): void {
 		$this->addPaths();
-		$this->load->language('extension/termopab/project/form');
+		$this->load->language('extension/termopab/news/form');
 
 		$json = [];
 
-		if (!$this->user->hasPermission('modify', 'extension/termopab/project')) {
+		if (!$this->user->hasPermission('modify', 'extension/termopab/news')) {
 			$json['error'] = $this->language->get('error_permission');
 		}
 
@@ -348,19 +348,19 @@ class Project extends \Opencart\System\Engine\Controller {
 			}
 
 			if (!isset($json['error'])) {
-				$dir = DIR_IMAGE . 'catalog/project/';
+				$dir = DIR_IMAGE . 'catalog/news/';
 				if (!is_dir($dir)) {
 					mkdir($dir, 0755, true);
 				}
 				$filename = preg_replace('/[^a-zA-Z0-9._-]/', '', basename(html_entity_decode($file['name'], ENT_QUOTES, 'UTF-8')));
 				if ($filename === '') {
-					$filename = 'project_' . time() . '.mp4';
+					$filename = 'news_' . time() . '.mp4';
 				} elseif (strtolower(pathinfo($filename, PATHINFO_EXTENSION)) !== 'mp4') {
 					$filename .= '.mp4';
 				}
 				$path = $dir . $filename;
 				if (is_uploaded_file($file['tmp_name']) && move_uploaded_file($file['tmp_name'], $path)) {
-					$json['path'] = 'catalog/project/' . $filename;
+					$json['path'] = 'catalog/news/' . $filename;
 					$json['success'] = $this->language->get('text_uploaded');
 				} else {
 					$json['error'] = $this->language->get('error_upload_path');
@@ -383,8 +383,8 @@ class Project extends \Opencart\System\Engine\Controller {
 	private function runInstallTables(): void {
 		$prefix = defined('DB_PREFIX') ? DB_PREFIX : 'tp_';
 		$sql = [
-			"CREATE TABLE IF NOT EXISTS `" . $prefix . "project` (
-				`project_id` int(11) NOT NULL AUTO_INCREMENT,
+			"CREATE TABLE IF NOT EXISTS `" . $prefix . "news` (
+				`news_id` int(11) NOT NULL AUTO_INCREMENT,
 				`image` varchar(255) DEFAULT NULL,
 				`logo` varchar(255) DEFAULT NULL,
 				`video` varchar(512) DEFAULT NULL,
@@ -392,10 +392,10 @@ class Project extends \Opencart\System\Engine\Controller {
 				`status` tinyint(1) NOT NULL DEFAULT 1,
 				`date_added` datetime NOT NULL,
 				`date_modified` datetime NOT NULL,
-				PRIMARY KEY (`project_id`)
+				PRIMARY KEY (`news_id`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
-			"CREATE TABLE IF NOT EXISTS `" . $prefix . "project_description` (
-				`project_id` int(11) NOT NULL,
+			"CREATE TABLE IF NOT EXISTS `" . $prefix . "news_description` (
+				`news_id` int(11) NOT NULL,
 				`language_id` int(11) NOT NULL,
 				`heading` varchar(255) DEFAULT NULL,
 				`title` varchar(255) NOT NULL,
@@ -404,22 +404,22 @@ class Project extends \Opencart\System\Engine\Controller {
 				`meta_title` varchar(255) DEFAULT NULL,
 				`meta_description` varchar(255) DEFAULT NULL,
 				`meta_keyword` varchar(255) DEFAULT NULL,
-				PRIMARY KEY (`project_id`,`language_id`),
+				PRIMARY KEY (`news_id`,`language_id`),
 				KEY `language_id` (`language_id`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
-			"CREATE TABLE IF NOT EXISTS `" . $prefix . "project_image` (
-				`project_image_id` int(11) NOT NULL AUTO_INCREMENT,
-				`project_id` int(11) NOT NULL,
+			"CREATE TABLE IF NOT EXISTS `" . $prefix . "news_image` (
+				`news_image_id` int(11) NOT NULL AUTO_INCREMENT,
+				`news_id` int(11) NOT NULL,
 				`image` varchar(255) NOT NULL,
 				`sort_order` int(11) NOT NULL DEFAULT 0,
-				PRIMARY KEY (`project_image_id`),
-				KEY `project_id` (`project_id`)
+				PRIMARY KEY (`news_image_id`),
+				KEY `news_id` (`news_id`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
 		];
 		$alters = [
-			"ALTER TABLE `" . $prefix . "project` ADD COLUMN `logo` varchar(255) DEFAULT NULL AFTER `image`",
-			"ALTER TABLE `" . $prefix . "project` ADD COLUMN `video` varchar(512) DEFAULT NULL AFTER `logo`",
-			"ALTER TABLE `" . $prefix . "project_description` ADD COLUMN `heading` varchar(255) DEFAULT NULL AFTER `language_id`",
+			"ALTER TABLE `" . $prefix . "news` ADD COLUMN `logo` varchar(255) DEFAULT NULL AFTER `image`",
+			"ALTER TABLE `" . $prefix . "news` ADD COLUMN `video` varchar(512) DEFAULT NULL AFTER `logo`",
+			"ALTER TABLE `" . $prefix . "news_description` ADD COLUMN `heading` varchar(255) DEFAULT NULL AFTER `language_id`",
 		];
 		try {
 			foreach ($sql as $q) {

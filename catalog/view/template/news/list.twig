@@ -1,5 +1,6 @@
 {{ header }}
-<main>
+<main id="content">
+  {{ content_top }}
   {% set bc_home = breadcrumbs|first %}
   {% set bc_rest = breadcrumbs|slice(1) %}
   {% set bc_items = [] %}
@@ -9,13 +10,15 @@
 
   {% include '@termopab/components/breadcrumbs/_breadcrumbs.twig' with {
     home: { url: bc_home.href|default('/'), name: bc_home.text|default(text_home)|striptags|trim },
-    breadcrumbs: bc_items,
-    background: breadcrumb_background|default('white')
+    breadcrumbs: bc_items
   } %}
 
-  {% include '@termopab/sections/shared/text-classic/_text-classic.twig' with {
-    title: heading_title|default(''),
-    content: description|default('')
+  {% include '@termopab/sections/shared/posts/_posts.twig' with {
+    filter: false,
+    posts: newss,
+    pagination_data: pagination_data|default(null),
+    empty_message: newss is empty ? text_empty : null
   } %}
+  {{ content_bottom }}
 </main>
 {{ footer }}

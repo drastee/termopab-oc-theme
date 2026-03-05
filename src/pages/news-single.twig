@@ -1,0 +1,21 @@
+{% extends "html/layouts/_html.twig" %}
+{% set pageTitle = "Новина 1" %}
+{% set pageClass = "news-page" %}
+{% block main %}
+<main>
+
+
+    {% include "@components/breadcrumbs/_breadcrumbs.twig" with {
+        "background": "combo-color",
+        "breadcrumbs": [
+            {"name": "Новини"},
+            {"name": "Новина 1"}
+        ]
+    }%}
+
+    {% include "@sections/pages/news/news-single/_news-single.twig" with {filter: true} %}
+
+    {% include "html/sections/shared/cta-thin-barrel/_cta-thin-barrel.twig" %}
+
+</main>
+{% endblock %}

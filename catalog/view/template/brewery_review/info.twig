@@ -45,26 +45,12 @@
     </div>
   </section>
 
-  {% if article %}
-    <section class="text-content">
-      <div class="container">
-          <div class="text-content__inner">
-              <div class="text-content__main typography">{{ article }}</div>
-              <button 
-                  class="link expand-btn js-expand-btn" 
-                  data-text-expand="{{ text_expand|default('Розгорнути') }}" 
-                  data-text-collapse="{{ text_collapse|default('Згорнути') }}"
-                  aria-expanded="false" 
-              >
-                  <span>{{ text_expand|default('Розгорнути') }}</span>
-                  <svg class="link-arrow">
-                      <use href="#icon-short-arrow"></use>
-                  </svg>
-              </button>
-          </div>
-      </div>
-  </section>
-  {% endif %}
+{% if article %}
+    {% include '@termopab/sections/shared/text-classic/_text-classic.twig' with {
+    title: title|default(''),
+    content: article|default('')
+  } %}
+{% endif %}
   {{ content_bottom }}
 </main>
 {{ footer }}
