@@ -66,7 +66,7 @@ class News extends \Opencart\System\Engine\Model {
 		if (!$ids) {
 			return [];
 		}
-		$sql = "SELECT p.*, pd.title
+		$sql = "SELECT p.*, pd.title, pd.description
 			FROM `" . DB_PREFIX . "news` p
 			LEFT JOIN `" . DB_PREFIX . "news_description` pd ON (p.news_id = pd.news_id AND pd.language_id = '" . (int)$language_id . "')
 			WHERE p.status = '1' AND p.news_id IN (" . implode(',', $ids) . ")";

@@ -1,0 +1,129 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="float-end">
+        <button type="submit" form="form-module" data-bs-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa-solid fa-save"></i></button>
+        <a href="{{ back }}" data-bs-toggle="tooltip" title="{{ button_back }}" class="btn btn-light"><i class="fa-solid fa-reply"></i></a>
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ol class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+          <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-header"><i class="fa-solid fa-pencil"></i> {{ text_edit }}</div>
+      <div class="card-body">
+        <form id="form-module" action="{{ save }}" method="post" data-oc-toggle="ajax">
+          <input type="hidden" name="module_id" value="{{ module_id }}"/>
+          <div class="row mb-3">
+            <label for="input-name" class="col-sm-2 col-form-label">{{ entry_name }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control"/>
+              <div id="error-name" class="invalid-feedback"></div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_title }}</label>
+            <div class="col-sm-10">
+              <ul class="nav nav-tabs" role="tablist">
+                {% for language in languages %}
+                  <li class="nav-item">
+                    <a class="nav-link{% if loop.first %} active{% endif %}" data-bs-toggle="tab" href="#tab-title-{{ language.language_id }}">{% if language.image %}<img src="{{ language.image }}" alt="{{ language.name }}" class="me-1"/>{% endif %}{{ language.name }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+              <div class="tab-content mt-2">
+                {% for language in languages %}
+                  <div id="tab-title-{{ language.language_id }}" class="tab-pane{% if loop.first %} active{% endif %}">
+                    <input type="text" name="title[{{ language.language_id }}]" value="{{ (title[language.language_id] ?? '') }}" class="form-control" placeholder="{{ entry_title }}"/>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_link_text }}</label>
+            <div class="col-sm-10">
+              <ul class="nav nav-tabs" role="tablist">
+                {% for language in languages %}
+                  <li class="nav-item">
+                    <a class="nav-link{% if loop.first %} active{% endif %}" data-bs-toggle="tab" href="#tab-link-text-{{ language.language_id }}">{% if language.image %}<img src="{{ language.image }}" alt="{{ language.name }}" class="me-1"/>{% endif %}{{ language.name }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+              <div class="tab-content mt-2">
+                {% for language in languages %}
+                  <div id="tab-link-text-{{ language.language_id }}" class="tab-pane{% if loop.first %} active{% endif %}">
+                    <input type="text" name="link_text[{{ language.language_id }}]" value="{{ (link_text[language.language_id] ?? '') }}" class="form-control" placeholder="{{ entry_link_text }}"/>
+                  </div>
+                {% endfor %}
+              </div>
+              <div class="form-text">{{ help_link_text }}</div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_source }}</label>
+            <div class="col-sm-10">
+              <div class="form-check">
+                <input type="radio" name="use_latest" value="1" id="source-latest" class="form-check-input"{% if use_latest %} checked{% endif %}/>
+                <label for="source-latest" class="form-check-label">{{ entry_source_latest }}</label>
+              </div>
+              <div class="ms-4 mb-2" id="wrap-limit">
+                <label for="input-limit" class="form-label">{{ entry_limit }}</label>
+                <input type="number" name="limit" value="{{ limit }}" min="1" max="50" id="input-limit" class="form-control" style="max-width: 100px;"/>
+              </div>
+              <div class="form-check">
+                <input type="radio" name="use_latest" value="0" id="source-selected" class="form-check-input"{% if not use_latest %} checked{% endif %}/>
+                <label for="source-selected" class="form-check-label">{{ entry_source_selected }}</label>
+              </div>
+              <div class="ms-4 border rounded p-3 bg-light mt-2" id="wrap-selected" style="max-height: 280px; overflow-y: auto;">
+                {% for news in newss %}
+                  <div class="form-check">
+                    <input type="checkbox" name="news_id[]" value="{{ news.news_id }}" id="news-{{ news.news_id }}" class="form-check-input news-cb"{% if news.selected %} checked{% endif %}/>
+                    <label class="form-check-label" for="news-{{ news.news_id }}">{{ news.title }}</label>
+                  </div>
+                {% else %}
+                  <p class="text-muted mb-0">{{ text_no_newss }}</p>
+                {% endfor %}
+              </div>
+              <div class="form-text">{{ help_source }}</div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label for="input-status" class="col-sm-2 col-form-label">{{ entry_status }}</label>
+            <div class="col-sm-10">
+              <select name="status" id="input-status" class="form-select">
+                <option value="1"{% if status %} selected{% endif %}>{{ text_enabled }}</option>
+                <option value="0"{% if not status %} selected{% endif %}>{{ text_disabled }}</option>
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var sourceLatest = document.getElementById('source-latest');
+  var sourceSelected = document.getElementById('source-selected');
+  var wrapLimit = document.getElementById('wrap-limit');
+  var wrapSelected = document.getElementById('wrap-selected');
+  var checkboxes = document.querySelectorAll('.news-cb');
+  function toggle() {
+    var useLatest = sourceLatest && sourceLatest.checked;
+    if (wrapLimit) wrapLimit.style.display = useLatest ? '' : 'none';
+    if (wrapSelected) wrapSelected.style.display = useLatest ? 'none' : '';
+    if (checkboxes.length) checkboxes.forEach(function(cb) { cb.disabled = useLatest; });
+  }
+  if (sourceLatest) sourceLatest.addEventListener('change', toggle);
+  if (sourceSelected) sourceSelected.addEventListener('change', toggle);
+  toggle();
+});
+</script>
+{{ footer }}
