@@ -19,4 +19,5 @@ import '../html/sections/pages/product/characteristics/_characteristics.js';
 import '../html/sections/pages/about/history/_history.js';
 import '../html/components/modal-callback/_modal-callback.js';
 import '../html/components/modal-order-success/_modal-order-success.js';
+import '../html/sections/shared/certificates/_certificates.js';
 import './animations/rotate-item.js';

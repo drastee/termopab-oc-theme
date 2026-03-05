@@ -10,6 +10,11 @@
     max-width: 522px;
     position: relative;
     overflow: visible;
+    @include md-down {
+        padding-inline: 20px;
+        max-width: 80%;
+        transform: translateX(-5%);
+    }
     
     &__title{
         color: var(--color-accent);

@@ -1,0 +1,25 @@
+<section class="certificates">
+    <div class="container certificates__head">
+        {% if title %}<h2 class="certificates__title">{{ title }}</h2>{% endif %}
+    </div>
+    <div class="container-wide">
+        <div class="certificates__slider swiper">
+            <div class="swiper-wrapper">
+                {% for image in images|default([]) %}
+                 {% set href = image.href is defined ? image.href : image %}
+                 {% set src = image.src is defined ? image.src : image %}
+                 <div class="swiper-slide">
+                  <a href="{{ href }}" data-fancybox="certificates" aria-label="Відкрити сертифікат">
+                   <img class="certificates__item" src="{{ src }}" alt="Сертифікат">
+                  </a>
+                 </div>
+                {% endfor %}
+            </div>
+
+            {% include '@components/swiper-controls-oval/_swiper-controls-oval.twig' %}
+
+        </div>
+
+    </div>
+</section>
+
