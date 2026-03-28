@@ -18,6 +18,7 @@ $_['tab_checkout']     = 'Checkout';
 $_['tab_about']        = 'About us (SEO)';
 $_['tab_contacts']     = 'Contacts page';
 $_['tab_status']       = 'Status';
+$_['tab_developer']    = 'Developer';
 
 $_['entry_meta_title']       = 'Meta Title';
 $_['entry_meta_description'] = 'Meta Description';

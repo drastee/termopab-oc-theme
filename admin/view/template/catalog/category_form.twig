@@ -1,0 +1,470 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="float-end"><button type="submit" form="form-category" data-bs-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i></button>
+        <a href="{{ back }}" data-bs-toggle="tooltip" title="{{ button_back }}" class="btn btn-light"><i class="fa-solid fa-reply"></i></a>
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ol class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+          <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-header"><i class="fa-solid fa-pencil"></i> {{ text_form }}</div>
+      <div class="card-body">
+        <form id="form-category" action="{{ save }}" method="post" data-oc-toggle="ajax">
+          <ul class="nav nav-tabs">
+            <li class="nav-item"><a href="#tab-general" data-bs-toggle="tab" class="nav-link active">{{ tab_general }}</a></li>
+            <li class="nav-item"><a href="#tab-data" data-bs-toggle="tab" class="nav-link">{{ tab_data }}</a></li>
+            <li class="nav-item"><a href="#tab-seo" data-bs-toggle="tab" class="nav-link">{{ tab_seo }}</a></li>
+            <li class="nav-item"><a href="#tab-design" data-bs-toggle="tab" class="nav-link">{{ tab_design }}</a></li>
+          </ul>
+          <div class="tab-content">
+            <div id="tab-general" class="tab-pane active">
+              <ul class="nav nav-tabs">
+                {% for language in languages %}
+                  <li class="nav-item"><a href="#language-{{ language.language_id }}" data-bs-toggle="tab" class="nav-link{% if loop.first %} active{% endif %}"><img src="{{ language.image }}" title="{{ language.name }}"/> {{ language.name }}</a></li>
+                {% endfor %}
+              </ul>
+              <div class="tab-content">
+                {% for language in languages %}
+                  <div id="language-{{ language.language_id }}" class="tab-pane{% if loop.first %} active{% endif %}">
+                    <div class="row mb-3 required">
+                      <label for="input-name-{{ language.language_id }}" class="col-sm-2 col-form-label">{{ entry_name }}</label>
+                      <div class="col-sm-10">
+                        <input type="text" name="category_description[{{ language.language_id }}][name]" value="{{ category_description[language.language_id] ? category_description[language.language_id].name }}" placeholder="{{ entry_name }}" id="input-name-{{ language.language_id }}" class="form-control"/>
+                        <div id="error-name-{{ language.language_id }}" class="invalid-feedback"></div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label for="input-description-{{ language.language_id }}" class="col-sm-2 col-form-label">{{ entry_description }}</label>
+                      <div class="col-sm-10">
+                        <textarea name="category_description[{{ language.language_id }}][description]" placeholder="{{ entry_description }}" id="input-description-{{ language.language_id }}" data-oc-toggle="ckeditor" data-lang="{{ ckeditor }}" class="form-control">{{ category_description[language.language_id] ? category_description[language.language_id].description }}</textarea>
+                      </div>
+                    </div>
+                    <div class="row mb-3 required">
+                      <label for="input-meta-title-{{ language.language_id }}" class="col-sm-2 col-form-label">{{ entry_meta_title }}</label>
+                      <div class="col-sm-10">
+                        <input type="text" name="category_description[{{ language.language_id }}][meta_title]" value="{{ category_description[language.language_id] ? category_description[language.language_id].meta_title }}" placeholder="{{ entry_meta_title }}" id="input-meta-title-{{ language.language_id }}" class="form-control"/>
+                        <div id="error-meta-title-{{ language.language_id }}" class="invalid-feedback"></div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label for="input-meta-description-{{ language.language_id }}" class="col-sm-2 col-form-label">{{ entry_meta_description }}</label>
+                      <div class="col-sm-10">
+                        <textarea name="category_description[{{ language.language_id }}][meta_description]" rows="5" placeholder="{{ entry_meta_description }}" id="input-meta-description-{{ language.language_id }}" class="form-control">{{ category_description[language.language_id] ? category_description[language.language_id].meta_description }}</textarea>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label for="input-meta-keyword-{{ language.language_id }}" class="col-sm-2 col-form-label">{{ entry_meta_keyword }}</label>
+                      <div class="col-sm-10">
+                        <textarea name="category_description[{{ language.language_id }}][meta_keyword]" rows="5" placeholder="{{ entry_meta_keyword }}" id="input-meta-keyword-{{ language.language_id }}" class="form-control">{{ category_description[language.language_id] ? category_description[language.language_id].meta_keyword }}</textarea>
+                      </div>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+            <div id="tab-data" class="tab-pane">
+              <div class="row mb-3">
+                <label for="input-parent" class="col-sm-2 col-form-label">{{ entry_parent }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="path" value="{{ path }}" placeholder="{{ entry_parent }}" id="input-parent" data-oc-target="autocomplete-parent" class="form-control" autocomplete="off"/>
+                  <ul id="autocomplete-parent" class="dropdown-menu"></ul>
+                  <input type="hidden" name="parent_id" value="{{ parent_id }}" id="input-parent-id"/>
+                  <div class="form-text">{{ help_parent }}</div>
+                  <div id="error-parent" class="invalid-feedback"></div>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">{{ entry_filter }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="filter" value="" placeholder="{{ entry_filter }}" id="input-filter" data-oc-target="autocomplete-filter" class="form-control" autocomplete="off"/>
+                  <ul id="autocomplete-filter" class="dropdown-menu"></ul>
+                  <div class="form-control p-0" style="height: 150px; overflow: auto;">
+                    <table id="category-filter" class="table m-0">
+                      <tbody>
+                        {% for category_filter in category_filters %}
+                          <tr id="category-filter-{{ category_filter.filter_id }}">
+                            <td>{{ category_filter.name }}<input type="hidden" name="category_filter[]" value="{{ category_filter.filter_id }}"/></td>
+                            <td class="text-end"><button type="button" class="btn btn-danger"><i class="fa-solid fa-minus-circle"></i></button></td>
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="form-text">{{ help_filter }}</div>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">{{ entry_store }}</label>
+                <div class="col-sm-10">
+                  <div class="form-control" style="height: 150px; overflow: auto;">
+                    {% for store in stores %}
+                      <div class="form-check">
+                        <input type="checkbox" name="category_store[]" value="{{ store.store_id }}" id="input-store-{{ store.store_id }}" class="form-check-input"{% if store.store_id in category_store %} checked{% endif %}/> <label for="input-store-{{ store.store_id }}" class="form-check-label">{{ store.name }}</label>
+                      </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">{{ entry_image }}</label>
+                <div class="col-sm-10">
+                  <div class="border rounded d-block" style="max-width: 300px;">
+                    <img src="{{ thumb }}" alt="" title="" id="thumb-image" data-oc-placeholder="{{ placeholder }}" class="img-fluid"/>
+                    <input type="hidden" name="image" value="{{ image }}" id="input-image"/>
+                    <div class="d-grid">
+                      <button type="button" data-oc-toggle="image" data-oc-target="#input-image" data-oc-thumb="#thumb-image" class="btn btn-primary rounded-0"><i class="fa-solid fa-pencil"></i> {{ button_edit }}</button>
+                      <button type="button" data-oc-toggle="clear" data-oc-target="#input-image" data-oc-thumb="#thumb-image" class="btn btn-warning rounded-0"><i class="fa-regular fa-trash-can"></i> {{ button_clear }}</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="input-sort-order" class="col-sm-2 col-form-label">{{ entry_sort_order }}</label>
+                <div class="col-sm-10">
+                  <input type="number" name="sort_order" value="{{ sort_order }}" placeholder="{{ entry_sort_order }}" id="input-sort-order" class="form-control"/>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">{{ entry_status }}</label>
+                <div class="col-sm-10">
+                  <div class="form-check form-switch form-switch-lg">
+                    <input type="hidden" name="status" value="0"/>
+                    <input type="checkbox" name="status" value="1" id="input-status" class="form-check-input" {% if status %} checked{% endif %}/>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="tab-seo" class="tab-pane">
+              <div class="alert alert-info"><i class="fa-solid fa-info-circle"></i> {{ text_keyword }}</div>
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>{{ entry_store }}</th>
+                      <th>{{ entry_keyword }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for store in stores %}
+                      <tr>
+                        <td>{{ store.name }}</td>
+                        <td>
+                          {% for language in languages %}
+                            <div class="input-group">
+                              <div class="input-group-text"><img src="{{ language.image }}" title="{{ language.name }}"/></div>
+                              <input type="text" name="category_seo_url[{{ store.store_id }}][{{ language.language_id }}]" value="{% if category_seo_url[store.store_id][language.language_id] %}{{ category_seo_url[store.store_id][language.language_id] }}{% endif %}" placeholder="{{ entry_keyword }}" id="input-keyword-{{ store.store_id }}-{{ language.language_id }}" class="form-control"/>
+                            </div>
+                            <div id="error-keyword-{{ store.store_id }}-{{ language.language_id }}" class="invalid-feedback"></div>
+                          {% endfor %}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div id="tab-design" class="tab-pane">
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>{{ entry_store }}</th>
+                      <th>{{ entry_layout }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for store in stores %}
+                      <tr>
+                        <td>{{ store.name }}</td>
+                        <td><select name="category_layout[{{ store.store_id }}]" class="form-select">
+                            <option value=""></option>
+                            {% for layout in layouts %}
+                              <option value="{{ layout.layout_id }}"{% if category_layout[store.store_id] and category_layout[store.store_id] == layout.layout_id %} selected{% endif %}>{{ layout.name }}</option>
+                            {% endfor %}
+                          </select></td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+
+          {% if category_builder_available_modules is defined %}
+          <div id="custom-fields-landing" class="mt-2">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                    <label class="col-form-label">Фонове зображення шапки</label>
+                    <div class="col-sm-10">
+                      <div class="border rounded d-inline-block mb-2" style="max-width: 300px;">
+                        <img src="{{ hero_thumb|default(hero_placeholder)|default('') }}" alt="" id="thumb-hero-image" data-oc-placeholder="{{ hero_placeholder|default('') }}" class="img-fluid"/>
+                        <input type="hidden" name="hero_image" value="{{ hero_image|default('') }}" id="input-hero-image"/>
+                        <div class="d-grid p-2">
+                          <button type="button" data-oc-toggle="image" data-oc-target="#input-hero-image" data-oc-thumb="#thumb-hero-image" class="btn btn-primary rounded-0"><i class="fa-solid fa-pencil"></i> {{ button_edit }}</button>
+                          <button type="button" data-oc-toggle="clear" data-oc-target="#input-hero-image" data-oc-thumb="#thumb-hero-image" class="btn btn-warning rounded-0"><i class="fa-regular fa-trash-can"></i> {{ button_clear }}</button>
+                        </div>
+                      </div>
+                    </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                  <label class="col-form-label">Фонове зображення шапки (моб.)</label>
+                  <div class="col-sm-10">
+                    <div class="border rounded d-inline-block mb-2" style="max-width: 300px;">
+                      <img src="{{ hero_thumb_mobile|default(hero_placeholder)|default('') }}" alt="" id="thumb-hero-image-mobile" data-oc-placeholder="{{ hero_placeholder|default('') }}" class="img-fluid"/>
+                      <input type="hidden" name="hero_image_mobile" value="{{ hero_image_mobile|default('') }}" id="input-hero-image-mobile"/>
+                      <div class="d-grid p-2">
+                        <button type="button" data-oc-toggle="image" data-oc-target="#input-hero-image-mobile" data-oc-thumb="#thumb-hero-image-mobile" class="btn btn-primary rounded-0"><i class="fa-solid fa-pencil"></i> {{ button_edit }}</button>
+                        <button type="button" data-oc-toggle="clear" data-oc-target="#input-hero-image-mobile" data-oc-thumb="#thumb-hero-image-mobile" class="btn btn-warning rounded-0"><i class="fa-regular fa-trash-can"></i> {{ button_clear }}</button>
+                      </div>
+                    </div>
+                    <div class="form-text">Якщо не задано — на мобільних використовується основний знімок.</div>
+                  </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+              <label class="col-sm-2 col-form-label">Хлібні крихти</label>
+              <div class="col-sm-10">
+                <select name="breadcrumb_background" class="form-select">
+                  <option value="black"{% if (breadcrumb_background|default('black')) == 'black' %} selected{% endif %}>Чорний фон</option>
+                  <option value="white"{% if (breadcrumb_background|default('black')) == 'white' %} selected{% endif %}>Білий фон</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div id="custom-fields-slots" class="mt-3" data-layout-type="{{ (parent_id|default(0) > 0) ? 'child' : 'parent' }}">
+            <h2>Кастомні блоки</h2>
+            <h6 class="mb-2">{% if parent_id|default(0) > 0 %}Підкатегорія{% else %}Батьківська категорія{% endif %} — секції до товарів</h6>
+            {% set layout_type = (parent_id|default(0) > 0) ? 'child' : 'parent' %}
+            <table class="table table-bordered table-hover mb-2" id="category-modules-{{ layout_type }}-top"><tbody></tbody>
+              <tfoot><tr><td class="text-end"><button type="button" class="btn btn-primary btn-sm add-module-row" data-layout="{{ layout_type }}" data-position="top"><i class="fa-solid fa-plus-circle"></i> Додати</button></td></tr></tfoot>
+            </table>
+            <h6 class="mb-2">Секції після товарів</h6>
+            <table class="table table-bordered table-hover mb-3" id="category-modules-{{ layout_type }}-bottom"><tbody></tbody>
+              <tfoot><tr><td class="text-end"><button type="button" class="btn btn-primary btn-sm add-module-row" data-layout="{{ layout_type }}" data-position="bottom"><i class="fa-solid fa-plus-circle"></i> Додати</button></td></tr></tfoot>
+            </table>
+          </div>
+          {% endif %}
+            </div>
+          </div>
+          <input type="hidden" name="category_id" value="{{ category_id }}" id="input-category-id"/>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript"><!--
+$('textarea[data-oc-toggle=\'ckeditor\']').ckeditor({
+    language: '{{ ckeditor }}'
+});
+
+$('#input-parent').autocomplete({
+    'source': function(request, response) {
+        $.ajax({
+            url: 'index.php?route=catalog/category.autocomplete&user_token={{ user_token }}&filter_name=' + encodeURIComponent(request),
+            dataType: 'json',
+            success: function(json) {
+                json.unshift({
+                    'category_id': '0',
+                    'name': '{{ text_none }}'
+                });
+
+                response($.map(json, function(item) {
+                    return {
+                        value: item['category_id'],
+                        label: item['name']
+                    }
+                }));
+            }
+        });
+    },
+    'select': function(item) {
+        $('#input-parent').val(decodeHTMLEntities(item['label']));
+        $('#input-parent-id').val(item['value']);
+    }
+});
+
+$('#input-filter').autocomplete({
+    'source': function(request, response) {
+        $.ajax({
+            url: 'index.php?route=catalog/filter.autocomplete&user_token={{ user_token }}&filter_name=' + encodeURIComponent(request),
+            dataType: 'json',
+            success: function(json) {
+                response($.map(json, function(item) {
+                    return {
+                        label: item['name'],
+                        value: item['filter_id']
+                    }
+                }));
+            }
+        });
+    },
+    'select': function(item) {
+        $('#input-filter').val('');
+
+        $('#category-filter-' + item['value']).remove();
+
+        html = '<tr id="category-filter-' + item['value'] + '">';
+        html += '  <td>' + item['label'] + '<input type="hidden" name="category_filter[]" value="' + item['value'] + '"/></td>';
+        html += '  <td class="text-end"><button type="button" class="btn btn-danger btn-sm"><i class="fa-solid fa-minus-circle"></i></button></td>';
+        html += '</tr>';
+
+        $('#category-filter tbody').append(html);
+    }
+});
+
+{% if category_builder_available_modules is defined %}
+(function() {
+  var modules = {{ category_builder_available_modules|default([])|json_encode|raw }};
+  var saved = {{ category_builder_saved|default({'parent':{'top':[],'bottom':[]},'child':{'top':[],'bottom':[]}})|json_encode|raw }};
+  function renumberRows(tbody, layout, pos) {
+    if (!tbody) return;
+    $(tbody).find('tr').each(function(i) {
+      var sel = $(this).find('select.form-select');
+      if (sel.length) {
+        sel.attr('name', 'category_content_' + layout + '_' + pos + '[' + i + ']');
+      }
+    });
+  }
+
+  function enableDnDSort(tbody, layout, pos) {
+    if (!tbody) return;
+
+    var dragged = null;
+
+    tbody.addEventListener('dragstart', function(e) {
+      var tr = e.target && e.target.closest ? e.target.closest('tr') : null;
+      if (!tr || !tbody.contains(tr)) return;
+
+      // Allow drag only from handle
+      var handle = e.target && e.target.closest ? e.target.closest('.tp-drag-handle') : null;
+      if (!handle || !tr.contains(handle)) {
+        e.preventDefault();
+        return;
+      }
+
+      dragged = tr;
+      try {
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', '1');
+      } catch (err) {}
+    }, true);
+
+    tbody.addEventListener('dragover', function(e) {
+      if (!dragged) return;
+      e.preventDefault();
+
+      var over = e.target && e.target.closest ? e.target.closest('tr') : null;
+      if (!over || over === dragged || !tbody.contains(over)) return;
+
+      var rect = over.getBoundingClientRect();
+      var after = (e.clientY - rect.top) > (rect.height / 2);
+
+      if (after) {
+        if (over.nextSibling !== dragged) {
+          tbody.insertBefore(dragged, over.nextSibling);
+        }
+      } else {
+        if (over !== dragged.nextSibling) {
+          tbody.insertBefore(dragged, over);
+        }
+      }
+    });
+
+    tbody.addEventListener('drop', function(e) {
+      if (!dragged) return;
+      e.preventDefault();
+      dragged = null;
+      renumberRows(tbody, layout, pos);
+    });
+
+    tbody.addEventListener('dragend', function() {
+      if (!dragged) return;
+      dragged = null;
+      renumberRows(tbody, layout, pos);
+    });
+  }
+
+  function buildSelect(mods, selected) {
+    var opts = '<option value="">— None —</option>';
+    (mods || []).forEach(function(m) { opts += '<option value="'+m.code+'"'+(m.code===selected?' selected':'')+'>'+m.name+'</option>'; });
+    return opts;
+  }
+  function addRow(tableId, layout, pos, code, idx) {
+    var tbody = $(tableId + ' tbody');
+    if (idx === undefined) idx = tbody.find('tr').length;
+    tbody.append('<tr><td><div class="input-group input-group-sm">'
+      + '<span class="input-group-text tp-drag-handle" title="Drag" draggable="true" style="cursor: grab;"><i class="fa-solid fa-grip-vertical"></i></span>'
+      + '<button type="button" class="btn btn-outline-secondary btn-sm tp-move-up" title="Up"><i class="fa-solid fa-chevron-up"></i></button>'
+      + '<button type="button" class="btn btn-outline-secondary btn-sm tp-move-down" title="Down"><i class="fa-solid fa-chevron-down"></i></button>'
+      + '<select name="category_content_'+layout+'_'+pos+'['+idx+']" class="form-select">'+buildSelect(modules, code)+'</select>'
+      + '<button type="button" class="btn btn-danger btn-sm remove-row"><i class="fa-solid fa-minus-circle"></i></button>'
+      + '</div></td></tr>');
+  }
+  function initSlots() {
+    var layoutType = document.getElementById('custom-fields-slots') && document.getElementById('custom-fields-slots').getAttribute('data-layout-type') || 'parent';
+    ['top','bottom'].forEach(function(pos) {
+      var tbody = $('#category-modules-'+layoutType+'-'+pos+' tbody');
+      if (tbody.length) {
+        tbody.empty();
+        var list = (saved[layoutType] && saved[layoutType][pos]) ? saved[layoutType][pos] : [];
+        if (list.length === 0) list = [''];
+        list.forEach(function(c, i) { addRow('#category-modules-'+layoutType+'-'+pos, layoutType, pos, c, i); });
+
+        enableDnDSort(tbody.get(0), layoutType, pos);
+      }
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initSlots);
+  else initSlots();
+  $(document).on('click', '.add-module-row', function() {
+    var layout = $(this).data('layout');
+    var pos = $(this).data('position');
+    var tableId = '#category-modules-' + layout + '-' + pos;
+    addRow(tableId, layout, pos, '');
+    var tbody = $(tableId + ' tbody');
+    renumberRows(tbody.get(0), layout, pos);
+  });
+  $(document).on('click', '.remove-row', function() {
+    var table = $(this).closest('table');
+    var id = table.attr('id') || '';
+    var m = id.match(/^category-modules-(parent|child)-(top|bottom)$/);
+    $(this).closest('tr').remove();
+    if (m) {
+      renumberRows(table.find('tbody').get(0), m[1], m[2]);
+    }
+  });
+
+  $(document).on('click', '.tp-move-up, .tp-move-down', function() {
+    var btn = $(this);
+    var tr = btn.closest('tr');
+    var table = btn.closest('table');
+    var id = table.attr('id') || '';
+    var m = id.match(/^category-modules-(parent|child)-(top|bottom)$/);
+    if (!m.length) return;
+
+    if (btn.hasClass('tp-move-up')) {
+      var prev = tr.prev('tr');
+      if (prev.length) {
+        prev.before(tr);
+      }
+    } else {
+      var next = tr.next('tr');
+      if (next.length) {
+        next.after(tr);
+      }
+    }
+
+    renumberRows(table.find('tbody').get(0), m[1], m[2]);
+  });
+})();
+{% endif %}
+$('#category-filter').on('click', '.btn', function() {
+    $(this).parent().parent().remove();
+});
+//--></script>
+{{ footer }}

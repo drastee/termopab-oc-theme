@@ -12,7 +12,9 @@ class Termopab extends \Opencart\System\Engine\Controller {
 	 * @return void
 	 */
 	public function index(): void {
+		$this->addPaths();
 		$this->load->language('extension/termopab/theme/termopab');
+		$data = $this->language->all();
 
 		// OC4: menu via Event System (extension/termopab/event/menu)
 		$this->document->setTitle($this->language->get('heading_title'));
@@ -42,19 +44,10 @@ class Termopab extends \Opencart\System\Engine\Controller {
 
 		$data['save'] = $this->url->link('extension/termopab/theme/termopab.save', 'user_token=' . $this->session->data['user_token'] . '&store_id=' . $store_id);
 		$data['back'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=theme');
-		$data['install_project_tables'] = $this->url->link('extension/termopab/project', 'user_token=' . $this->session->data['user_token'] . '&install_tables=1');
 		$data['install_news_tables'] = $this->url->link('extension/termopab/news', 'user_token=' . $this->session->data['user_token'] . '&install_tables=1');
-		$data['install_testimonial_tables'] = $this->url->link('extension/termopab/testimonial', 'user_token=' . $this->session->data['user_token'] . '&install_tables=1');
-		$data['projects_list'] = $this->url->link('extension/termopab/project', 'user_token=' . $this->session->data['user_token']);
-		$data['projects_add'] = $this->url->link('extension/termopab/project.form', 'user_token=' . $this->session->data['user_token']);
-		$data['testimonials_list'] = $this->url->link('extension/termopab/testimonial', 'user_token=' . $this->session->data['user_token']);
-		$data['testimonials_add'] = $this->url->link('extension/termopab/testimonial.form', 'user_token=' . $this->session->data['user_token']);
 		$data['testimonials_add_permission'] = $this->url->link('extension/termopab/theme/termopab.addTestimonialPermission', 'user_token=' . $this->session->data['user_token']);
 		$data['news_add_permission'] = $this->url->link('extension/termopab/theme/termopab.addNewsPermission', 'user_token=' . $this->session->data['user_token']);
-		$data['brewery_reviews_list'] = $this->url->link('extension/termopab/brewery_review', 'user_token=' . $this->session->data['user_token']);
-		$data['brewery_reviews_add'] = $this->url->link('extension/termopab/brewery_review.form', 'user_token=' . $this->session->data['user_token']);
 		$data['brewery_reviews_add_permission'] = $this->url->link('extension/termopab/theme/termopab.addBreweryReviewPermission', 'user_token=' . $this->session->data['user_token']);
-		$data['callback_requests_list'] = $this->url->link('extension/termopab/callback_request', 'user_token=' . $this->session->data['user_token']);
 		$data['callback_requests_add_permission'] = $this->url->link('extension/termopab/theme/termopab.addCallbackRequestPermission', 'user_token=' . $this->session->data['user_token']);
 		$data['install_full_tables'] = $this->url->link('extension/termopab/theme/termopab.runFullInstall', 'user_token=' . $this->session->data['user_token']);
 		$data['sync_events'] = $this->url->link('extension/termopab/theme/termopab.syncEvents', 'user_token=' . $this->session->data['user_token']);
@@ -188,6 +181,12 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		$this->response->setOutput($this->load->view('extension/termopab/theme/termopab', $data));
 	}
 
+	protected function addPaths(): void {
+		if (method_exists($this->language, 'addPath')) {
+			$this->language->addPath('extension/termopab', DIR_EXTENSION . 'termopab/admin/language/');
+		}
+	}
+
 	/**
 	 * Add permissions for "Огляди пивоварень" and "Категорії оглядів" to current user's group; redirect to brewery review list.
 	 * Use when the user has no checkbox for these routes in User Groups (e.g. after manual install).
@@ -280,6 +279,8 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		$this->load->model('setting/event');
 		$this->model_setting_event->deleteEventByCode('termopab_admin_menu');
 		$this->model_setting_event->addEvent(['code' => 'termopab_admin_menu', 'description' => 'Termopab: меню «Тема Termopab» і «Проекти»', 'trigger' => 'admin/view/common/column_left/before', 'action' => 'extension/termopab/event/menu.onColumnLeft', 'status' => 1, 'sort_order' => 0]);
+		$this->model_setting_event->deleteEventByCode('termopab_admin_category_form_override');
+		$this->model_setting_event->addEvent(['code' => 'termopab_admin_category_form_override', 'description' => 'Termopab: override admin category_form view', 'trigger' => 'admin/view/catalog/category_form/before', 'action' => 'extension/termopab/event/category_form_override.onBefore', 'status' => 1, 'sort_order' => -200]);
 		$this->model_setting_event->deleteEventByCode('termopab_admin_category');
 		$this->model_setting_event->addEvent(['code' => 'termopab_admin_category', 'description' => 'Termopab: category form custom fields', 'trigger' => 'admin/view/catalog/category_form/before', 'action' => 'extension/termopab/event/category.onCategoryFormBefore', 'status' => 1, 'sort_order' => 0]);
 		$this->model_setting_event->addEvent(['code' => 'termopab_admin_category', 'description' => 'Termopab: category save custom fields (add)', 'trigger' => 'admin/model/catalog/category.addCategory/after', 'action' => 'extension/termopab/event/category.onAddCategoryAfter', 'status' => 1, 'sort_order' => 0]);
@@ -582,6 +583,16 @@ class Termopab extends \Opencart\System\Engine\Controller {
 				'action'      => 'extension/termopab/event/menu.onColumnLeft',
 				'status'      => 1,
 				'sort_order'  => 0,
+			]);
+
+			$this->model_setting_event->deleteEventByCode('termopab_admin_category_form_override');
+			$this->model_setting_event->addEvent([
+				'code'        => 'termopab_admin_category_form_override',
+				'description' => 'Termopab: override admin category_form view',
+				'trigger'     => 'admin/view/catalog/category_form/before',
+				'action'      => 'extension/termopab/event/category_form_override.onBefore',
+				'status'      => 1,
+				'sort_order'  => -200,
 			]);
 
 			// Events: category form custom fields (hero_image, breadcrumb_background)

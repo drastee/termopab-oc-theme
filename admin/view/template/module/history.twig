@@ -20,15 +20,15 @@
       <div class="card-body">
         <form id="form-module" action="{{ save }}" method="post" data-oc-toggle="ajax">
           <div class="row mb-3">
-            <label for="input-name" class="col-sm-2 col-form-label">{{ entry_name }}</label>
+            <label for="input-name" class="col-sm-2 col-form-label">{{ entry_name }} <span class="text-danger">*</span></label>
             <div class="col-sm-10">
-              <input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control"/>
+              <input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control" required/>
               <div id="error-name" class="invalid-feedback"></div>
             </div>
           </div>
 
           <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">{{ entry_title }}</label>
+            <label class="col-sm-2 col-form-label">{{ entry_title }} <span class="text-danger">*</span></label>
             <div class="col-sm-10">
               <ul class="nav nav-tabs" role="tablist">
                 {% for language in languages %}
@@ -40,7 +40,7 @@
               <div class="tab-content mt-2">
                 {% for language in languages %}
                   <div id="tab-lang-{{ language.language_id }}" class="tab-pane{% if loop.first %} active{% endif %}">
-                    <input type="text" name="title[{{ language.language_id }}]" value="{{ (title[language.language_id] ?? '') }}" class="form-control" placeholder="{{ entry_title }}"/>
+                    <input type="text" name="title[{{ language.language_id }}]" value="{{ (title[language.language_id] ?? '') }}" class="form-control" placeholder="{{ entry_title }}" required/>
                   </div>
                 {% endfor %}
               </div>
@@ -67,8 +67,8 @@
                     <div class="collapse show" id="slide-body-history-{{ loop.index0 }}">
                     <div class="card-body">
                       <div class="mb-3">
-                        <label class="form-label small">{{ entry_year }}</label>
-                        <input type="text" name="slide[{{ loop.index0 }}][year]" value="{{ (slide.year ?? '') }}" class="form-control form-control-sm" placeholder="2016"/>
+                        <label class="form-label small">{{ entry_year }} <span class="text-danger">*</span></label>
+                        <input type="text" name="slide[{{ loop.index0 }}][year]" value="{{ (slide.year ?? '') }}" class="form-control form-control-sm" placeholder="2016" required/>
                       </div>
                       <ul class="nav nav-tabs" role="tablist">
                         {% for language in languages %}
@@ -130,8 +130,8 @@
     <div class="collapse show" id="slide-body-history-__ROW__">
     <div class="card-body">
       <div class="mb-3">
-        <label class="form-label small">{{ entry_year }}</label>
-        <input type="text" name="slide[__ROW__][year]" value="" class="form-control form-control-sm" placeholder="2016"/>
+        <label class="form-label small">{{ entry_year }} <span class="text-danger">*</span></label>
+        <input type="text" name="slide[__ROW__][year]" value="" class="form-control form-control-sm" placeholder="2016" required/>
       </div>
       <ul class="nav nav-tabs" role="tablist">
         {% for language in languages %}

@@ -18,6 +18,7 @@ $_['tab_checkout']     = 'Оформление заказа';
 $_['tab_about']        = 'О нас (SEO)';
 $_['tab_contacts']     = 'Страница Контакты';
 $_['tab_status']       = 'Статус';
+$_['tab_developer']    = 'Для разработчиков';
 
 $_['entry_meta_title']       = 'Meta Title';
 $_['entry_meta_description'] = 'Meta Description';

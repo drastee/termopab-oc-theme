@@ -1,9 +1,10 @@
 <section class="not-found">
     <div class="container">
         <div class="not-found__inner">
-            <img src="/src/assets/images/404.webp" alt="">
-            <p>Сторінка вирішила піти на пиво і ще не повернулася.</p>
-            <p>А ви тим часом зазирніть на головну <a href="/" class="link">головну<svg class="link-arrow"><use href="#icon-short-arrow"></use></svg></a></p>
+            {% set not_found_home_href = continue|default(home_url|default('/')) %}
+            <img src="{{ not_found_image|default('/src/assets/images/404.webp') }}" alt="{{ text_not_found_image_alt|default('404') }}">
+            <p>{{ text_not_found_message|default('Сторінка вирішила піти на пиво і ще не повернулася.') }}</p>
+            <p>{{ text_not_found_go_home|default('А ви тим часом зазирніть на') }} <a href="{{ not_found_home_href }}" class="link">{{ text_not_found_home_label|default('головну') }}<svg class="link-arrow"><use href="#icon-short-arrow"></use></svg></a></p>
         </div>
     </div>
 </section>

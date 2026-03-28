@@ -20,6 +20,10 @@ export default {
           dest: 'image/images/payments',
         },
         {
+          src: 'src/assets/images/404.webp',
+          dest: 'image',
+        },
+        {
           src: 'src/assets/images/logo-large.webp',
           dest: 'image',
         },

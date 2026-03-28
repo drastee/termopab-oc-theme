@@ -3,10 +3,6 @@
   <div class="page-header">
     <div class="container-fluid">
       <div class="float-end">
-        <a href="{{ install_project_tables }}" class="btn btn-secondary me-2" title="{{ text_install_project_tables }}"><i class="fa-solid fa-database"></i> {{ text_install_project_tables }}</a>
-        <a href="{{ install_news_tables }}" class="btn btn-secondary me-2" title="{{ text_install_news_tables }}"><i class="fa-solid fa-database"></i> {{ text_install_news_tables }}</a>
-        <a href="{{ install_testimonial_tables }}" class="btn btn-secondary me-2" title="{{ text_install_testimonial_tables }}"><i class="fa-solid fa-database"></i> {{ text_install_testimonial_tables }}</a>
-        <a href="{{ projects_list }}" class="btn btn-outline-primary me-2"><i class="fa-solid fa-folder-open"></i> {{ text_projects }}</a>
         <button type="submit" form="form-theme" data-bs-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa-solid fa-save"></i></button>
         <a href="{{ back }}" data-bs-toggle="tooltip" title="{{ button_back }}" class="btn btn-light"><i class="fa-solid fa-reply"></i></a></div>
       <h1>{{ heading_title }}</h1>
@@ -18,30 +14,6 @@
     </div>
   </div>
   <div class="container-fluid">
-    <div class="card mb-3">
-      <div class="card-header"><i class="fa-solid fa-paper-plane"></i> {{ text_quick_links }}</div>
-      <div class="card-body">
-        <a href="{{ projects_list }}" class="btn btn-outline-primary me-2"><i class="fa-solid fa-folder-open"></i> {{ text_projects }}</a>
-        <a href="{{ projects_add }}" class="btn btn-outline-success me-2"><i class="fa-solid fa-plus"></i> {{ text_projects_add }}</a>
-        <a href="{{ install_project_tables }}" class="btn btn-outline-secondary me-2" title="{{ text_install_project_tables }}"><i class="fa-solid fa-database"></i> {{ text_install_project_tables }}</a>
-        <a href="{{ testimonials_list }}" class="btn btn-outline-primary me-2"><i class="fa-solid fa-comments"></i> {{ text_testimonials }}</a>
-        <a href="{{ testimonials_add }}" class="btn btn-outline-success me-2"><i class="fa-solid fa-plus"></i> {{ text_testimonials_add }}</a>
-        <a href="{{ install_testimonial_tables }}" class="btn btn-outline-secondary me-2" title="{{ text_install_testimonial_tables }}"><i class="fa-solid fa-database"></i> {{ text_install_testimonial_tables }}</a>
-        <a href="{{ testimonials_add_permission }}" class="btn btn-warning" title="{{ text_testimonials_add_permission }}"><i class="fa-solid fa-key"></i> {{ text_testimonials_add_permission }}</a>
-        <a href="{{ install_news_tables }}" class="btn btn-outline-secondary me-2" title="{{ text_install_news_tables }}"><i class="fa-solid fa-database"></i> {{ text_install_news_tables }}</a>
-        <a href="{{ install_full_tables }}" class="btn btn-outline-secondary me-2" title="{{ text_install_full_tables }}"><i class="fa-solid fa-database"></i> {{ text_install_full_tables }}</a>
-        <a href="{{ sync_events }}" class="btn btn-outline-info me-2" title="Синхронізувати події"><i class="fa-solid fa-sync"></i> Синхронізувати події</a>
-        <a href="{{ news_add_permission }}" class="btn btn-warning" title="{{ text_news_add_permission }}"><i class="fa-solid fa-key"></i> {{ text_news_add_permission }}</a>
-        <hr class="my-3"/>
-        <a href="{{ brewery_reviews_list }}" class="btn btn-outline-primary me-2"><i class="fa-solid fa-beer-mug-empty"></i> {{ text_brewery_reviews }}</a>
-        <a href="{{ brewery_reviews_add }}" class="btn btn-outline-success me-2"><i class="fa-solid fa-plus"></i> {{ text_brewery_reviews_add }}</a>
-        <a href="{{ brewery_reviews_add_permission }}" class="btn btn-warning" title="{{ text_brewery_reviews_add_permission }}"><i class="fa-solid fa-key"></i> {{ text_brewery_reviews_add_permission }}</a>
-
-        <hr class="my-3"/>
-        <a href="{{ callback_requests_list }}" class="btn btn-outline-primary me-2"><i class="fa-solid fa-phone"></i> {{ text_callback_requests }}</a>
-        <a href="{{ callback_requests_add_permission }}" class="btn btn-warning" title="{{ text_callback_requests_add_permission }}"><i class="fa-solid fa-key"></i> {{ text_callback_requests_add_permission }}</a>
-      </div>
-    </div>
     <div class="card">
       <div class="card-header"><i class="fa-solid fa-pencil"></i> {{ text_edit }}</div>
       <div class="card-body">
@@ -57,6 +29,7 @@
             <li class="nav-item"><a href="#tab-about" data-bs-toggle="tab" class="nav-link">{{ tab_about }}</a></li>
             <li class="nav-item"><a href="#tab-contacts" data-bs-toggle="tab" class="nav-link">{{ tab_contacts }}</a></li>
             <li class="nav-item"><a href="#tab-status" data-bs-toggle="tab" class="nav-link">{{ tab_status }}</a></li>
+            <li class="nav-item"><a href="#tab-developer" data-bs-toggle="tab" class="nav-link">{{ tab_developer }}</a></li>
           </ul>
           <div class="tab-content">
             <div id="tab-main" class="tab-pane active">
@@ -616,6 +589,24 @@
                   </div>
                 </div>
               </div>
+            </div>
+            <div id="tab-developer" class="tab-pane">
+              <fieldset>
+                <legend>{{ tab_developer }}</legend>
+                <div class="mb-2 text-muted small">{{ text_install_full_tables }}</div>
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                  <a href="{{ install_news_tables }}" class="btn btn-outline-secondary btn-sm" title="{{ text_install_news_tables }}"><i class="fa-solid fa-database"></i> {{ text_install_news_tables }}</a>
+                  <a href="{{ install_full_tables }}" class="btn btn-outline-secondary btn-sm" title="{{ text_install_full_tables }}"><i class="fa-solid fa-database"></i> {{ text_install_full_tables }}</a>
+                  <a href="{{ sync_events }}" class="btn btn-outline-info btn-sm" title="Синхронізувати події"><i class="fa-solid fa-sync"></i> Синхронізувати події</a>
+                </div>
+                <div class="mb-2 text-muted small">{{ text_quick_links }}</div>
+                <div class="d-flex flex-wrap gap-2">
+                  <a href="{{ testimonials_add_permission }}" class="btn btn-warning btn-sm" title="{{ text_testimonials_add_permission }}"><i class="fa-solid fa-key"></i> {{ text_testimonials_add_permission }}</a>
+                  <a href="{{ news_add_permission }}" class="btn btn-warning btn-sm" title="{{ text_news_add_permission }}"><i class="fa-solid fa-key"></i> {{ text_news_add_permission }}</a>
+                  <a href="{{ brewery_reviews_add_permission }}" class="btn btn-warning btn-sm" title="{{ text_brewery_reviews_add_permission }}"><i class="fa-solid fa-key"></i> {{ text_brewery_reviews_add_permission }}</a>
+                  <a href="{{ callback_requests_add_permission }}" class="btn btn-warning btn-sm" title="{{ text_callback_requests_add_permission }}"><i class="fa-solid fa-key"></i> {{ text_callback_requests_add_permission }}</a>
+                </div>
+              </fieldset>
             </div>
           </div>
         </form>

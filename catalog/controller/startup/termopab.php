@@ -62,6 +62,7 @@ class Termopab extends \Opencart\System\Engine\Controller {
 			$this->addDesignPath();
 			$this->template->addPath('extension/termopab', DIR_EXTENSION . 'termopab/catalog/view/template/');
 			$this->event->register('view/*/before', new \Opencart\System\Engine\Action('extension/termopab/startup/termopab.event'));
+			$this->event->register('view/error/not_found/before', new \Opencart\System\Engine\Action('extension/termopab/event/not_found.onBefore'));
 			$this->event->register('extension/termopab/checkout/form_data', new \Opencart\System\Engine\Action('extension/termopab/startup/termopab.addModalCartFormData'));
 		}
 	}
@@ -112,7 +113,7 @@ class Termopab extends \Opencart\System\Engine\Controller {
 			'common/language',
 			'product/product',
 			'catalog/category',
-			'checkout/checkout',
+			'checkout/checkout'
 		];
 		if (in_array($route, $override)) {
 			$route = 'extension/termopab/' . $route;
@@ -121,6 +122,7 @@ class Termopab extends \Opencart\System\Engine\Controller {
 		if (in_array($route, ['extension/termopab/common/header', 'extension/termopab/common/footer'])) {
 			$this->addThemeData($data);
 		}
+
 	}
 
 	/**
